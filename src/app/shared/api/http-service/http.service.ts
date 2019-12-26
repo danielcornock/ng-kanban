@@ -1,6 +1,5 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { Observable } from "rxjs";
 
 @Injectable({
   providedIn: "root"
@@ -21,27 +20,35 @@ export class HttpService {
     return url[0] === "/" ? url.slice(1) : url;
   }
 
-  public post(url: string, data: object): Observable<any> {
-    return this.http.post(this.apiUrl + this._processUrl(url), data, {
-      headers: this.addAuthHeaders()
-    });
+  public post(url: string, data: object): Promise<any> {
+    return this.http
+      .post(this.apiUrl + this._processUrl(url), data, {
+        headers: this.addAuthHeaders()
+      })
+      .toPromise();
   }
 
-  public put(url: string, data: object): Observable<any> {
-    return this.http.put(this.apiUrl + this._processUrl(url), data, {
-      headers: this.addAuthHeaders()
-    });
+  public put(url: string, data: object): Promise<any> {
+    return this.http
+      .put(this.apiUrl + this._processUrl(url), data, {
+        headers: this.addAuthHeaders()
+      })
+      .toPromise();
   }
 
-  public get(url: string): Observable<any> {
-    return this.http.get(this.apiUrl + this._processUrl(url), {
-      headers: this.addAuthHeaders()
-    });
+  public get(url: string): Promise<any> {
+    return this.http
+      .get(this.apiUrl + this._processUrl(url), {
+        headers: this.addAuthHeaders()
+      })
+      .toPromise();
   }
 
-  public delete(url: string): Observable<any> {
-    return this.http.delete(this.apiUrl + this._processUrl(url), {
-      headers: this.addAuthHeaders()
-    });
+  public delete(url: string): Promise<any> {
+    return this.http
+      .delete(this.apiUrl + this._processUrl(url), {
+        headers: this.addAuthHeaders()
+      })
+      .toPromise();
   }
 }

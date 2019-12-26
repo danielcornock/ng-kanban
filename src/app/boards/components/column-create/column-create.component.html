@@ -1,0 +1,6 @@
+<div class="columnCreate-container">
+  <form (ngSubmit)="addColumn()" [formGroup]="columnForm">
+    <input type="text" formControlName="title" placeholder="Column name" />
+    <input type="submit" value="Add column" />
+  </form>
+</div>

@@ -43,11 +43,9 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    this._httpService
-      .post("auth/login", this.loginForm.value)
-      .subscribe(res => {
-        this._authService.setJwt(res.jwt);
-        this._router.navigate("home");
-      });
+    this._httpService.post("auth/login", this.loginForm.value).then(res => {
+      this._authService.setJwt(res.jwt);
+      this._router.navigate("home");
+    });
   }
 }
