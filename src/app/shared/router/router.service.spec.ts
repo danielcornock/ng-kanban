@@ -2,15 +2,16 @@ import { TestBed } from "@angular/core/testing";
 
 import { RouterService } from "./router.service";
 import { NgZone } from "@angular/core";
-import { Router } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
 
 describe("RouterService", () => {
-  let service: RouterService, ngZone: NgZone, router: Router;
+  let service: RouterService, ngZone: NgZone, router: Router, activatedRoute;
 
   beforeEach(() => {
     ngZone = (new NgZoneStub() as Partial<NgZone>) as NgZone;
     router = (new RouterStub() as Partial<Router>) as Router;
-    service = new RouterService(router, ngZone);
+    activatedRoute = (new ActivatedRouteStub() as unknown) as ActivatedRoute;
+    service = new RouterService(router, ngZone, activatedRoute);
   });
 
   describe("when navigating to a url", () => {
@@ -35,6 +36,17 @@ describe("RouterService", () => {
       });
     });
   });
+
+  describe("when fetching the activated route path", () => {
+    let result: string;
+    beforeEach(() => {
+      result = service.getUrlParams("testId");
+    });
+
+    it("should return the requested parameter", () => {
+      expect(result).toBe("testId");
+    });
+  });
 });
 
 class NgZoneStub {
@@ -43,4 +55,16 @@ class NgZoneStub {
 
 class RouterStub {
   public navigate = jasmine.createSpy("Router.navigate");
+}
+
+class ActivatedRouteStub {
+  public snapshot = {
+    children: [
+      {
+        params: {
+          testId: "testId"
+        }
+      }
+    ]
+  };
 }
