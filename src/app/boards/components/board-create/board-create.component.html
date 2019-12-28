@@ -1,0 +1,4 @@
+<form (ngSubmit)="createBoard()" [formGroup]="createBoardForm">
+  <input formControlName="title" type="text" class="boardCreate-titleField" />
+  <input type="submit" value="Create board" class="boardCreate-submit" />
+</form>
