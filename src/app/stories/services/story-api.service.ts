@@ -6,20 +6,30 @@ import { Subject } from "rxjs";
   providedIn: "root"
 })
 export class StoryApiService {
-  public updateBoardSubject: Subject<{
-    storyId: string;
-    columnId: string;
-  }> = new Subject<{ storyId: string; columnId: string }>();
+  public updateBoardSubject: Subject<IBoardUpdate> = new Subject<
+    IBoardUpdate
+  >();
 
   private readonly _httpService: HttpService;
+
   constructor(httpService: HttpService) {
     this._httpService = httpService;
   }
 
-  public async addNewStory(title: string, columnId: string) {
-    const { story } = await this._httpService
+  public addNewStory(title: string, columnId: string) {
+    this._httpService
       .post("stories", { title })
-      .catch(() => {});
-    this.updateBoardSubject.next({ storyId: story._id, columnId: columnId });
+      .then(({ story }) => {
+        this.updateBoardSubject.next({
+          storyId: story._id,
+          columnId: columnId
+        });
+      })
+      .catch(() => null);
   }
+}
+
+export interface IBoardUpdate {
+  storyId: string;
+  columnId: string;
 }
