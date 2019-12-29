@@ -7,8 +7,9 @@ import { RouterServiceStub } from "src/app/shared/router/router.service.stub";
 import { RouterService } from "src/app/shared/router/router.service";
 import { By } from "@angular/platform-browser";
 import { DebugElement } from "@angular/core";
+import { BoardsListComponentStub } from "src/app/boards/components/boards-list/boards-list.component.stub";
 
-fdescribe("HomeComponent", () => {
+describe("HomeComponent", () => {
   let component: HomeComponent;
   let fixture: ComponentFixture<HomeComponent>;
   let dependencies: {
@@ -26,7 +27,7 @@ fdescribe("HomeComponent", () => {
       router: new RouterServiceStub()
     };
     TestBed.configureTestingModule({
-      declarations: [HomeComponent],
+      declarations: [HomeComponent, BoardsListComponentStub],
       providers: [
         { provide: AuthService, useValue: dependencies.authService },
         { provide: RouterService, useValue: dependencies.router }
