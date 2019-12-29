@@ -1,25 +1,39 @@
 import { HttpService } from "./http.service";
 import { HttpClient } from "@angular/common/http";
 import { HttpClientStub } from "./testing/http-client.stub";
+import { Observable } from "rxjs";
+import { TestBed } from "@angular/core/testing";
 
 describe("HttpService", () => {
-  let service: HttpService, client: HttpClient, result: any, apiUrl: string;
+  let service: HttpService, client: HttpClientStub, result: any, apiUrl: string;
+
+  function getReturnPromise(type: string) {
+    (client[type] as jasmine.Spy).and.returnValue({
+      toPromise: jasmine
+        .createSpy("toPromise")
+        .and.returnValue(`${type}Promise`)
+    });
+  }
 
   beforeEach(() => {
     apiUrl = "http://localhost:3000/api/v1/";
-    client = (new HttpClientStub() as Partial<HttpClient>) as HttpClient;
-    service = new HttpService(client);
+    client = new HttpClientStub();
+
+    TestBed.configureTestingModule({
+      providers: [{ provide: HttpClient, useValue: client }]
+    });
+
+    service = TestBed.get(HttpService);
   });
 
   describe("when getting a resource from the API", () => {
     let args: Array<any>;
 
-    beforeEach(() => {
-      (client.get as jasmine.Spy).and.returnValue("getPromise");
-    });
+    beforeEach(() => {});
 
     describe("when a correctly formatted URL is supplied", () => {
       beforeEach(() => {
+        getReturnPromise("get");
         result = service.get("get/url");
         args = (client.get as jasmine.Spy).calls.mostRecent().args;
       });
@@ -35,6 +49,7 @@ describe("HttpService", () => {
 
     describe("when an incorrectly formatted URL is supplied", () => {
       beforeEach(() => {
+        getReturnPromise("get");
         service.get("/get/url");
         args = (client.get as jasmine.Spy).calls.mostRecent().args;
       });
@@ -49,7 +64,7 @@ describe("HttpService", () => {
     let args: Array<any>;
 
     beforeEach(() => {
-      (client.post as jasmine.Spy).and.returnValue("postPromise");
+      getReturnPromise("post");
       result = service.post("post/url", { data: "newData" });
       args = (client.post as jasmine.Spy).calls.mostRecent().args;
     });
@@ -68,7 +83,7 @@ describe("HttpService", () => {
     let args: Array<any>;
 
     beforeEach(() => {
-      (client.put as jasmine.Spy).and.returnValue("putPromise");
+      getReturnPromise("put");
       result = service.put("put/url", { data: "putData" });
       args = (client.put as jasmine.Spy).calls.mostRecent().args;
     });
@@ -87,7 +102,7 @@ describe("HttpService", () => {
     let args: Array<any>;
 
     beforeEach(() => {
-      (client.delete as jasmine.Spy).and.returnValue("deletePromise");
+      getReturnPromise("delete");
       result = service.delete("delete/url");
       args = (client.delete as jasmine.Spy).calls.mostRecent().args;
     });
