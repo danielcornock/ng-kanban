@@ -1,10 +1,8 @@
 <div class="column-container">
-  <h3>{{ appColumn.title }}</h3>
+  <h3 class="column-title">{{ appColumn.title }}</h3>
   <app-story
     *ngFor="let story of appColumn.stories"
     [appStory]="story"
   ></app-story>
-  <app-story-create
-    [appStoryCreateColumnId]="appColumn._id ? appColumn._id : null"
-  ></app-story-create>
+  <app-story-create [appStoryCreateColumnId]="appColumn._id"></app-story-create>
 </div>

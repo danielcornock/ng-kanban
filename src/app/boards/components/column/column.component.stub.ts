@@ -1,0 +1,10 @@
+import { Component, Input } from "@angular/core";
+import { IColumn } from "../../interfaces/column.interface";
+
+@Component({
+  selector: "app-column",
+  template: ""
+})
+export class ColumnComponentStub {
+  @Input() appColumn: IColumn;
+}

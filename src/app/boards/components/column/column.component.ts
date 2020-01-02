@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from "@angular/core";
+import { IColumn } from "../../interfaces/column.interface";
 
 @Component({
   selector: "app-column",
@@ -6,7 +7,7 @@ import { Component, OnInit, Input } from "@angular/core";
   styleUrls: ["./column.component.scss"]
 })
 export class ColumnComponent implements OnInit {
-  @Input() appColumn;
+  @Input() appColumn: IColumn;
   constructor() {}
 
   ngOnInit() {}
