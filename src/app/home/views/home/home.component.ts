@@ -8,15 +8,11 @@ import { RouterService } from "src/app/shared/router/router.service";
   styleUrls: ["./home.component.scss"]
 })
 export class HomeComponent implements OnInit {
-  constructor(
-    private _authService: AuthService,
-    private _router: RouterService
-  ) {}
+  constructor(private _authService: AuthService) {}
 
   ngOnInit() {}
 
   public logout(): void {
     this._authService.logout();
-    this._router.navigate("login");
   }
 }

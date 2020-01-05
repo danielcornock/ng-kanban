@@ -1,10 +1,11 @@
 import { Injectable } from "@angular/core";
+import { RouterService } from "src/app/shared/router/router.service";
 
 @Injectable({
   providedIn: "root"
 })
 export class AuthService {
-  constructor() {}
+  constructor(private readonly _router: RouterService) {}
 
   public setJwt(token: string): void {
     localStorage.setItem("jwt_token", token);
@@ -16,5 +17,6 @@ export class AuthService {
 
   public logout() {
     localStorage.removeItem("jwt_token");
+    this._router.navigate("login");
   }
 }

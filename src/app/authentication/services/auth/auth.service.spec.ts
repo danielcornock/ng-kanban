@@ -1,10 +1,15 @@
 import { AuthService } from "./auth.service";
+import { RouterService } from "src/app/shared/router/router.service";
+import { RouterServiceStub } from "src/app/shared/router/router.service.stub";
 
 describe("AuthService", () => {
-  let service: AuthService;
+  let service: AuthService, router: RouterService;
 
   beforeEach(() => {
-    service = new AuthService();
+    router = (new RouterServiceStub() as Partial<
+      RouterService
+    >) as RouterService;
+    service = new AuthService(router);
   });
 
   describe("when setting the jwt", () => {
@@ -52,6 +57,10 @@ describe("AuthService", () => {
 
     it("should remove the jwt from local storage", () => {
       expect(localStorage.removeItem).toHaveBeenCalledWith("jwt_token");
+    });
+
+    it("should redirect the user to the login page", () => {
+      expect(router.navigate).toHaveBeenCalledWith("login");
     });
   });
 });
