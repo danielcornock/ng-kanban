@@ -60,13 +60,13 @@ describe("BoardsListComponent", () => {
 
   describe("on initialisation", () => {
     let getPromise: TestPromise<any>;
-    beforeEach(async(() => {
+    beforeEach(() => {
       getPromise = new TestPromise<any>();
       (dependencies.httpService.get as jasmine.Spy).and.returnValue(
         getPromise.promise
       );
       fixture.detectChanges();
-    }));
+    });
 
     it("should fetch the board list", () => {
       expect(dependencies.httpService.get).toHaveBeenCalledWith("boards/list");
@@ -74,15 +74,16 @@ describe("BoardsListComponent", () => {
 
     describe("when the boards have been fetched successfully", () => {
       beforeEach(fakeAsync(() => {
-        getPromise.resolve({ board: { _id: "board-id", title: "test-board" } });
+        getPromise.resolve({
+          boards: [{ _id: "board-id", title: "test-board" }]
+        });
 
         tick();
-        // component.boardList = [{ _id: "board-id", title: "test-board" }];
         fixture.detectChanges();
+        // component.boardList = [{ _id: "board-id", title: "test-board" }];
       }));
 
-      fit("should display the boards that were fetched", () => {
-        //TODO - make this test responsive to the promise
+      it("should display the boards that were fetched", () => {
         expect(getBoardButtons()[0].nativeElement.innerText).toBe("test-board");
       });
 
@@ -100,11 +101,12 @@ describe("BoardsListComponent", () => {
     });
 
     describe("when subscribing to a new board", () => {
+      let refreshPromise: TestPromise<any>;
+
       beforeEach(() => {
+        refreshPromise = new TestPromise<any>();
         (dependencies.httpService.get as jasmine.Spy).and.returnValue(
-          Promise.resolve({
-            boards: [{ title: "updated-board" }]
-          })
+          refreshPromise.promise
         );
         dependencies.boardRefreshService.boardListRefresh.next();
       });
@@ -115,8 +117,22 @@ describe("BoardsListComponent", () => {
         );
       });
 
-      it("should update the list", () => {
-        //TODO - make this test work
+      describe("when the new board list has been fetched", () => {
+        beforeEach(fakeAsync(() => {
+          refreshPromise.resolve({
+            boards: [{ title: "updated-board" }]
+          });
+
+          tick();
+
+          fixture.detectChanges();
+        }));
+
+        it("should update the list", () => {
+          expect(getBoardButtons()[0].nativeElement.innerText).toBe(
+            "updated-board"
+          );
+        });
       });
     });
   });

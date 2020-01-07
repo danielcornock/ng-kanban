@@ -33,7 +33,9 @@ export class BoardsListComponent implements OnInit, OnDestroy {
 
   private async _fetchBoards(): Promise<void> {
     this._httpService.get("boards/list").then(data => {
+      console.log(data);
       this.boardList = data.boards;
+      console.log(this.boardList);
     });
   }
 
