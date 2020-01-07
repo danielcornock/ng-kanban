@@ -1,0 +1,13 @@
+@import "src/assets/styles/themes.scss";
+
+.board {
+  &-container {
+    @include flex;
+    padding: $spacing-4;
+    overflow-x: scroll;
+  }
+
+  &-column {
+    @include space-by(right, $spacing-4);
+  }
+}

@@ -1,4 +1,10 @@
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import {
+  async,
+  ComponentFixture,
+  TestBed,
+  fakeAsync,
+  tick
+} from "@angular/core/testing";
 
 import { BoardsListComponent } from "./boards-list.component";
 import { BoardCreateComponentStub } from "../board-create/board-create.component.stub";
@@ -10,6 +16,7 @@ import { HttpService } from "src/app/shared/api/http-service/http.service";
 import { BoardRefreshService } from "../../services/board-refresh/board-refresh.service";
 import { DebugElement } from "@angular/core";
 import { By } from "@angular/platform-browser";
+import { TestPromise } from "src/app/testing/test-promise/test-promise";
 
 describe("BoardsListComponent", () => {
   let component: BoardsListComponent;
@@ -47,32 +54,34 @@ describe("BoardsListComponent", () => {
   }));
 
   beforeEach(() => {
-    (dependencies.httpService.get as jasmine.Spy).and.returnValue(
-      Promise.resolve({
-        boards: [{ title: "test-board" }]
-      })
-    );
-
     fixture = TestBed.createComponent(BoardsListComponent);
     component = fixture.componentInstance;
   });
 
   describe("on initialisation", () => {
-    beforeEach(() => {
+    let getPromise: TestPromise<any>;
+    beforeEach(async(() => {
+      getPromise = new TestPromise<any>();
+      (dependencies.httpService.get as jasmine.Spy).and.returnValue(
+        getPromise.promise
+      );
       fixture.detectChanges();
-    });
+    }));
 
     it("should fetch the board list", () => {
       expect(dependencies.httpService.get).toHaveBeenCalledWith("boards/list");
     });
 
     describe("when the boards have been fetched successfully", () => {
-      beforeEach(() => {
-        component.boardList = [{ _id: "board-id", title: "test-board" }];
-        fixture.detectChanges();
-      });
+      beforeEach(fakeAsync(() => {
+        getPromise.resolve({ board: { _id: "board-id", title: "test-board" } });
 
-      it("should display the boards that were fetched", () => {
+        tick();
+        // component.boardList = [{ _id: "board-id", title: "test-board" }];
+        fixture.detectChanges();
+      }));
+
+      fit("should display the boards that were fetched", () => {
         //TODO - make this test responsive to the promise
         expect(getBoardButtons()[0].nativeElement.innerText).toBe("test-board");
       });

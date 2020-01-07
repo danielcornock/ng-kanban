@@ -1,0 +1,44 @@
+$dark-red: hsl(360, 100%, 40%);
+$light-red: hsl(360, 100%, 94%);
+$dark-green: hsl(120, 58%, 30%);
+$light-green: hsl(120, 58%, 90%);
+$light-yellow: hsl(55, 92%, 90%);
+$dark-yellow: hsl(55, 92%, 25%);
+
+$color-text-success: $dark-green;
+$color-text-warning: $dark-yellow;
+$color-bg-danger: $light-red;
+
+$color-bg-danger: $light-red;
+$color-bg-success: $light-green;
+$color-bg-warning: $light-yellow;
+
+//* Border radius
+$br-max: 9999px;
+$br-med: 10px;
+$br-small: 5px;
+
+//* Font weight
+$light: 300;
+$standard: 400;
+$medium: 500;
+$semi-bold: 600;
+$bold: 700;
+$extra-bold: 800;
+
+//* Transition times
+$t250: 250ms;
+$t150: 150ms;
+
+//* Breakpoints
+$sd: 1300px;
+$ld: 1014px;
+$tablet: 768px;
+$phone: 480px;
+
+$font-tiny: 12px;
+$font-small: 14px;
+$font-standard: 16px;
+$font-default: 18px;
+$font-subheading: 20px;
+$font-large: 24px;

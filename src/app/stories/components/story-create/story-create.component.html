@@ -1,6 +1,15 @@
 <div class="storyCreate-container">
-  <form (ngSubmit)="createStory()" [formGroup]="storyForm">
-    <input type="text" formControlName="title" />
+  <form
+    class="storyCreate-form"
+    (ngSubmit)="createStory()"
+    [formGroup]="storyForm"
+  >
+    <input
+      type="text"
+      formControlName="title"
+      class="storyCreate-title"
+      placeholder="Story name"
+    />
     <input type="submit" value="Add story" class="storyCreate-submit" />
   </form>
 </div>

@@ -1,8 +1,10 @@
 <div *ngIf="board" class="board-container">
-  <h2>{{ board.title }}</h2>
   <ng-container *ngFor="let column of board.columns">
-    <app-column [appColumn]="column"></app-column>
+    <app-column class="board-column" [appColumn]="column"></app-column>
   </ng-container>
-  <app-column-create (appColumnCreateOnCreate)="addColumn($event)">
+  <app-column-create
+    class="board-column"
+    (appColumnCreateOnCreate)="addColumn($event)"
+  >
   </app-column-create>
 </div>

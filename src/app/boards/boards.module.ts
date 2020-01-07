@@ -6,13 +6,15 @@ import { ColumnComponent } from "./components/column/column.component";
 import { StoriesModule } from "../stories/stories.module";
 import { ColumnCreateComponent } from "./components/column-create/column-create.component";
 import { SharedModule } from "../shared/shared.module";
+import { BoardCreateComponent } from './components/board-create/board-create.component';
 
 @NgModule({
   declarations: [
     BoardsListComponent,
     BoardComponent,
     ColumnComponent,
-    ColumnCreateComponent
+    ColumnCreateComponent,
+    BoardCreateComponent
   ],
   imports: [CommonModule, StoriesModule, SharedModule],
   exports: [BoardsListComponent]

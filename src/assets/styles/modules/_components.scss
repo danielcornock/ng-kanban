@@ -1,0 +1,22 @@
+@mixin button-sm {
+  @include button-reset;
+  background-color: $blue-500;
+  color: white;
+  font-size: $text-sm;
+  font-weight: bold;
+  padding: $spacing-1 $spacing-4;
+  border-radius: $br-small;
+}
+
+@mixin text-input {
+  border: none;
+  width: 100%;
+  color: $gray-800;
+  font-size: $text-sm;
+  padding: $spacing-1 $spacing-2;
+  border-radius: $br-small;
+
+  &::placeholder {
+    color: $gray-500;
+  }
+}

@@ -12,6 +12,11 @@ const routes: Routes = [
     path: "boards/:boardId",
     canActivate: [AuthGuard],
     component: BoardComponent
+  },
+  {
+    path: "",
+    pathMatch: "full",
+    redirectTo: "home"
   }
 ];
 

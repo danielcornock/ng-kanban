@@ -9,7 +9,9 @@ import { RouterService } from "src/app/shared/router/router.service";
 describe("AuthGuard", () => {
   let authGuard: AuthGuard, authService: AuthService, router: RouterService;
   beforeEach(() => {
-    authService = new AuthServiceStub();
+    authService = (new AuthServiceStub() as Partial<
+      AuthService
+    >) as AuthService;
     router = (new RouterServiceStub() as Partial<
       RouterService
     >) as RouterService;

@@ -1,0 +1,13 @@
+@import "src/assets/styles/themes.scss";
+
+.story {
+  &-container {
+    background-color: $gray-200;
+    padding: $spacing-2;
+    border-radius: $br-small;
+  }
+
+  &-title {
+    font-size: $text-xl;
+  }
+}

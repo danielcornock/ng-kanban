@@ -1,0 +1,83 @@
+@mixin flex($orientation: row) {
+  display: flex;
+  flex-direction: $orientation;
+}
+
+@mixin center-self {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@mixin center-contents {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin media($device) {
+  @media (min-width: $device) {
+    @content;
+  }
+}
+
+@mixin media-alt($device) {
+  @media (max-width: $device) {
+    @content;
+  }
+}
+
+@mixin hover($speed: 0) {
+  @if ($speed != 0) {
+    transition: $speed;
+  }
+  &:hover {
+    @content;
+  }
+}
+
+@mixin pseudo($type) {
+  position: relative;
+  @if ($type == 'before') {
+    &::before {
+      content: '';
+      position: absolute;
+      @content;
+    }
+  } @else {
+    &::after {
+      content: '';
+      position: absolute;
+      @content;
+    }
+  }
+}
+
+@mixin button-reset {
+  padding: 0;
+  border: none;
+  cursor: pointer;
+  background-color: transparent;
+}
+
+@mixin default-image {
+  width: 100%;
+  object-fit: cover;
+}
+
+@mixin space-by($direction, $spacing) {
+  @if ($direction == 'right') {
+    margin-right: $spacing;
+    &:nth-last-child(1) {
+      margin-right: 0px;
+    }
+  }
+
+  @if ($direction == 'down') {
+    margin-bottom: $spacing;
+    &:nth-last-child(1) {
+      margin-bottom: 0px;
+    }
+  }
+}

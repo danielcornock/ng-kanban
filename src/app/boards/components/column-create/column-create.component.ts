@@ -27,6 +27,7 @@ export class ColumnCreateComponent implements OnInit {
 
   public addColumn() {
     this.appColumnCreateOnCreate.emit(this.columnForm.value.title);
+    this.columnForm.reset();
   }
 
   private _initialiseForm(): void {

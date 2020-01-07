@@ -1,0 +1,20 @@
+@import "src/assets/styles/themes.scss";
+
+.storyCreate {
+  &-container {
+  }
+
+  &-form {
+    @include flex;
+  }
+
+  &-title {
+    @include text-input;
+    flex-grow: 100%;
+    border: 1px solid $blue-500;
+  }
+
+  &-submit {
+    @include button-sm;
+  }
+}

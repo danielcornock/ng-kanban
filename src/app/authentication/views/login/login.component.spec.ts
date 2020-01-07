@@ -21,12 +21,6 @@ describe("LoginComponent", () => {
   let routerService: RouterServiceStub;
   let authService: AuthServiceStub;
 
-  function getEmailInput(): DebugElement {
-    return fixture.debugElement.query(By.css(".login-email"));
-  }
-  function getPasswordInput(): DebugElement {
-    return fixture.debugElement.query(By.css(".login-password"));
-  }
   function getSubmitButton(): DebugElement {
     return fixture.debugElement.query(By.css(".login-submit"));
   }
@@ -64,7 +58,7 @@ describe("LoginComponent", () => {
   describe("on initialisation", () => {
     beforeEach(() => {});
 
-    it("should ", () => {
+    it("should create the form", () => {
       expect(formBuilder.group).toHaveBeenCalledWith({
         email: ["", [jasmine.any(Function), jasmine.any(Function)]],
         password: ["", jasmine.any(Function)]
