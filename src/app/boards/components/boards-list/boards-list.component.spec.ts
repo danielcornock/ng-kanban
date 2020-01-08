@@ -80,7 +80,6 @@ describe("BoardsListComponent", () => {
 
         tick();
         fixture.detectChanges();
-        // component.boardList = [{ _id: "board-id", title: "test-board" }];
       }));
 
       it("should display the boards that were fetched", () => {
