@@ -28,10 +28,7 @@ describe("HomeComponent", () => {
     };
     TestBed.configureTestingModule({
       declarations: [HomeComponent, BoardsListComponentStub],
-      providers: [
-        { provide: AuthService, useValue: dependencies.authService },
-        { provide: RouterService, useValue: dependencies.router }
-      ]
+      providers: [{ provide: AuthService, useValue: dependencies.authService }]
     }).compileComponents();
   }));
 
@@ -48,10 +45,6 @@ describe("HomeComponent", () => {
 
     it("should log out the user", () => {
       expect(dependencies.authService.logout).toHaveBeenCalledWith();
-    });
-
-    it("should navigate to the login screen", () => {
-      expect(dependencies.router.navigate).toHaveBeenCalledWith("login");
     });
   });
 });
