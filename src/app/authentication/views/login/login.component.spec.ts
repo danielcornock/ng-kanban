@@ -1,4 +1,10 @@
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import {
+  async,
+  ComponentFixture,
+  TestBed,
+  fakeAsync,
+  tick
+} from "@angular/core/testing";
 
 import { LoginComponent } from "./login.component";
 import { FormBuilder } from "@angular/forms";
@@ -12,33 +18,38 @@ import { SharedModule } from "src/app/shared/shared.module";
 import { DebugElement } from "@angular/core";
 import { By } from "@angular/platform-browser";
 import { Subject } from "rxjs";
+import { TestPromise } from "src/app/testing/test-promise/test-promise";
 
 describe("LoginComponent", () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
-  let formBuilder: FormBuilder;
-  let httpService: HttpServiceStub;
-  let routerService: RouterServiceStub;
-  let authService: AuthServiceStub;
+  let dependencies: {
+    formBuilder: FormBuilder;
+    httpService: HttpServiceStub;
+    routerService: RouterServiceStub;
+    authService: AuthServiceStub;
+  };
 
   function getSubmitButton(): DebugElement {
     return fixture.debugElement.query(By.css(".login-submit"));
   }
 
   beforeEach(async(async () => {
-    (formBuilder = new FormBuilder()),
-      (httpService = new HttpServiceStub()),
-      (routerService = new RouterServiceStub()),
-      (authService = new AuthServiceStub());
+    dependencies = {
+      formBuilder: new FormBuilder(),
+      httpService: new HttpServiceStub(),
+      routerService: new RouterServiceStub(),
+      authService: new AuthServiceStub()
+    };
 
     await TestBed.configureTestingModule({
       imports: [SharedModule],
       declarations: [LoginComponent],
       providers: [
-        { provide: FormBuilder, useValue: formBuilder },
-        { provide: HttpService, useValue: httpService },
-        { provide: RouterService, useValue: routerService },
-        { provide: AuthService, useValue: authService }
+        { provide: FormBuilder, useValue: dependencies.formBuilder },
+        { provide: HttpService, useValue: dependencies.httpService },
+        { provide: RouterService, useValue: dependencies.routerService },
+        { provide: AuthService, useValue: dependencies.authService }
       ]
     }).compileComponents();
 
@@ -47,11 +58,11 @@ describe("LoginComponent", () => {
 
   beforeEach(() => {
     component = fixture.componentInstance;
-    const loginForm = formBuilder.group({
+    const loginForm = dependencies.formBuilder.group({
       email: [""],
       password: [""]
     });
-    spyOn(formBuilder, "group").and.returnValue(loginForm);
+    spyOn(dependencies.formBuilder, "group").and.returnValue(loginForm);
     fixture.detectChanges();
   });
 
@@ -59,41 +70,55 @@ describe("LoginComponent", () => {
     beforeEach(() => {});
 
     it("should create the form", () => {
-      expect(formBuilder.group).toHaveBeenCalledWith({
+      expect(dependencies.formBuilder.group).toHaveBeenCalledWith({
         email: ["", [jasmine.any(Function), jasmine.any(Function)]],
         password: ["", jasmine.any(Function)]
       });
     });
 
     describe("when the user submits the form", () => {
-      let httpSubject: Subject<any> = new Subject<any>();
+      let postPromise: TestPromise<any>;
 
       beforeEach(() => {
         component.loginForm.value.email = "daniel@me.com";
-        (httpService.post as jasmine.Spy).and.returnValue(
-          httpSubject.asObservable()
+        postPromise = new TestPromise();
+
+        (dependencies.httpService.post as jasmine.Spy).and.returnValue(
+          postPromise.promise
         );
+
         getSubmitButton().nativeElement.click();
       });
 
       it("should post the results to the API", () => {
-        expect(httpService.post).toHaveBeenCalledWith("auth/login", {
-          email: "daniel@me.com",
-          password: ""
-        });
+        expect(dependencies.httpService.post).toHaveBeenCalledWith(
+          "auth/login",
+          {
+            email: "daniel@me.com",
+            password: ""
+          }
+        );
       });
 
-      describe("when the results are posted successfully", () => {
-        beforeEach(() => {
-          httpSubject.next({ jwt: "jwt" });
-        });
+      describe("when the user logs in successfully", () => {
+        beforeEach(fakeAsync(() => {
+          postPromise.resolve({ jwt: "test-jwt" });
+
+          tick();
+
+          fixture.detectChanges();
+        }));
 
         it("should set the jwt to the return", () => {
-          expect(authService.setJwt).toHaveBeenCalledWith("jwt");
+          expect(dependencies.authService.setJwt).toHaveBeenCalledWith(
+            "test-jwt"
+          );
         });
 
         it("should navigate the user to the home page", () => {
-          expect(routerService.navigate).toHaveBeenCalledWith("home");
+          expect(dependencies.routerService.navigate).toHaveBeenCalledWith(
+            "home"
+          );
         });
       });
     });
