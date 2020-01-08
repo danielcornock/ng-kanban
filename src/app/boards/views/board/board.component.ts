@@ -1,7 +1,10 @@
 import { Component, OnInit } from "@angular/core";
 import { RouterService } from "src/app/shared/router/router.service";
 import { HttpService } from "src/app/shared/api/http-service/http.service";
-import { StoryApiService } from "src/app/stories/services/story-api.service";
+import {
+  StoryApiService,
+  IBoardUpdate
+} from "src/app/stories/services/story-api.service";
 import { BoardApiService } from "../../services/board-api/board-api.service";
 import { IBoard } from "../../interfaces/board.interface";
 
@@ -44,7 +47,7 @@ export class BoardComponent implements OnInit {
   }
 
   private _subscribeToNewStories(): void {
-    this._storyApiService.updateBoardSubject.subscribe((val: any) => {
+    this._storyApiService.updateBoardSubject.subscribe((val: IBoardUpdate) => {
       const col = this.board.columns.find(col => col._id === val.columnId);
       col.stories.push(val.storyId);
       this._saveBoard();

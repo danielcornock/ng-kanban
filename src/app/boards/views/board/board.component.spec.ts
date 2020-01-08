@@ -17,6 +17,9 @@ import { HttpService } from "src/app/shared/api/http-service/http.service";
 import { StoryApiService } from "src/app/stories/services/story-api.service";
 import { DebugElement } from "@angular/core";
 import { By } from "@angular/platform-browser";
+import { TestPromise } from "src/app/testing/test-promise/test-promise";
+import { BoardApiServiceStub } from "../../services/board-api/board-api.service.stub";
+import { BoardApiService } from "../../services/board-api/board-api.service";
 
 describe("BoardComponent", () => {
   let component: BoardComponent;
@@ -25,6 +28,7 @@ describe("BoardComponent", () => {
     routerService: RouterServiceStub;
     httpService: HttpServiceStub;
     storyApiService: StoryApiServiceStub;
+    boardApiService: BoardApiServiceStub;
   };
 
   function getColumnCreate(): DebugElement {
@@ -43,7 +47,8 @@ describe("BoardComponent", () => {
     dependencies = {
       routerService: new RouterServiceStub(),
       httpService: new HttpServiceStub(),
-      storyApiService: new StoryApiServiceStub()
+      storyApiService: new StoryApiServiceStub(),
+      boardApiService: new BoardApiServiceStub()
     };
 
     TestBed.configureTestingModule({
@@ -55,7 +60,8 @@ describe("BoardComponent", () => {
       providers: [
         { provide: RouterService, useValue: dependencies.routerService },
         { provide: HttpService, useValue: dependencies.httpService },
-        { provide: StoryApiService, useValue: dependencies.storyApiService }
+        { provide: StoryApiService, useValue: dependencies.storyApiService },
+        { provide: BoardApiService, useValue: dependencies.boardApiService }
       ]
     }).compileComponents();
   }));
@@ -66,25 +72,17 @@ describe("BoardComponent", () => {
   });
 
   describe("on initialisation", () => {
+    let getBoardPromise: TestPromise<any>;
+
     beforeEach(async(() => {
+      getBoardPromise = new TestPromise<any>();
+
       (dependencies.routerService.getUrlParams as jasmine.Spy).and.returnValue(
         "testBoardId"
       );
 
-      (dependencies.httpService.get as jasmine.Spy).and.returnValue(
-        Promise.resolve({
-          board: {
-            title: "testBoard",
-            columns: [
-              {
-                title: "column1"
-              },
-              {
-                title: "column2"
-              }
-            ]
-          }
-        })
+      (dependencies.boardApiService.fetchBoard as jasmine.Spy).and.returnValue(
+        getBoardPromise.promise
       );
     }));
 
@@ -99,54 +97,58 @@ describe("BoardComponent", () => {
     });
 
     it("should fetch the board from the API", () => {
-      expect(dependencies.httpService.get).toHaveBeenCalledWith(
-        "boards/testBoardId"
+      expect(dependencies.boardApiService.fetchBoard).toHaveBeenCalledWith(
+        "testBoardId"
       );
     });
 
     describe("when the data has been fetched", () => {
-      beforeEach(() => {
-        component.board = {
+      beforeEach(fakeAsync(() => {
+        getBoardPromise.resolve({
           title: "testBoard",
           columns: [
             {
-              title: "column1"
+              _id: "col1-id",
+              title: "column1",
+              stories: []
+            },
+            {
+              _id: "col2-id",
+              title: "column2"
             }
           ]
-        };
+        });
+
+        tick();
 
         fixture.detectChanges();
-      });
-
-      it("should display the title", () => {
-        expect(getTitle() === null).toBe(false);
-      });
+      }));
 
       it("should display the columns", () => {
-        expect(getColumns().length).toBe(1);
+        expect(getColumns().length).toBe(2);
         expect(getColumns()[0].componentInstance.appColumn).toEqual({
-          title: "column1"
+          _id: "col1-id",
+          title: "column1",
+          stories: []
+        });
+        expect(getColumns()[1].componentInstance.appColumn).toEqual({
+          _id: "col2-id",
+          title: "column2"
         });
       });
 
       describe("when a new column is added", () => {
+        let putBoardPromise: TestPromise<any>;
+
         beforeEach(() => {
+          putBoardPromise = new TestPromise<any>();
+
           (dependencies.httpService.put as jasmine.Spy).and.returnValue(
-            Promise.resolve({
-              title: "testBoard",
-              columns: [
-                {
-                  title: "column1"
-                },
-                {
-                  title: "column2"
-                }
-              ]
-            })
+            putBoardPromise.promise
           );
 
           getColumnCreate().componentInstance.appColumnCreateOnCreate.emit(
-            "newColumn"
+            "new-column"
           );
         });
 
@@ -157,10 +159,98 @@ describe("BoardComponent", () => {
               title: "testBoard",
               columns: [
                 {
-                  title: "column1"
+                  _id: "col1-id",
+                  title: "column1",
+                  stories: []
                 },
                 {
-                  title: "newColumn"
+                  _id: "col2-id",
+                  title: "column2"
+                },
+                {
+                  title: "new-column"
+                }
+              ]
+            }
+          );
+        });
+
+        describe("when the board has been successfully updated", () => {
+          let refreshBoardPromise: TestPromise<any>;
+
+          beforeEach(() => {
+            refreshBoardPromise = new TestPromise<any>();
+
+            (dependencies.boardApiService
+              .fetchBoard as jasmine.Spy).and.returnValue(
+              refreshBoardPromise.promise
+            );
+
+            putBoardPromise.resolve();
+          });
+
+          it("should refresh the board", () => {
+            expect(
+              dependencies.boardApiService.fetchBoard
+            ).toHaveBeenCalledWith("testBoardId");
+          });
+
+          describe("when the board has successfully refreshed", () => {
+            beforeEach(fakeAsync(() => {
+              refreshBoardPromise.resolve({
+                title: "testBoard",
+                columns: [
+                  {
+                    _id: "col1-id",
+                    title: "column1"
+                  },
+                  {
+                    _id: "col2-id",
+                    title: "column2"
+                  },
+                  {
+                    _id: "col3-id",
+                    title: "new-column"
+                  }
+                ]
+              });
+
+              tick();
+
+              fixture.detectChanges();
+            }));
+
+            it("should render the new columns", () => {
+              expect(getColumns()[2].componentInstance.appColumn).toEqual({
+                title: "new-column"
+              });
+            });
+          });
+        });
+      });
+
+      describe("when a new story is added", () => {
+        beforeEach(() => {
+          dependencies.storyApiService.updateBoardSubject.next({
+            columnId: "col1-id",
+            storyId: "storyId"
+          });
+        });
+
+        it("should save the board", () => {
+          expect(dependencies.httpService.put).toHaveBeenCalledWith(
+            "boards/testBoardId",
+            {
+              title: "testBoard",
+              columns: [
+                {
+                  _id: "col1-id",
+                  title: "column1",
+                  stories: ["storyId"]
+                },
+                {
+                  _id: "col2-id",
+                  title: "column2"
                 }
               ]
             }
