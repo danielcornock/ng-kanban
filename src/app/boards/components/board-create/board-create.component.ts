@@ -23,7 +23,6 @@ export class BoardCreateComponent implements OnInit {
 
   public async createBoard(): Promise<void> {
     await this._httpService.post("boards", this.createBoardForm.value);
-    console.log("yo");
     this._boardRefreshService.boardListRefresh.next();
   }
 
