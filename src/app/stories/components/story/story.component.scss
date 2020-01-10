@@ -8,6 +8,8 @@
   }
 
   &-title {
-    font-size: $text-xl;
+    font-size: $text-base;
+    font-weight: 400;
+    color: $gray-800;
   }
 }
