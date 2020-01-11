@@ -1,14 +1,21 @@
 <div class="column-container">
   <h3 class="column-title">{{ appColumn.title }}</h3>
-  <div class="column-column">
+  <div
+    class="column-column"
+    cdkDropList
+    (cdkDropListDropped)="drop($event)"
+    [cdkDropListData]="appColumn.stories"
+  >
     <app-story
       class="column-story"
       *ngFor="let story of appColumn.stories"
       [appStory]="story"
+      cdkDrag
     ></app-story>
-    <app-story-create
-      class="column-story"
-      [appStoryCreateColumnId]="appColumn._id"
-    ></app-story-create>
+    <div class="column-dudStory"></div>
   </div>
+  <app-story-create
+    class="column-storyCreate"
+    [appStoryCreateColumnId]="appColumn._id"
+  ></app-story-create>
 </div>

@@ -20,6 +20,7 @@ import { By } from "@angular/platform-browser";
 import { TestPromise } from "src/app/testing/test-promise/test-promise";
 import { BoardApiServiceStub } from "../../services/board-api/board-api.service.stub";
 import { BoardApiService } from "../../services/board-api/board-api.service";
+import { SharedModule } from "src/app/shared/shared.module";
 
 describe("BoardComponent", () => {
   let component: BoardComponent;
@@ -52,6 +53,7 @@ describe("BoardComponent", () => {
     };
 
     TestBed.configureTestingModule({
+      imports: [SharedModule],
       declarations: [
         BoardComponent,
         ColumnComponentStub,

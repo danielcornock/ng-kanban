@@ -14,7 +14,7 @@ import { IBoard } from "../../interfaces/board.interface";
   styleUrls: ["./board.component.scss"]
 })
 export class BoardComponent implements OnInit {
-  public board;
+  public board: IBoard;
   private _boardId: string;
 
   constructor(
@@ -31,11 +31,31 @@ export class BoardComponent implements OnInit {
 
   public addColumn(title: string) {
     this.board.columns.push({ title });
-    this._saveBoard();
+    this._saveBoardAndRefresh();
   }
 
-  private async _saveBoard() {
+  public async saveBoard() {
     await this._httpService.put(`boards/${this._boardId}`, this.board);
+  }
+
+  //! Deprecated until future use
+  // public drop(event: CdkDragDrop<IColumn>): void {
+  //   console.log(event);
+  //   if (event.currentIndex === event.previousIndex) {
+  //     return;
+  //   }
+
+  //   moveItemInArray(
+  //     this.board.columns,
+  //     event.previousIndex,
+  //     event.currentIndex
+  //   );
+
+  //   this.saveBoard();
+  // }
+
+  private async _saveBoardAndRefresh() {
+    await this.saveBoard();
     this._fetchBoard(this._boardId);
   }
 
@@ -50,7 +70,7 @@ export class BoardComponent implements OnInit {
     this._storyApiService.updateBoardSubject.subscribe((val: IBoardUpdate) => {
       const col = this.board.columns.find(col => col._id === val.columnId);
       col.stories.push(val.storyId);
-      this._saveBoard();
+      this._saveBoardAndRefresh();
     });
   }
 }

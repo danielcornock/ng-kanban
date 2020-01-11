@@ -2,12 +2,16 @@
 
 .board {
   &-container {
-    @include flex;
     padding: $spacing-4;
     overflow-x: scroll;
   }
 
+  &-columnsContainer {
+    @include flex;
+  }
+
   &-column {
     @include space-by(right, $spacing-4);
+    display: block;
   }
 }
