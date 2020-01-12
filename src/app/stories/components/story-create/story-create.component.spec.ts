@@ -45,6 +45,7 @@ describe("StoryCreateComponent", () => {
     fixture = TestBed.createComponent(StoryCreateComponent);
     component = fixture.componentInstance;
     component.appStoryCreateColumnId = "columnId";
+    component.appStoryCreateBoardId = "boardId";
     fixture.detectChanges();
   });
 
@@ -65,7 +66,8 @@ describe("StoryCreateComponent", () => {
     it("should send the story to the API", () => {
       expect(dependencies.storyApiService.addNewStory).toHaveBeenCalledWith(
         "test-title",
-        "columnId"
+        "columnId",
+        "boardId"
       );
     });
   });

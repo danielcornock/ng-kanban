@@ -6,4 +6,5 @@ import { Component, Input } from "@angular/core";
 })
 export class StoryCreateComponentStub {
   @Input() appStoryCreateColumnId: string;
+  @Input() appStoryCreateBoardId: string;
 }

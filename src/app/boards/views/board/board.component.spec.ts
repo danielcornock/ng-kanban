@@ -108,6 +108,7 @@ describe("BoardComponent", () => {
       beforeEach(fakeAsync(() => {
         getBoardPromise.resolve({
           title: "testBoard",
+          _id: "board-id",
           columns: [
             {
               _id: "col1-id",
@@ -137,6 +138,9 @@ describe("BoardComponent", () => {
           _id: "col2-id",
           title: "column2"
         });
+        expect(getColumns()[0].componentInstance.appColumnBoardId).toBe(
+          "board-id"
+        );
       });
 
       describe("when a new column is added", () => {
@@ -159,6 +163,7 @@ describe("BoardComponent", () => {
             "boards/testBoardId",
             {
               title: "testBoard",
+              _id: "board-id",
               columns: [
                 {
                   _id: "col1-id",
@@ -201,6 +206,7 @@ describe("BoardComponent", () => {
             beforeEach(fakeAsync(() => {
               refreshBoardPromise.resolve({
                 title: "testBoard",
+                _id: "board-id",
                 columns: [
                   {
                     _id: "col1-id",
@@ -244,6 +250,7 @@ describe("BoardComponent", () => {
             "boards/testBoardId",
             {
               title: "testBoard",
+              _id: "board-id",
               columns: [
                 {
                   _id: "col1-id",

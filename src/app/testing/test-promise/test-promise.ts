@@ -1,13 +1,17 @@
 export class TestPromise<T> {
-  public promise: Promise<T>;
+  public promise: Promise<Partial<T>>;
 
-  public resolve: [T] extends [void] ? (data?: T) => void : (data: T) => void;
+  public resolve: [T] extends [void]
+    ? (data?: Partial<T>) => void
+    : (data: Partial<T>) => void;
   public reject: (err: unknown) => void;
 
   constructor() {
-    this.promise = new Promise<T>(
+    this.promise = new Promise<Partial<T>>(
       (
-        resolve: [T] extends [void] ? (data?: T) => void : (data: T) => void,
+        resolve: [T] extends [void]
+          ? (data?: Partial<T>) => void
+          : (data: T) => void,
         reject: (err: unknown) => void
       ): void => {
         this.resolve = resolve;

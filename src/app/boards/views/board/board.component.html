@@ -4,6 +4,7 @@
       *ngFor="let column of board.columns"
       class="board-column"
       [appColumn]="column"
+      [appColumnBoardId]="board._id"
     ></app-column>
     <app-column-create
       class="board-column"

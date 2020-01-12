@@ -7,4 +7,6 @@ import { IColumn } from "../../interfaces/column.interface";
 })
 export class ColumnComponentStub {
   @Input() appColumn: IColumn;
+
+  @Input() appColumnBoardId: string;
 }

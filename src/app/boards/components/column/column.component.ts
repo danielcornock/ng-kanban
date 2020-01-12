@@ -15,6 +15,8 @@ import { IStory } from "src/app/stories/interfaces/story.interface";
 export class ColumnComponent implements OnInit {
   @Input() appColumn: IColumn;
 
+  @Input() appColumnBoardId: string;
+
   @Output() appColumnOnDrop: EventEmitter<void> = new EventEmitter<void>();
 
   constructor() {}

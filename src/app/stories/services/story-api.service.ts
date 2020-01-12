@@ -16,9 +16,9 @@ export class StoryApiService {
     this._httpService = httpService;
   }
 
-  public addNewStory(title: string, columnId: string) {
+  public addNewStory(title: string, columnId: string, boardId: string) {
     this._httpService
-      .post("stories", { title })
+      .post(`boards/${boardId}/stories`, { title })
       .then(({ story }) => {
         this.updateBoardSubject.next({
           storyId: story._id,

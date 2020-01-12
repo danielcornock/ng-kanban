@@ -33,13 +33,16 @@ describe("StoryApiService", () => {
         observableData = data;
       });
 
-      service.addNewStory("storyTitle", "columnId");
+      service.addNewStory("storyTitle", "columnId", "boardId");
     });
 
     it("should post the story to the API", () => {
-      expect(dependencies.httpService.post).toHaveBeenCalledWith("stories", {
-        title: "storyTitle"
-      });
+      expect(dependencies.httpService.post).toHaveBeenCalledWith(
+        "boards/boardId/stories",
+        {
+          title: "storyTitle"
+        }
+      );
     });
 
     it("should next the story title and column id", () => {

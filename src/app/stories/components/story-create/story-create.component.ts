@@ -10,6 +10,7 @@ import { StoryApiService } from "../../services/story-api.service";
 })
 export class StoryCreateComponent implements OnInit {
   @Input() appStoryCreateColumnId: string;
+  @Input() appStoryCreateBoardId: string;
 
   public storyForm: FormGroup;
 
@@ -28,7 +29,8 @@ export class StoryCreateComponent implements OnInit {
   public async createStory(): Promise<void> {
     this._storyApiService.addNewStory(
       this.storyForm.value.title,
-      this.appStoryCreateColumnId
+      this.appStoryCreateColumnId,
+      this.appStoryCreateBoardId
     );
   }
 
