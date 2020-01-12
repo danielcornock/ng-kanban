@@ -1,4 +1,13 @@
-import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+  ViewChild,
+  ElementRef,
+  AfterViewInit
+} from "@angular/core";
 import { IColumn } from "../../interfaces/column.interface";
 import {
   CdkDragDrop,
@@ -12,16 +21,21 @@ import { IStory } from "src/app/stories/interfaces/story.interface";
   templateUrl: "./column.component.html",
   styleUrls: ["./column.component.scss"]
 })
-export class ColumnComponent implements OnInit {
+export class ColumnComponent implements OnInit, AfterViewInit {
   @Input() appColumn: IColumn;
 
   @Input() appColumnBoardId: string;
 
   @Output() appColumnOnDrop: EventEmitter<void> = new EventEmitter<void>();
 
+  @ViewChild("columnContainer", { static: true }) columnContainer: ElementRef;
   constructor() {}
 
   ngOnInit() {}
+
+  ngAfterViewInit(): void {
+    this._adjustPaddingForScrollBar();
+  }
 
   public drop(event: CdkDragDrop<IStory>) {
     console.log(event);
@@ -45,5 +59,13 @@ export class ColumnComponent implements OnInit {
     }
 
     this.appColumnOnDrop.emit();
+  }
+
+  private _adjustPaddingForScrollBar(): void {
+    const columnElement = this.columnContainer.nativeElement;
+
+    if (columnElement.scrollHeight > columnElement.clientHeight) {
+      this.columnContainer.nativeElement.style.paddingRight = "1rem";
+    }
   }
 }

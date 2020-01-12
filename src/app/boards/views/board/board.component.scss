@@ -3,11 +3,14 @@
 .board {
   &-container {
     padding: $spacing-4;
+    height: calc(100vh - 54px);
     overflow-x: scroll;
+    overflow-y: hidden;
   }
 
   &-columnsContainer {
     @include flex;
+    height: 100%;
   }
 
   &-column {
