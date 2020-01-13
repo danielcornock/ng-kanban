@@ -38,7 +38,6 @@ export class ColumnComponent implements OnInit, AfterViewInit {
   }
 
   public drop(event: CdkDragDrop<IStory>) {
-    console.log(event);
     if (event.container.id === event.previousContainer.id) {
       if (event.currentIndex === event.previousIndex) {
         return;
