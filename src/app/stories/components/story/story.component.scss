@@ -3,6 +3,8 @@
 .story {
   &-container {
     @include flex(column);
+    @include button-reset;
+    width: 100%;
     background-color: $gray-200;
     padding: $spacing-2;
     border-radius: $br-small;
