@@ -5,11 +5,7 @@ import { HeaderComponent } from "./layouts/header/header.component";
 import { DragDropModule } from "@angular/cdk/drag-drop";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
-import {
-  MatDialogModule,
-  MatDialogRef,
-  MatNativeDateModule
-} from "@angular/material";
+import { MatDialogModule, MatDialogRef } from "@angular/material";
 
 @NgModule({
   declarations: [HeaderComponent],
