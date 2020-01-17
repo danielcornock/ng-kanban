@@ -1,0 +1,14 @@
+<label
+  class="formInputTextarea-label"
+  [formGroup]="parentForm"
+  [for]="controlName"
+>
+  <textarea
+    [id]="controlName"
+    class="formInputTextarea-textarea"
+    (blur)="onTitleEnter($event)"
+    #textarea
+    [formControlName]="controlName"
+    (keydown)="onTitleEnter($event)"
+  ></textarea>
+</label>
