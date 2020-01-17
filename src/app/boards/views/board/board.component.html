@@ -5,6 +5,7 @@
       class="board-column"
       [appColumn]="column"
       [appColumnBoardId]="board._id"
+      (appColumnOnDrop)="saveBoard()"
     ></app-column>
     <app-column-create
       class="board-column"

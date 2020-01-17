@@ -21,6 +21,7 @@ import { TestPromise } from "src/app/testing/test-promise/test-promise";
 import { BoardApiServiceStub } from "../../services/board-api/board-api.service.stub";
 import { BoardApiService } from "../../services/board-api/board-api.service";
 import { SharedModule } from "src/app/shared/shared.module";
+import { IBoard } from "../../interfaces/board.interface";
 
 describe("BoardComponent", () => {
   let component: BoardComponent;
@@ -105,10 +106,11 @@ describe("BoardComponent", () => {
     });
 
     describe("when the data has been fetched", () => {
+      let mockBoard: IBoard;
       beforeEach(fakeAsync(() => {
-        getBoardPromise.resolve({
+        mockBoard = {
           title: "testBoard",
-          _id: "board-id",
+          _id: "testBoardId",
           columns: [
             {
               _id: "col1-id",
@@ -120,14 +122,16 @@ describe("BoardComponent", () => {
               title: "column2"
             }
           ]
-        });
+        } as IBoard;
+
+        getBoardPromise.resolve(mockBoard);
 
         tick();
 
         fixture.detectChanges();
       }));
 
-      it("should display the columns", () => {
+      it("should display th_e columns", () => {
         expect(getColumns().length).toBe(2);
         expect(getColumns()[0].componentInstance.appColumn).toEqual({
           _id: "col1-id",
@@ -139,8 +143,22 @@ describe("BoardComponent", () => {
           title: "column2"
         });
         expect(getColumns()[0].componentInstance.appColumnBoardId).toBe(
-          "board-id"
+          "testBoardId"
         );
+      });
+
+      describe("when a story is moved", () => {
+        beforeEach(() => {
+          console;
+          getColumns()[0].componentInstance.appColumnOnDrop.emit();
+        });
+
+        it("should save the board to the API", () => {
+          expect(dependencies.httpService.put).toHaveBeenCalledWith(
+            "boards/testBoardId",
+            mockBoard
+          );
+        });
       });
 
       describe("when a new column is added", () => {
@@ -163,7 +181,7 @@ describe("BoardComponent", () => {
             "boards/testBoardId",
             {
               title: "testBoard",
-              _id: "board-id",
+              _id: "testBoardId",
               columns: [
                 {
                   _id: "col1-id",
@@ -206,7 +224,7 @@ describe("BoardComponent", () => {
             beforeEach(fakeAsync(() => {
               refreshBoardPromise.resolve({
                 title: "testBoard",
-                _id: "board-id",
+                _id: "testBoardId",
                 columns: [
                   {
                     _id: "col1-id",
@@ -250,7 +268,7 @@ describe("BoardComponent", () => {
             "boards/testBoardId",
             {
               title: "testBoard",
-              _id: "board-id",
+              _id: "testBoardId",
               columns: [
                 {
                   _id: "col1-id",
