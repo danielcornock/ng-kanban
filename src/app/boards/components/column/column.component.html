@@ -10,6 +10,7 @@
       class="column-story"
       *ngFor="let story of appColumn.stories"
       [appStory]="story"
+      [appStoryColumnId]="appColumn._id"
       cdkDrag
     ></app-story>
     <div class="column-dudStory"></div>

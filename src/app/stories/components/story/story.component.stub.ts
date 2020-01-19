@@ -7,4 +7,5 @@ import { IStory } from "../../interfaces/story.interface";
 })
 export class StoryComponentStub {
   @Input() appStory: IStory;
+  @Input() appStoryColumnId: string;
 }
