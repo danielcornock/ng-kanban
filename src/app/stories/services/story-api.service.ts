@@ -10,13 +10,17 @@ export class StoryApiService {
     IBoardUpdate
   >();
 
+  public deleteStorySubject: Subject<IBoardUpdate> = new Subject<
+    IBoardUpdate
+  >();
+
   private readonly _httpService: HttpService;
 
   constructor(httpService: HttpService) {
     this._httpService = httpService;
   }
 
-  public addNewStory(title: string, columnId: string, boardId: string) {
+  public addNewStory(title: string, columnId: string, boardId: string): void {
     this._httpService
       .post(`boards/${boardId}/stories`, { title })
       .then(({ story }) => {
@@ -26,6 +30,13 @@ export class StoryApiService {
         });
       })
       .catch(() => null);
+  }
+
+  public async deleteStory(storyId: string, columnId: string): Promise<void> {
+    try {
+      await this._httpService.delete(`stories/${storyId}`);
+      this.deleteStorySubject.next({ storyId, columnId });
+    } catch {}
   }
 }
 

@@ -6,5 +6,11 @@ export class StoryApiServiceStub {
     IBoardUpdate
   >();
 
-  public addNewStory = jasmine.createSpy("StoryApiServiceStub.addNewStory");
+  public deleteStorySubject: Subject<IBoardUpdate> = new Subject<
+    IBoardUpdate
+  >();
+
+  public addNewStory = jasmine.createSpy("addNewStory");
+
+  public deleteStory = jasmine.createSpy("deleteStory");
 }

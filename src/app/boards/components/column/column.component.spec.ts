@@ -62,6 +62,9 @@ describe("ColumnComponent", () => {
 
     it("should display the stories", () => {
       expect(getStories()[0].componentInstance.appStory).toBe(testStory);
+      expect(getStories()[0].componentInstance.appStoryColumnId).toBe(
+        "column-id"
+      );
     });
 
     it("should pass the column id to the story create component", () => {

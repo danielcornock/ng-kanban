@@ -8,6 +8,7 @@ import {
 import { BoardApiService } from "../../services/board-api/board-api.service";
 import { IBoard } from "../../interfaces/board.interface";
 import { BoardRefreshService } from "../../services/board-refresh/board-refresh.service";
+import { IStory } from "src/app/stories/interfaces/story.interface";
 
 @Component({
   selector: "app-board",
@@ -29,6 +30,7 @@ export class BoardComponent implements OnInit {
   ngOnInit() {
     this._fetchBoard();
     this._subscribeToNewStories();
+    this._subscribeToDeletedStories();
     this._onBoardRefresh();
   }
 
@@ -79,6 +81,18 @@ export class BoardComponent implements OnInit {
     this._storyApiService.updateBoardSubject.subscribe((val: IBoardUpdate) => {
       const col = this.board.columns.find(col => col._id === val.columnId);
       col.stories.push(val.storyId);
+      this._saveBoardAndRefresh();
+    });
+  }
+
+  private _subscribeToDeletedStories(): void {
+    this._storyApiService.deleteStorySubject.subscribe((val: IBoardUpdate) => {
+      const col = this.board.columns.find(col => col._id === val.columnId);
+
+      col.stories = col.stories.filter((story: IStory) => {
+        return story._id !== val.storyId;
+      });
+
       this._saveBoardAndRefresh();
     });
   }

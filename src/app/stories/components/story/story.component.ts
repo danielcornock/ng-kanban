@@ -10,6 +10,7 @@ import { EditStoryModalComponent } from "../edit-story-modal/edit-story-modal.co
 })
 export class StoryComponent implements OnInit {
   @Input() appStory: IStory;
+  @Input() appStoryColumnId: string;
 
   constructor(private readonly _modalService: ModalService) {}
 
@@ -17,7 +18,8 @@ export class StoryComponent implements OnInit {
 
   public openStoryModal(): void {
     this._modalService.openModal(EditStoryModalComponent, {
-      storyId: this.appStory._id
+      storyId: this.appStory._id,
+      columnId: this.appStoryColumnId
     });
   }
 }

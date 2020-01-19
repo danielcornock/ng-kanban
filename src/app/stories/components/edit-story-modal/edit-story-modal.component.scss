@@ -12,6 +12,21 @@
 
   &-title {
     font-weight: 500;
-    font-size: 20px;
+    font-size: $text-lg;
+  }
+
+  &-delete {
+    @include button-reset;
+    padding: $spacing-3 $spacing-5;
+    font-size: $text-lg;
+    background-color: $red-200;
+    color: $red-600;
+    font-weight: $bold;
+    border-radius: $br-small;
+
+    @include hover(0) {
+      background-color: $red-300;
+      color: $red-700;
+    }
   }
 }

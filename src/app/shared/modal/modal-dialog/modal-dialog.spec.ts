@@ -4,12 +4,8 @@ import { MatDialogRef } from "@angular/material";
 import { BoardCreateComponent } from "src/app/boards/components/board-create/board-create.component";
 
 class TestModal extends ModalDialog<BoardCreateComponent> {
-  constructor(matDialogRef: MatDialogRef<BoardCreateComponent>) {
-    super(matDialogRef);
-  }
-
-  public accessFormatData(data): void {
-    this._formatData(data);
+  constructor(matDialogRef: MatDialogRef<BoardCreateComponent>, mockData) {
+    super(matDialogRef, mockData);
   }
 }
 describe("ModalDialogComponent", () => {
@@ -19,7 +15,13 @@ describe("ModalDialogComponent", () => {
     matDialogRef = (new MatDialogRefStub() as Partial<
       MatDialogRef<any>
     >) as MatDialogRef<any>;
-    component = new TestModal(matDialogRef);
+
+    const mockData = { data: { test: "test" } };
+    component = new TestModal(matDialogRef, mockData);
+  });
+
+  it("should set the dialog data to the pure data", () => {
+    expect(component.dialogData).toEqual({ test: "test" });
   });
 
   describe("when closing the modal", () => {
@@ -28,21 +30,7 @@ describe("ModalDialogComponent", () => {
     });
 
     it("should close the dialog", () => {
-      expect(matDialogRef.close).toHaveBeenCalledWith();
-    });
-  });
-
-  describe("when formatting the data", () => {
-    beforeEach(() => {
-      component.accessFormatData({
-        data: {
-          test: "test"
-        }
-      });
-    });
-
-    it("should set the dialog data to the pure data", () => {
-      expect(component.dialogData).toEqual({ test: "test" });
+      expect(matDialogRef.close).toHaveBeenCalledWith(undefined);
     });
   });
 });
