@@ -22,6 +22,8 @@ import { BoardApiServiceStub } from "../../services/board-api/board-api.service.
 import { BoardApiService } from "../../services/board-api/board-api.service";
 import { SharedModule } from "src/app/shared/shared.module";
 import { IBoard } from "../../interfaces/board.interface";
+import { BoardRefreshServiceStub } from "../../services/board-refresh/board-refresh.service.stub";
+import { BoardRefreshService } from "../../services/board-refresh/board-refresh.service";
 
 describe("BoardComponent", () => {
   let component: BoardComponent;
@@ -31,6 +33,7 @@ describe("BoardComponent", () => {
     httpService: HttpServiceStub;
     storyApiService: StoryApiServiceStub;
     boardApiService: BoardApiServiceStub;
+    boardRefreshService: BoardRefreshServiceStub;
   };
 
   function getColumnCreate(): DebugElement {
@@ -50,7 +53,8 @@ describe("BoardComponent", () => {
       routerService: new RouterServiceStub(),
       httpService: new HttpServiceStub(),
       storyApiService: new StoryApiServiceStub(),
-      boardApiService: new BoardApiServiceStub()
+      boardApiService: new BoardApiServiceStub(),
+      boardRefreshService: new BoardRefreshServiceStub()
     };
 
     TestBed.configureTestingModule({
@@ -64,7 +68,11 @@ describe("BoardComponent", () => {
         { provide: RouterService, useValue: dependencies.routerService },
         { provide: HttpService, useValue: dependencies.httpService },
         { provide: StoryApiService, useValue: dependencies.storyApiService },
-        { provide: BoardApiService, useValue: dependencies.boardApiService }
+        { provide: BoardApiService, useValue: dependencies.boardApiService },
+        {
+          provide: BoardRefreshService,
+          useValue: dependencies.boardRefreshService
+        }
       ]
     }).compileComponents();
   }));
@@ -77,7 +85,7 @@ describe("BoardComponent", () => {
   describe("on initialisation", () => {
     let getBoardPromise: TestPromise<any>;
 
-    beforeEach(async(() => {
+    beforeEach(() => {
       getBoardPromise = new TestPromise<any>();
 
       (dependencies.routerService.getUrlParams as jasmine.Spy).and.returnValue(
@@ -87,9 +95,7 @@ describe("BoardComponent", () => {
       (dependencies.boardApiService.fetchBoard as jasmine.Spy).and.returnValue(
         getBoardPromise.promise
       );
-    }));
 
-    beforeEach(() => {
       fixture.detectChanges();
     });
 
@@ -131,7 +137,7 @@ describe("BoardComponent", () => {
         fixture.detectChanges();
       }));
 
-      it("should display th_e columns", () => {
+      it("should display the columns", () => {
         expect(getColumns().length).toBe(2);
         expect(getColumns()[0].componentInstance.appColumn).toEqual({
           _id: "col1-id",
@@ -145,6 +151,18 @@ describe("BoardComponent", () => {
         expect(getColumns()[0].componentInstance.appColumnBoardId).toBe(
           "testBoardId"
         );
+      });
+
+      describe("when the board is refreshed", () => {
+        beforeEach(() => {
+          dependencies.boardRefreshService.boardListRefresh.next();
+        });
+
+        it("should fetch the updated board", () => {
+          expect(dependencies.boardApiService.fetchBoard).toHaveBeenCalledWith(
+            "testBoardId"
+          );
+        });
       });
 
       describe("when a story is moved", () => {

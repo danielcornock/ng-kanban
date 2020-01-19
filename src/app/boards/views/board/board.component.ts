@@ -7,6 +7,7 @@ import {
 } from "src/app/stories/services/story-api.service";
 import { BoardApiService } from "../../services/board-api/board-api.service";
 import { IBoard } from "../../interfaces/board.interface";
+import { BoardRefreshService } from "../../services/board-refresh/board-refresh.service";
 
 @Component({
   selector: "app-board",
@@ -21,12 +22,14 @@ export class BoardComponent implements OnInit {
     private readonly _routerService: RouterService,
     private readonly _httpService: HttpService,
     private readonly _storyApiService: StoryApiService,
-    private readonly _boardApiService: BoardApiService
+    private readonly _boardApiService: BoardApiService,
+    private readonly _boardRefreshService: BoardRefreshService
   ) {}
 
   ngOnInit() {
     this._fetchBoard();
     this._subscribeToNewStories();
+    this._onBoardRefresh();
   }
 
   public addColumn(title: string) {
@@ -38,7 +41,7 @@ export class BoardComponent implements OnInit {
     await this._httpService.put(`boards/${this._boardId}`, this.board);
   }
 
-  //! Deprecated until future use
+  //! Deprecated until future use - drag drop columns
   // public drop(event: CdkDragDrop<IColumn>): void {
   //   console.log(event);
   //   if (event.currentIndex === event.previousIndex) {
@@ -53,6 +56,12 @@ export class BoardComponent implements OnInit {
 
   //   this.saveBoard();
   // }
+
+  private _onBoardRefresh(): void {
+    this._boardRefreshService.boardListRefresh.subscribe(() => {
+      this._fetchBoard(this._boardId);
+    });
+  }
 
   private async _saveBoardAndRefresh() {
     await this.saveBoard();
