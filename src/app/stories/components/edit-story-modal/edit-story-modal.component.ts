@@ -12,6 +12,7 @@ import { IStory } from "../../interfaces/story.interface";
 import { FormBuilder, Validators, FormGroup } from "@angular/forms";
 import { BoardRefreshService } from "src/app/boards/services/board-refresh/board-refresh.service";
 import { IControlExport } from "src/app/shared/forms/interfaces/control-export.interface";
+import { StoryApiService } from "../../services/story-api.service";
 
 @Component({
   selector: "app-edit-story-modal",
@@ -24,22 +25,15 @@ export class EditStoryModalComponent
   public story: IStory;
   public storyForm: FormGroup;
 
-  private readonly _httpService: HttpService;
-  private readonly _formBuilder: FormBuilder;
-  private readonly _boardRefreshService: BoardRefreshService;
-
   constructor(
     @Inject(MAT_DIALOG_DATA) data: any,
     matDialogRef: MatDialogRef<EditStoryModalComponent>,
-    httpService: HttpService,
-    formBuilder: FormBuilder,
-    boardRefreshService: BoardRefreshService
+    private readonly _httpService: HttpService,
+    private readonly _formBuilder: FormBuilder,
+    private readonly _boardRefreshService: BoardRefreshService,
+    private readonly _storyApiService: StoryApiService
   ) {
-    super(matDialogRef);
-    this._httpService = httpService;
-    this._formBuilder = formBuilder;
-    this._boardRefreshService = boardRefreshService;
-    this._formatData(data);
+    super(matDialogRef, data);
   }
 
   async ngOnInit() {
@@ -51,6 +45,14 @@ export class EditStoryModalComponent
     if (this.story[event.name] === event.value) return;
     this.story[event.name] = event.value;
     this._updateStory();
+  }
+
+  public async deleteStory(): Promise<void> {
+    await this._storyApiService.deleteStory(
+      this.story._id,
+      this.dialogData.columnId
+    );
+    this.closeModal();
   }
 
   private async _updateStory(): Promise<void> {

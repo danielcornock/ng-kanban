@@ -19,6 +19,8 @@ import { FormBuilder, ReactiveFormsModule, FormGroup } from "@angular/forms";
 import { BoardRefreshServiceStub } from "src/app/boards/services/board-refresh/board-refresh.service.stub";
 import { BoardRefreshService } from "src/app/boards/services/board-refresh/board-refresh.service";
 import { IStory } from "../../interfaces/story.interface";
+import { StoryApiServiceStub } from "../../services/story-api.service.stub";
+import { StoryApiService } from "../../services/story-api.service";
 
 describe("EditStoryModalComponent", () => {
   let component: EditStoryModalComponent,
@@ -31,6 +33,7 @@ describe("EditStoryModalComponent", () => {
       httpService: HttpServiceStub;
       formBuilder: FormBuilder;
       boardRefreshService: BoardRefreshServiceStub;
+      storyApiService: StoryApiServiceStub;
     };
 
   function getStoryTitle(): DebugElement {
@@ -39,17 +42,23 @@ describe("EditStoryModalComponent", () => {
     );
   }
 
+  function getDeleteButton(): DebugElement {
+    return fixture.debugElement.query(By.css(".editStoryModal-delete"));
+  }
+
   beforeEach(async(() => {
     dependencies = {
       dialogData: {
         data: {
-          storyId: "test"
+          storyId: "test",
+          columnId: "column-id"
         }
       },
       matDialogRef: new MatDialogRefStub(),
       httpService: new HttpServiceStub(),
       formBuilder: new FormBuilder(),
-      boardRefreshService: new BoardRefreshServiceStub()
+      boardRefreshService: new BoardRefreshServiceStub(),
+      storyApiService: new StoryApiServiceStub()
     };
 
     TestBed.configureTestingModule({
@@ -63,6 +72,10 @@ describe("EditStoryModalComponent", () => {
         {
           provide: BoardRefreshService,
           useValue: dependencies.boardRefreshService
+        },
+        {
+          provide: StoryApiService,
+          useValue: dependencies.storyApiService
         }
       ]
     }).compileComponents();
@@ -118,6 +131,39 @@ describe("EditStoryModalComponent", () => {
 
       it("should pass the form config to the form input", () => {
         expect(getStoryTitle().componentInstance.parentForm).toBe(mockForm);
+      });
+
+      describe("when the delete button is clickec", () => {
+        let deleteStoryPromise: TestPromise<void>;
+
+        beforeEach(() => {
+          deleteStoryPromise = new TestPromise<void>();
+          (dependencies.storyApiService
+            .deleteStory as jasmine.Spy).and.returnValue(
+            deleteStoryPromise.promise
+          );
+
+          getDeleteButton().nativeElement.click();
+        });
+
+        it("should delete the story", () => {
+          expect(dependencies.storyApiService.deleteStory).toHaveBeenCalledWith(
+            "story-id",
+            "column-id"
+          );
+        });
+
+        describe("when the story has been successfully deleted", () => {
+          beforeEach(async(() => {
+            deleteStoryPromise.resolve();
+          }));
+
+          it("should close the modal", () => {
+            expect(dependencies.matDialogRef.close).toHaveBeenCalledWith(
+              undefined
+            );
+          });
+        });
       });
 
       describe("when the input for the title changes", () => {
