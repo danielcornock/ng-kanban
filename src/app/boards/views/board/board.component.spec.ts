@@ -24,6 +24,7 @@ import { SharedModule } from "src/app/shared/shared.module";
 import { IBoard } from "../../interfaces/board.interface";
 import { BoardRefreshServiceStub } from "../../services/board-refresh/board-refresh.service.stub";
 import { BoardRefreshService } from "../../services/board-refresh/board-refresh.service";
+import { IStory } from "src/app/stories/interfaces/story.interface";
 
 describe("BoardComponent", () => {
   let component: BoardComponent;
@@ -161,6 +162,40 @@ describe("BoardComponent", () => {
         it("should fetch the updated board", () => {
           expect(dependencies.boardApiService.fetchBoard).toHaveBeenCalledWith(
             "testBoardId"
+          );
+        });
+      });
+
+      describe("when a story is deleted", () => {
+        beforeEach(() => {
+          mockBoard.columns[0].stories.push({ _id: "story-id" } as IStory);
+
+          fixture.detectChanges();
+
+          dependencies.storyApiService.deleteStorySubject.next({
+            storyId: "story-id",
+            columnId: "col1-id"
+          });
+        });
+
+        it("should save the updated board", () => {
+          expect(dependencies.httpService.put).toHaveBeenCalledWith(
+            "boards/testBoardId",
+            {
+              title: "testBoard",
+              _id: "testBoardId",
+              columns: [
+                {
+                  _id: "col1-id",
+                  title: "column1",
+                  stories: []
+                },
+                {
+                  _id: "col2-id",
+                  title: "column2"
+                }
+              ]
+            }
           );
         });
       });
