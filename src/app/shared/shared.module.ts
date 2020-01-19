@@ -6,9 +6,11 @@ import { DragDropModule } from "@angular/cdk/drag-drop";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 import { MatDialogModule, MatDialogRef } from "@angular/material";
+import { FormInputTextareaComponent } from "./forms/form-input-textarea/form-input-textarea.component";
+import { TextAreaAutoSizeDirective } from './forms/directives/text-area-auto-size.directive';
 
 @NgModule({
-  declarations: [HeaderComponent],
+  declarations: [HeaderComponent, FormInputTextareaComponent, TextAreaAutoSizeDirective],
   imports: [
     CommonModule,
     FormsModule,
@@ -23,7 +25,8 @@ import { MatDialogModule, MatDialogRef } from "@angular/material";
     DragDropModule,
     HeaderComponent,
     MatDialogModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    FormInputTextareaComponent
   ],
   providers: [{ provide: MatDialogRef, useValue: {} }]
 })

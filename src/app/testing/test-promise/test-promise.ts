@@ -2,8 +2,8 @@ export class TestPromise<T> {
   public promise: Promise<Partial<T>>;
 
   public resolve: [T] extends [void]
-    ? (data?: Partial<T>) => void
-    : (data: Partial<T>) => void;
+    ? (data?: Partial<T> | T) => void
+    : (data: Partial<T> | T) => void;
   public reject: (err: unknown) => void;
 
   constructor() {

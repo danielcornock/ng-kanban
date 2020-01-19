@@ -9,8 +9,8 @@ export abstract class ModalDialog<T> {
     this._matDialogRef = matDialogRef;
   }
 
-  public closeModal(): void {
-    this._matDialogRef.close();
+  public closeModal(data?: any): void {
+    this._matDialogRef.close(data);
   }
 
   protected _formatData(data: any) {

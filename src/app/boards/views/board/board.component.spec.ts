@@ -21,6 +21,9 @@ import { TestPromise } from "src/app/testing/test-promise/test-promise";
 import { BoardApiServiceStub } from "../../services/board-api/board-api.service.stub";
 import { BoardApiService } from "../../services/board-api/board-api.service";
 import { SharedModule } from "src/app/shared/shared.module";
+import { IBoard } from "../../interfaces/board.interface";
+import { BoardRefreshServiceStub } from "../../services/board-refresh/board-refresh.service.stub";
+import { BoardRefreshService } from "../../services/board-refresh/board-refresh.service";
 
 describe("BoardComponent", () => {
   let component: BoardComponent;
@@ -30,6 +33,7 @@ describe("BoardComponent", () => {
     httpService: HttpServiceStub;
     storyApiService: StoryApiServiceStub;
     boardApiService: BoardApiServiceStub;
+    boardRefreshService: BoardRefreshServiceStub;
   };
 
   function getColumnCreate(): DebugElement {
@@ -49,7 +53,8 @@ describe("BoardComponent", () => {
       routerService: new RouterServiceStub(),
       httpService: new HttpServiceStub(),
       storyApiService: new StoryApiServiceStub(),
-      boardApiService: new BoardApiServiceStub()
+      boardApiService: new BoardApiServiceStub(),
+      boardRefreshService: new BoardRefreshServiceStub()
     };
 
     TestBed.configureTestingModule({
@@ -63,7 +68,11 @@ describe("BoardComponent", () => {
         { provide: RouterService, useValue: dependencies.routerService },
         { provide: HttpService, useValue: dependencies.httpService },
         { provide: StoryApiService, useValue: dependencies.storyApiService },
-        { provide: BoardApiService, useValue: dependencies.boardApiService }
+        { provide: BoardApiService, useValue: dependencies.boardApiService },
+        {
+          provide: BoardRefreshService,
+          useValue: dependencies.boardRefreshService
+        }
       ]
     }).compileComponents();
   }));
@@ -76,7 +85,7 @@ describe("BoardComponent", () => {
   describe("on initialisation", () => {
     let getBoardPromise: TestPromise<any>;
 
-    beforeEach(async(() => {
+    beforeEach(() => {
       getBoardPromise = new TestPromise<any>();
 
       (dependencies.routerService.getUrlParams as jasmine.Spy).and.returnValue(
@@ -86,9 +95,7 @@ describe("BoardComponent", () => {
       (dependencies.boardApiService.fetchBoard as jasmine.Spy).and.returnValue(
         getBoardPromise.promise
       );
-    }));
 
-    beforeEach(() => {
       fixture.detectChanges();
     });
 
@@ -105,10 +112,11 @@ describe("BoardComponent", () => {
     });
 
     describe("when the data has been fetched", () => {
+      let mockBoard: IBoard;
       beforeEach(fakeAsync(() => {
-        getBoardPromise.resolve({
+        mockBoard = {
           title: "testBoard",
-          _id: "board-id",
+          _id: "testBoardId",
           columns: [
             {
               _id: "col1-id",
@@ -120,7 +128,9 @@ describe("BoardComponent", () => {
               title: "column2"
             }
           ]
-        });
+        } as IBoard;
+
+        getBoardPromise.resolve(mockBoard);
 
         tick();
 
@@ -139,8 +149,34 @@ describe("BoardComponent", () => {
           title: "column2"
         });
         expect(getColumns()[0].componentInstance.appColumnBoardId).toBe(
-          "board-id"
+          "testBoardId"
         );
+      });
+
+      describe("when the board is refreshed", () => {
+        beforeEach(() => {
+          dependencies.boardRefreshService.boardListRefresh.next();
+        });
+
+        it("should fetch the updated board", () => {
+          expect(dependencies.boardApiService.fetchBoard).toHaveBeenCalledWith(
+            "testBoardId"
+          );
+        });
+      });
+
+      describe("when a story is moved", () => {
+        beforeEach(() => {
+          console;
+          getColumns()[0].componentInstance.appColumnOnDrop.emit();
+        });
+
+        it("should save the board to the API", () => {
+          expect(dependencies.httpService.put).toHaveBeenCalledWith(
+            "boards/testBoardId",
+            mockBoard
+          );
+        });
       });
 
       describe("when a new column is added", () => {
@@ -163,7 +199,7 @@ describe("BoardComponent", () => {
             "boards/testBoardId",
             {
               title: "testBoard",
-              _id: "board-id",
+              _id: "testBoardId",
               columns: [
                 {
                   _id: "col1-id",
@@ -206,7 +242,7 @@ describe("BoardComponent", () => {
             beforeEach(fakeAsync(() => {
               refreshBoardPromise.resolve({
                 title: "testBoard",
-                _id: "board-id",
+                _id: "testBoardId",
                 columns: [
                   {
                     _id: "col1-id",
@@ -250,7 +286,7 @@ describe("BoardComponent", () => {
             "boards/testBoardId",
             {
               title: "testBoard",
-              _id: "board-id",
+              _id: "testBoardId",
               columns: [
                 {
                   _id: "col1-id",
