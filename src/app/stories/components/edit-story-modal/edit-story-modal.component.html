@@ -1,4 +1,11 @@
 <div class="editStoryModal-container" *ngIf="story">
-  <h2 class="editStoryModal-title">{{ story.title }}</h2>
+  <form [formGroup]="storyForm">
+    <app-form-input-textarea
+      class="editStoryModal-title"
+      [parentForm]="storyForm"
+      controlName="title"
+      (setValue)="onInputChange($event)"
+    ></app-form-input-textarea>
+  </form>
   <span class="editStoryModal-storyNumber">#{{ story.storyNumber }}</span>
 </div>

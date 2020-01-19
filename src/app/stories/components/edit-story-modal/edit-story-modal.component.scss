@@ -1,0 +1,21 @@
+@import "src/assets/styles/themes.scss";
+
+:host {
+  display: block;
+}
+.editStoryModal {
+  &-container {
+    max-width: 768px;
+    min-height: 600px;
+    width: 70vw;
+
+    // @include media-alt(1050px) {
+    //   width: 100%;
+    // }
+  }
+
+  &-title {
+    font-weight: 500;
+    font-size: 20px;
+  }
+}
