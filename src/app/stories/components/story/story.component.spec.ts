@@ -49,6 +49,8 @@ describe("StoryComponent", () => {
         storyNumber: 5
       } as IStory;
 
+      component.appStoryColumnId = "column-id";
+
       fixture.detectChanges();
     });
 
@@ -73,7 +75,8 @@ describe("StoryComponent", () => {
         expect(dependencies.modalService.openModal).toHaveBeenCalledWith(
           EditStoryModalComponent,
           {
-            storyId: "story-id"
+            storyId: "story-id",
+            columnId: "column-id"
           }
         );
       });
