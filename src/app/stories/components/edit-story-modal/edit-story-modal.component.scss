@@ -1,5 +1,18 @@
 @import "src/assets/styles/themes.scss";
 
+@mixin section-header {
+  color: $gray-500;
+  margin-bottom: $spacing-1;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-size: $text-sm;
+  font-weight: 500;
+}
+
+@mixin textbox-auto-margin {
+  margin-left: -$spacing-2;
+}
+
 :host {
   display: block;
 }
@@ -10,9 +23,23 @@
     width: 70vw;
   }
 
+  &-titleHeader {
+    @include section-header;
+  }
+
   &-title {
+    @include textbox-auto-margin;
     font-weight: 500;
     font-size: $text-lg;
+    margin-bottom: $spacing-3;
+  }
+
+  &-description {
+    @include textbox-auto-margin;
+  }
+
+  &-descriptionHeader {
+    @include section-header;
   }
 
   &-delete {

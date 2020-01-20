@@ -70,7 +70,8 @@ export class EditStoryModalComponent
 
   private _buildform(): void {
     this.storyForm = this._formBuilder.group({
-      title: [this.story.title, Validators.required]
+      title: [this.story.title, Validators.required],
+      description: [this.story.description]
     });
   }
 }

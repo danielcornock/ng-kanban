@@ -83,7 +83,8 @@ describe("EditStoryModalComponent", () => {
 
   beforeEach(() => {
     mockForm = dependencies.formBuilder.group({
-      title: ""
+      title: "",
+      description: ""
     });
     spyOn(dependencies.formBuilder, "group").and.returnValue(mockForm);
 
@@ -113,7 +114,8 @@ describe("EditStoryModalComponent", () => {
           _id: "story-id",
           title: "story-title",
           storyNumber: 12
-        };
+        } as IStory;
+
         getStoryPromise.resolve({
           story: mockStory
         });
@@ -125,7 +127,8 @@ describe("EditStoryModalComponent", () => {
 
       it("should build the form", () => {
         expect(dependencies.formBuilder.group).toHaveBeenCalledWith({
-          title: ["story-title", jasmine.any(Function)]
+          title: ["story-title", jasmine.any(Function)],
+          description: [undefined]
         });
       });
 
