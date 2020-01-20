@@ -13,6 +13,7 @@ export class ColumnCreateComponent implements OnInit {
   >();
 
   public columnForm: FormGroup;
+  public isActive: boolean;
 
   private readonly _formBuilder: FormBuilder;
   private readonly _httpService: HttpService;
@@ -25,9 +26,14 @@ export class ColumnCreateComponent implements OnInit {
     this._initialiseForm();
   }
 
+  public setActive(active: boolean): void {
+    this.isActive = active;
+  }
+
   public addColumn() {
     this.appColumnCreateOnCreate.emit(this.columnForm.value.title);
     this.columnForm.reset();
+    this.setActive(false);
   }
 
   private _initialiseForm(): void {

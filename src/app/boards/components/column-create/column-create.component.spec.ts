@@ -16,8 +16,18 @@ describe("ColumnCreateComponent", () => {
     httpService: HttpServiceStub;
   };
 
+  function getTextInput(): DebugElement {
+    return fixture.debugElement.query(By.css(".columnCreate-title"));
+  }
+
   function getSubmitButton(): DebugElement {
     return fixture.debugElement.query(By.css(".columnCreate-submit"));
+  }
+
+  function getActivateButton(): DebugElement {
+    return fixture.debugElement.query(
+      By.css(".columnCreate-inactiveContainer")
+    );
   }
 
   beforeEach(async(() => {
@@ -51,28 +61,43 @@ describe("ColumnCreateComponent", () => {
       fixture.detectChanges();
     });
 
+    it("should not display the form", () => {
+      expect(getTextInput() === null).toBe(true);
+    });
+
     it("should initialise the form", () => {
       expect(dependencies.formBuilder.group).toHaveBeenCalledWith({
         title: ["", jasmine.any(Function)]
       });
     });
 
-    describe("when the form is submitted", () => {
+    describe("when the form is activated", () => {
       beforeEach(() => {
-        component.columnForm.value.title = "test-title";
-        spyOn(component.appColumnCreateOnCreate, "emit");
-        spyOn(component.columnForm, "reset");
-        getSubmitButton().nativeElement.click();
+        getActivateButton().nativeElement.click();
+        fixture.detectChanges();
       });
 
-      it("should emit the form value title", () => {
-        expect(component.appColumnCreateOnCreate.emit).toHaveBeenCalledWith(
-          "test-title"
-        );
+      it("should display the form", () => {
+        expect(getTextInput() === null).toBe(false);
       });
 
-      it("should reset the form values", () => {
-        expect(component.columnForm.reset).toHaveBeenCalledWith();
+      describe("when the form is submitted", () => {
+        beforeEach(() => {
+          component.columnForm.value.title = "test-title";
+          spyOn(component.appColumnCreateOnCreate, "emit");
+          spyOn(component.columnForm, "reset");
+          getSubmitButton().nativeElement.click();
+        });
+
+        it("should emit the form value title", () => {
+          expect(component.appColumnCreateOnCreate.emit).toHaveBeenCalledWith(
+            "test-title"
+          );
+        });
+
+        it("should reset the form values", () => {
+          expect(component.columnForm.reset).toHaveBeenCalledWith();
+        });
       });
     });
   });

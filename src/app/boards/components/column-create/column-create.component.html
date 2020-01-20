@@ -1,16 +1,27 @@
 <div class="columnCreate-container">
-  <h3 class="columnCreate-header">Add new column</h3>
-  <form
-    class="columnCreate-form"
-    (ngSubmit)="addColumn()"
-    [formGroup]="columnForm"
+  <div class="columnCreate-activeContainer" *ngIf="isActive">
+    <h3 class="columnCreate-header">Add new column</h3>
+    <form
+      class="columnCreate-form"
+      (ngSubmit)="addColumn()"
+      [formGroup]="columnForm"
+    >
+      <input
+        class="columnCreate-title"
+        type="text"
+        formControlName="title"
+        placeholder="Column name"
+        (blur)="setActive(false)"
+        autofocus
+      />
+      <input class="columnCreate-submit" type="submit" value="Add column" />
+    </form>
+  </div>
+  <button
+    class="columnCreate-inactiveContainer"
+    (click)="setActive(true)"
+    *ngIf="!isActive"
   >
-    <input
-      class="columnCreate-title"
-      type="text"
-      formControlName="title"
-      placeholder="Column name"
-    />
-    <input class="columnCreate-submit" type="submit" value="Add column" />
-  </form>
+    +
+  </button>
 </div>
