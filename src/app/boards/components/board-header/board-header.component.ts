@@ -1,4 +1,6 @@
 import { Component, OnInit, Input } from "@angular/core";
+import { ModalService } from "src/app/shared/modal/modal-service/modal.service";
+import { TagsModalComponent } from "../../../stories/components/tags-modal/tags-modal.component";
 
 @Component({
   selector: "app-board-header",
@@ -8,7 +10,11 @@ import { Component, OnInit, Input } from "@angular/core";
 export class BoardHeaderComponent implements OnInit {
   @Input() appBoardHeaderTitle: string;
 
-  constructor() {}
+  constructor(private readonly _modalService: ModalService) {}
 
   ngOnInit() {}
+
+  public openTagsModal(): void {
+    this._modalService.openModal(TagsModalComponent, {});
+  }
 }

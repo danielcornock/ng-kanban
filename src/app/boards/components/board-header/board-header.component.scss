@@ -7,9 +7,16 @@
     padding: $spacing-2 $spacing-4;
     box-shadow: 0px 2px 8px $gray-400;
     overflow-x: hidden;
+    @include flex;
+    justify-content: space-between;
   }
 
   &-title {
     color: $white;
+  }
+
+  &-tags {
+    @include button-reset;
+    @include button-default($green-600, $green-200);
   }
 }
