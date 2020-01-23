@@ -1,9 +1,9 @@
 @import "src/assets/styles/themes.scss";
 
-.header {
+.boardHeader {
   &-container {
     width: 100vw;
-    background: $blue-400;
+    background: $gray-500;
     padding: $spacing-2 $spacing-4;
     box-shadow: 0px 2px 8px $gray-400;
     overflow-x: hidden;

@@ -7,6 +7,7 @@ import { StoriesModule } from "../stories/stories.module";
 import { ColumnCreateComponent } from "./components/column-create/column-create.component";
 import { SharedModule } from "../shared/shared.module";
 import { BoardCreateComponent } from './components/board-create/board-create.component';
+import { BoardHeaderComponent } from './components/board-header/board-header.component';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { BoardCreateComponent } from './components/board-create/board-create.com
     BoardComponent,
     ColumnComponent,
     ColumnCreateComponent,
-    BoardCreateComponent
+    BoardCreateComponent,
+    BoardHeaderComponent
   ],
   imports: [CommonModule, StoriesModule, SharedModule],
   exports: [BoardsListComponent]
