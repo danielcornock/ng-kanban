@@ -1,0 +1,12 @@
+<div class="addStoryTags-container">
+  <div class="addStoryTags-tags">
+    <button
+      class="addStoryTags-tag"
+      [ngStyle]="{ 'background-color': tag.color }"
+      *ngFor="let tag of notSelectedTags"
+      (click)="addTagToStory(tag)"
+    >
+      {{ tag.label }}
+    </button>
+  </div>
+</div>
