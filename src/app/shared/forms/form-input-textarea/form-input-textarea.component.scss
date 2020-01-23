@@ -12,6 +12,9 @@
     border: none;
     resize: none;
     padding: $spacing-2;
+    border-bottom: 2px solid $gray-200;
+    overflow: hidden;
+    height: 40px;
 
     &:focus {
       outline: 2px solid $blue-500;
