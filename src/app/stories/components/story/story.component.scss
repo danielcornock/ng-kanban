@@ -31,4 +31,20 @@
     padding: $spacing-1 $spacing-2;
     border-radius: $br-small;
   }
+
+  &-tags {
+    @include flex;
+    flex-wrap: wrap;
+    margin-bottom: $spacing-1;
+  }
+
+  &-tag {
+    font-size: 12px;
+    padding: 2px $spacing-2;
+    color: white;
+    border-radius: $br-small;
+    font-weight: 600;
+
+    @include space-by(right, $spacing-1);
+  }
 }

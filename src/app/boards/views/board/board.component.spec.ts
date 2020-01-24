@@ -25,6 +25,7 @@ import { IBoard } from "../../interfaces/board.interface";
 import { BoardRefreshServiceStub } from "../../services/board-refresh/board-refresh.service.stub";
 import { BoardRefreshService } from "../../services/board-refresh/board-refresh.service";
 import { IStory } from "src/app/stories/interfaces/story.interface";
+import { BoardHeaderComponentStub } from "../../components/board-header/board-header.component.stub";
 
 describe("BoardComponent", () => {
   let component: BoardComponent;
@@ -45,8 +46,8 @@ describe("BoardComponent", () => {
     return fixture.debugElement.queryAll(By.directive(ColumnComponentStub));
   }
 
-  function getTitle(): DebugElement {
-    return fixture.debugElement.query(By.css(".board-title"));
+  function getHeader(): DebugElement {
+    return fixture.debugElement.query(By.directive(BoardHeaderComponentStub));
   }
 
   beforeEach(async(() => {
@@ -63,7 +64,8 @@ describe("BoardComponent", () => {
       declarations: [
         BoardComponent,
         ColumnComponentStub,
-        ColumnCreateComponentStub
+        ColumnCreateComponentStub,
+        BoardHeaderComponentStub
       ],
       providers: [
         { provide: RouterService, useValue: dependencies.routerService },
@@ -137,6 +139,12 @@ describe("BoardComponent", () => {
 
         fixture.detectChanges();
       }));
+
+      it("should display the board title", () => {
+        expect(getHeader().componentInstance.appBoardHeaderTitle).toBe(
+          "testBoard"
+        );
+      });
 
       it("should display the columns", () => {
         expect(getColumns().length).toBe(2);

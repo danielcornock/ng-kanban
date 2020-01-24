@@ -20,3 +20,12 @@
     color: $gray-500;
   }
 }
+
+@mixin button-default($textColor, $bgColor) {
+  padding: $spacing-2 $spacing-4;
+  font-size: $text-lg;
+  background-color: $bgColor;
+  color: $textColor;
+  border-radius: $br-small;
+  display: block;
+}

@@ -39,15 +39,15 @@
 
 @mixin pseudo($type) {
   position: relative;
-  @if ($type == 'before') {
+  @if ($type == "before") {
     &::before {
-      content: '';
+      content: "";
       position: absolute;
       @content;
     }
   } @else {
     &::after {
-      content: '';
+      content: "";
       position: absolute;
       @content;
     }
@@ -55,6 +55,7 @@
 }
 
 @mixin button-reset {
+  font-size: $text-base;
   padding: 0;
   border: none;
   cursor: pointer;
@@ -67,14 +68,14 @@
 }
 
 @mixin space-by($direction, $spacing) {
-  @if ($direction == 'right') {
+  @if ($direction == "right") {
     margin-right: $spacing;
     &:nth-last-child(1) {
       margin-right: 0px;
     }
   }
 
-  @if ($direction == 'down') {
+  @if ($direction == "down") {
     margin-bottom: $spacing;
     &:nth-last-child(1) {
       margin-bottom: 0px;

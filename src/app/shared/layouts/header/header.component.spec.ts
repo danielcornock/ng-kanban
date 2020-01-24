@@ -10,24 +10,10 @@ import { By } from "@angular/platform-browser";
 describe("HeaderComponent", () => {
   let component: HeaderComponent;
   let fixture: ComponentFixture<HeaderComponent>;
-  let dependencies: {
-    boardApiService: BoardApiServiceStub;
-  };
-
-  function getTitle(): DebugElement {
-    return fixture.debugElement.query(By.css(".header-boardTitle"));
-  }
 
   beforeEach(async(() => {
-    dependencies = {
-      boardApiService: new BoardApiServiceStub()
-    };
-
     TestBed.configureTestingModule({
-      declarations: [HeaderComponent],
-      providers: [
-        { provide: BoardApiService, useValue: dependencies.boardApiService }
-      ]
+      declarations: [HeaderComponent]
     }).compileComponents();
   }));
 
@@ -37,14 +23,7 @@ describe("HeaderComponent", () => {
     fixture.detectChanges();
   });
 
-  describe("when a board title is set", () => {
-    beforeEach(() => {
-      dependencies.boardApiService.boardTitle.next("board-title");
-      fixture.detectChanges();
-    });
-
-    it("should render the title", () => {
-      expect(getTitle().nativeElement.innerText).toBe("board-title");
-    });
+  it("should build", () => {
+    expect(component).toBeTruthy();
   });
 });

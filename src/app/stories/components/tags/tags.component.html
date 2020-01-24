@@ -1,0 +1,20 @@
+<div class="tags-container">
+  <div class="tags-tags">
+    <button
+      *ngFor="let tag of appTags; let i = index"
+      (click)="removeTag(i)"
+      [ngStyle]="{ 'background-color': tag.color }"
+      class="tags-tag"
+    >
+      {{ tag.label }}
+    </button>
+    <button class="tags-addNew" (click)="addNewTag()">
+      {{ showTagsChoice ? "Done" : "+ Add new tag" }}
+    </button>
+  </div>
+  <app-add-story-tags
+    *ngIf="showTagsChoice"
+    [appAddStoryTagsExistingTags]="appTags"
+    (appAddStoryTagsSelectedTag)="addTagToStory($event)"
+  ></app-add-story-tags>
+</div>

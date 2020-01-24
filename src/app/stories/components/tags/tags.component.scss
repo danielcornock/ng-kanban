@@ -1,0 +1,20 @@
+@import "src/assets/styles/themes.scss";
+
+.tags {
+  &-addNew {
+    @include button-reset;
+    @include button-default($blue-600, $blue-200);
+  }
+
+  &-tags {
+    @include flex;
+  }
+
+  &-tag {
+    @include button-reset;
+    color: white;
+    padding: $spacing-2 $spacing-4;
+    border-radius: $br-small;
+    margin-right: $spacing-2;
+  }
+}

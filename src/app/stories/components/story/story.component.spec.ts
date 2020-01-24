@@ -15,6 +15,10 @@ describe("StoryComponent", () => {
     modalService: ModalServiceStub;
   };
 
+  function getTags(): Array<DebugElement> {
+    return fixture.debugElement.queryAll(By.css(".story-tag"));
+  }
+
   function getTitle(): DebugElement {
     return fixture.debugElement.query(By.css(".story-title"));
   }
@@ -46,7 +50,8 @@ describe("StoryComponent", () => {
       component.appStory = {
         title: "story-title",
         _id: "story-id",
-        storyNumber: 5
+        storyNumber: 5,
+        tags: [{ color: "#1", label: "#1" }]
       } as IStory;
 
       component.appStoryColumnId = "column-id";
@@ -64,6 +69,11 @@ describe("StoryComponent", () => {
       );
 
       expect(storyNumber.nativeElement.innerText).toBe("#5");
+    });
+
+    it("should display the tags", () => {
+      expect(getTags().length).toBe(1);
+      expect(getTags()[0].nativeElement.innerText).toBe("#1");
     });
 
     describe("when the story is clicked on", () => {

@@ -2,10 +2,14 @@
 
 .board {
   &-container {
+    height: calc(100vh - 114px);
+  }
+
+  &-board {
     padding: $spacing-4;
-    height: calc(100vh - 54px);
     overflow-x: scroll;
     overflow-y: hidden;
+    height: 100%;
   }
 
   &-columnsContainer {

@@ -1,4 +1,13 @@
 <button class="story-container" (click)="openStoryModal()">
+  <div class="story-tags">
+    <div
+      class="story-tag"
+      *ngFor="let tag of appStory.tags"
+      [ngStyle]="{ 'background-color': tag.color }"
+    >
+      {{ tag.label }}
+    </div>
+  </div>
   <h2 class="story-title">{{ appStory.title }}</h2>
   <span class="story-storyNumber">#{{ appStory.storyNumber }}</span>
 </button>

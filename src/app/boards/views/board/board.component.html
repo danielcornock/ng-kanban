@@ -1,16 +1,19 @@
 <div *ngIf="board" class="board-container">
-  <div class="board-columnsContainer" cdkDropListGroup>
-    <app-column
-      *ngFor="let column of board.columns"
-      class="board-column"
-      [appColumn]="column"
-      [appColumnBoardId]="board._id"
-      (appColumnOnDrop)="saveBoard()"
-    ></app-column>
-    <app-column-create
-      class="board-column"
-      (appColumnCreateOnCreate)="addColumn($event)"
-    >
-    </app-column-create>
+  <app-board-header [appBoardHeaderTitle]="board.title"></app-board-header>
+  <div class="board-board">
+    <div class="board-columnsContainer" cdkDropListGroup>
+      <app-column
+        *ngFor="let column of board.columns"
+        class="board-column"
+        [appColumn]="column"
+        [appColumnBoardId]="board._id"
+        (appColumnOnDrop)="saveBoard()"
+      ></app-column>
+      <app-column-create
+        class="board-column"
+        (appColumnCreateOnCreate)="addColumn($event)"
+      >
+      </app-column-create>
+    </div>
   </div>
 </div>
