@@ -121,7 +121,7 @@ describe("TagsModalComponent", () => {
         });
       });
 
-      fit("should update the label for that tag", () => {
+      it("should update the label for that tag", () => {
         expect(component.tags[0].label).toBe("new-label");
       });
     });
