@@ -1,0 +1,19 @@
+<div class="tagsModal-container">
+  <h2 class="tagsModal-header">Customise tags</h2>
+  <div class="tagsModal-tag" *ngFor="let tag of tags; let i = index">
+    <div
+      class="tagsModal-color"
+      (click)="resetTag(i)"
+      [ngStyle]="{ 'background-color': tag.color }"
+    >
+      <span class="tagsModal-colorText">{{ tag.label ? tag.label : "" }}</span>
+    </div>
+    <input
+      (keyup)="onTextEnter($event, i)"
+      [value]="tag.label"
+      class="tagsModal-input"
+      type="text"
+    />
+  </div>
+  <button class="tagsModal-save" (click)="saveTags()">Save tags</button>
+</div>

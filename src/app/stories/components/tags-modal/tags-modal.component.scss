@@ -1,0 +1,48 @@
+@import "src/assets/styles/themes.scss";
+
+.tagsModal {
+  &-container {
+  }
+
+  &-tag {
+    @include flex;
+
+    @include space-by(down, $spacing-2);
+  }
+
+  &-color {
+    height: 30px;
+    width: 100%;
+    border-radius: $br-small;
+    @include center-contents;
+    color: $white;
+    font-weight: 500;
+    font-size: $text-lg;
+  }
+
+  &-colorText {
+    padding: $spacing-2;
+  }
+
+  &-header {
+    font-size: $text-lg;
+    letter-spacing: 2px;
+    font-weight: 500;
+    padding-bottom: $spacing-2;
+    border-bottom: 2px solid $gray-200;
+    margin-bottom: $spacing-4;
+  }
+
+  &-input {
+    @include text-input;
+    border: 1px solid $gray-300;
+  }
+
+  &-save {
+    @include button-reset;
+    @include button-default($blue-600, $blue-200);
+    width: 100%;
+    @include center-contents;
+    margin-top: $spacing-4;
+  }
+}
