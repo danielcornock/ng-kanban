@@ -43,7 +43,6 @@ export class TagsModalComponent extends ModalDialog<TagsModalComponent>
   }
 
   public onTextEnter(event: KeyboardEvent, index) {
-    console.log(event);
     this.tags[index].label = (event.target as HTMLInputElement).value;
   }
 
