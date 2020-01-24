@@ -1,20 +1,33 @@
 <div class="editStoryModal-container" *ngIf="story">
   <form [formGroup]="storyForm">
-    <h3 class="editStoryModal-titleHeader">Title</h3>
-    <app-form-input-textarea
-      class="editStoryModal-title"
-      [parentForm]="storyForm"
-      controlName="title"
-      (setValue)="onInputChange($event)"
-    ></app-form-input-textarea>
-    <h3 class="editStoryModal-descriptionHeader">Description</h3>
-    <app-form-input-textarea
-      class="editStoryModal-description"
-      [parentForm]="storyForm"
-      controlName="description"
-      (setValue)="onInputChange($event)"
-    ></app-form-input-textarea>
+    <div class="editStoryModal-section">
+      <h3 class="editStoryModal-titleHeader">Title</h3>
+      <app-form-input-textarea
+        class="editStoryModal-title"
+        [parentForm]="storyForm"
+        controlName="title"
+        (setValue)="onInputChange($event)"
+      ></app-form-input-textarea>
+    </div>
+    <div class="editStoryModal-section">
+      <h3 class="editStoryModal-descriptionHeader">Description</h3>
+      <app-form-input-textarea
+        class="editStoryModal-description"
+        [parentForm]="storyForm"
+        controlName="description"
+        (setValue)="onInputChange($event)"
+      ></app-form-input-textarea>
+    </div>
   </form>
+  <div class="editStoryModal-section">
+    <h3 class="editStoryModal-tagsHeader">Tags</h3>
+    <app-tags
+      class="editStoryModal-tags"
+      [appTags]="story.tags"
+      (appTagsSelectedTag)="addTagToStory($event)"
+      (appTagsDeletedTag)="removeTag($event)"
+    ></app-tags>
+  </div>
   <p class="editStoryModal-storyNumber">#{{ story.storyNumber }}</p>
   <button class="editStoryModal-delete" (click)="deleteStory()">Delete</button>
 </div>

@@ -21,6 +21,7 @@
     max-width: 768px;
     min-height: 600px;
     width: 70vw;
+    position: relative;
   }
 
   &-titleHeader {
@@ -42,18 +43,48 @@
     @include section-header;
   }
 
+  &-tagsHeader {
+    @include section-header;
+  }
+
   &-delete {
     @include button-reset;
-    padding: $spacing-3 $spacing-5;
-    font-size: $text-lg;
-    background-color: $red-200;
-    color: $red-600;
-    font-weight: $bold;
-    border-radius: $br-small;
+    @include button-default($red-600, $red-200);
+    position: absolute;
+    bottom: 0;
+    right: 0;
 
     @include hover(0) {
       background-color: $red-300;
       color: $red-700;
     }
+  }
+
+  &-tags {
+    padding-top: $spacing-2;
+    display: block;
+  }
+
+  &-section {
+    margin-bottom: $spacing-4;
+  }
+
+  &-tagModalButton {
+    @include button-reset;
+    @include button-default($blue-600, $blue-200);
+  }
+
+  &-storyNumber {
+    display: block;
+    background-color: $gray-200;
+    font-size: $text-xs;
+    color: $gray-500;
+    font-size: $text-base;
+    padding: $spacing-2 $spacing-4;
+    border-radius: $br-small;
+
+    position: absolute;
+    bottom: 0;
+    left: 0;
   }
 }

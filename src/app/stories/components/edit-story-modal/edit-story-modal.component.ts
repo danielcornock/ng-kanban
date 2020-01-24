@@ -13,6 +13,7 @@ import { FormBuilder, Validators, FormGroup } from "@angular/forms";
 import { BoardRefreshService } from "src/app/boards/services/board-refresh/board-refresh.service";
 import { IControlExport } from "src/app/shared/forms/interfaces/control-export.interface";
 import { StoryApiService } from "../../services/story-api.service";
+import { ITag } from "src/app/boards/interfaces/board-config.interface";
 
 @Component({
   selector: "app-edit-story-modal",
@@ -44,6 +45,16 @@ export class EditStoryModalComponent
   public onInputChange(event: IControlExport) {
     if (this.story[event.name] === event.value) return;
     this.story[event.name] = event.value;
+    this._updateStory();
+  }
+
+  public addTagToStory(tag: ITag) {
+    this.story.tags.push(tag);
+    this._updateStory();
+  }
+
+  public removeTag(index: number) {
+    this.story.tags.splice(index, 1);
     this._updateStory();
   }
 
