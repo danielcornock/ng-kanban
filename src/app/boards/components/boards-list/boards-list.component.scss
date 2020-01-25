@@ -1,0 +1,20 @@
+@import "src/assets/styles/themes.scss";
+
+.boardsList {
+  &-container {
+    padding: $spacing-3;
+    @include flex(column);
+    width: 300px;
+  }
+
+  &-board {
+    @include button-reset;
+    @include button-default($blue-700, $blue-100);
+    @include space-by(down, $spacing-2);
+    text-align: left;
+  }
+
+  &-title {
+    margin-bottom: $spacing-3;
+  }
+}

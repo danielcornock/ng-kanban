@@ -1,10 +1,11 @@
-<h2>Boards List</h2>
 <div class="boardsList-container">
-  <div *ngFor="let board of boardList">
-    <button (click)="navigateTo(board._id)" class="boardsList-board">
-      {{ board.title }}
-    </button>
-  </div>
+  <h2 class="boardsList-title">Boards List</h2>
+  <button
+    *ngFor="let board of boardList"
+    (click)="navigateTo(board._id)"
+    class="boardsList-board"
+  >
+    {{ board.title }}
+  </button>
 </div>
-
 <app-board-create></app-board-create>
