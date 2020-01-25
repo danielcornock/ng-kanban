@@ -31,6 +31,11 @@ export class BoardsListComponent implements OnInit, OnDestroy {
     this._subscribeToNewBoards();
   }
 
+  public deleteBoard(boardId: string, index: number): void {
+    this.boardList.splice(index, 1);
+    this._httpService.delete(`boards/${boardId}`);
+  }
+
   private async _fetchBoards(): Promise<void> {
     this._httpService.get("boards/list").then(data => {
       this.boardList = data.boards;

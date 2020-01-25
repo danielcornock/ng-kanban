@@ -1,11 +1,15 @@
 <div class="boardsList-container">
   <h2 class="boardsList-title">Boards List</h2>
-  <button
-    *ngFor="let board of boardList"
-    (click)="navigateTo(board._id)"
-    class="boardsList-board"
+  <div
+    class="boardsList-boardRow"
+    *ngFor="let board of boardList; let i = index"
   >
-    {{ board.title }}
-  </button>
+    <button (click)="navigateTo(board._id)" class="boardsList-board">
+      {{ board.title }}
+    </button>
+    <button (click)="deleteBoard(board._id, i)" class="boardsList-delete">
+      Remove
+    </button>
+  </div>
+  <app-board-create></app-board-create>
 </div>
-<app-board-create></app-board-create>

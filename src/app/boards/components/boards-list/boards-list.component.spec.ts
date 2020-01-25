@@ -31,6 +31,10 @@ describe("BoardsListComponent", () => {
     return fixture.debugElement.queryAll(By.css(".boardsList-board"));
   }
 
+  function getBoardDeleteButtons(): Array<DebugElement> {
+    return fixture.debugElement.queryAll(By.css(".boardsList-delete"));
+  }
+
   beforeEach(async(() => {
     dependencies = {
       routerService: new RouterServiceStub(),
@@ -84,6 +88,23 @@ describe("BoardsListComponent", () => {
 
       it("should display the boards that were fetched", () => {
         expect(getBoardButtons()[0].nativeElement.innerText).toBe("test-board");
+      });
+
+      describe("when deleting a board", () => {
+        beforeEach(() => {
+          getBoardDeleteButtons()[0].nativeElement.click();
+          fixture.detectChanges();
+        });
+
+        it("should delete the board from the API", () => {
+          expect(dependencies.httpService.delete).toHaveBeenCalledWith(
+            "boards/board-id"
+          );
+        });
+
+        it("should remove the board from the view", () => {
+          expect(getBoardButtons().length).toBe(0);
+        });
       });
 
       describe("when selecting a board", () => {

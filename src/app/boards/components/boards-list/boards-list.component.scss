@@ -4,14 +4,24 @@
   &-container {
     padding: $spacing-3;
     @include flex(column);
-    width: 300px;
   }
 
   &-board {
     @include button-reset;
     @include button-default($blue-700, $blue-100);
-    @include space-by(down, $spacing-2);
+    width: 300px;
     text-align: left;
+  }
+
+  &-delete {
+    @include button-reset;
+    @include button-default($red-600, $red-200);
+    margin-left: $spacing-2;
+  }
+
+  &-boardRow {
+    @include flex;
+    @include space-by(down, $spacing-2);
   }
 
   &-title {

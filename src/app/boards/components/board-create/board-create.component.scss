@@ -1,0 +1,17 @@
+@import "src/assets/styles/themes.scss";
+
+.boardCreate {
+  &-form {
+    @include flex;
+  }
+
+  &-title {
+    @include text-input;
+    width: 300px;
+    border: 1px solid $blue-500;
+  }
+
+  &-submit {
+    @include button-sm;
+  }
+}
