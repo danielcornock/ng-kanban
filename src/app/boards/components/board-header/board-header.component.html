@@ -1,6 +1,11 @@
 <div class="boardHeader-container">
   <h1 class="boardHeader-title">{{ appBoardHeaderTitle }}</h1>
-  <button class="boardHeader-tags" (click)="openTagsModal()">
-    Tags Config
-  </button>
+  <div class="boardHeader-menuItems">
+    <button class="boardHeader-github">
+      <app-icon appIcon="github" class="app-icon--med"></app-icon>
+    </button>
+    <button class="boardHeader-tags" (click)="openTagsModal()">
+      Tags Config
+    </button>
+  </div>
 </div>

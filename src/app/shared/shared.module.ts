@@ -7,17 +7,23 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 import { MatDialogModule, MatDialogRef } from "@angular/material";
 import { FormInputTextareaComponent } from "./forms/form-input-textarea/form-input-textarea.component";
-import { TextAreaAutoSizeDirective } from './forms/directives/text-area-auto-size.directive';
+import { TextAreaAutoSizeDirective } from "./forms/directives/text-area-auto-size.directive";
+import { IconsModule } from "../icons/icons.module";
 
 @NgModule({
-  declarations: [HeaderComponent, FormInputTextareaComponent, TextAreaAutoSizeDirective],
+  declarations: [
+    HeaderComponent,
+    FormInputTextareaComponent,
+    TextAreaAutoSizeDirective
+  ],
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
     DragDropModule,
     MatDialogModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    IconsModule
   ],
   exports: [
     FormsModule,
@@ -26,7 +32,8 @@ import { TextAreaAutoSizeDirective } from './forms/directives/text-area-auto-siz
     HeaderComponent,
     MatDialogModule,
     BrowserAnimationsModule,
-    FormInputTextareaComponent
+    FormInputTextareaComponent,
+    IconsModule
   ],
   providers: [{ provide: MatDialogRef, useValue: {} }]
 })

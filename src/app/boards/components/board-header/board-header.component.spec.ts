@@ -6,6 +6,7 @@ import { By } from "@angular/platform-browser";
 import { TagsModalComponent } from "src/app/stories/components/tags-modal/tags-modal.component";
 import { ModalServiceStub } from "src/app/shared/modal/modal-service/modal.service.stub";
 import { ModalService } from "src/app/shared/modal/modal-service/modal.service";
+import { IconComponentStub } from "../../../icons/icon/icon.component.stub";
 
 describe("BoardHeaderComponent", () => {
   let component: BoardHeaderComponent;
@@ -28,7 +29,7 @@ describe("BoardHeaderComponent", () => {
     };
 
     TestBed.configureTestingModule({
-      declarations: [BoardHeaderComponent],
+      declarations: [BoardHeaderComponent, IconComponentStub],
       providers: [
         { provide: ModalService, useValue: dependencies.modalService }
       ]

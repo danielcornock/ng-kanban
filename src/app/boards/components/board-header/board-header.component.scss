@@ -1,5 +1,8 @@
 @import "src/assets/styles/themes.scss";
 
+:host {
+  display: block;
+}
 .boardHeader {
   &-container {
     width: 100vw;
@@ -18,5 +21,15 @@
   &-tags {
     @include button-reset;
     @include button-default($green-600, $green-200);
+    margin-left: $spacing-2;
+  }
+
+  &-github {
+    @include button-reset;
+    @include button-default($white, $gray-700);
+  }
+
+  &-menuItems {
+    @include flex;
   }
 }
