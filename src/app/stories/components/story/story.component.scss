@@ -45,6 +45,6 @@
     border-radius: $br-small;
     font-weight: 600;
 
-    @include space-by(right, $spacing-1);
+    @include space(right, $spacing-1);
   }
 }

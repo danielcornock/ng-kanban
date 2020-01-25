@@ -1,7 +1,6 @@
-@import "modules/colors";
-@import "modules/fonts";
-@import "modules/spacing";
+@import "~@danielc7150/tailwind-scss";
+@import "~@danielc7150/mixins-scss";
+
 @import "modules/variables";
-@import "modules/generics";
 @import "modules/components";
 @import "modules/overrides";

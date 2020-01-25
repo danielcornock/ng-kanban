@@ -21,7 +21,7 @@
 
   &-boardRow {
     @include flex;
-    @include space-by(down, $spacing-2);
+    @include space(down, $spacing-2);
   }
 
   &-title {
