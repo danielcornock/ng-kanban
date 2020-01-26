@@ -25,7 +25,7 @@ describe("GithubProfileComponent", () => {
 
   describe("on initialisation", () => {
     beforeEach(() => {
-      component.githubProfile = {
+      component.appGithubProfile = {
         imageUrl: "url/image",
         name: "githubName",
         bio: "githubBio"

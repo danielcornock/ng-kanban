@@ -7,7 +7,7 @@ import { IGithubProfile } from "./interfaces/github-profile.interface";
   styleUrls: ["./github-profile.component.scss"]
 })
 export class GithubProfileComponent {
-  @Input() githubProfile: IGithubProfile;
+  @Input() appGithubProfile: IGithubProfile;
 
   constructor() {}
 }
