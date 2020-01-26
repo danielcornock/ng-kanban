@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { ModalService } from "src/app/shared/modal/modal-service/modal.service";
 import { TagsModalComponent } from "../../../stories/components/tags-modal/tags-modal.component";
+import { GithubConfigModalComponent } from "../github-config-modal/github-config-modal.component";
 
 @Component({
   selector: "app-board-header",
@@ -16,5 +17,9 @@ export class BoardHeaderComponent implements OnInit {
 
   public openTagsModal(): void {
     this._modalService.openModal(TagsModalComponent, {});
+  }
+
+  public openGithubModal(): void {
+    this._modalService.openModal(GithubConfigModalComponent, {});
   }
 }

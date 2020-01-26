@@ -7,21 +7,16 @@ import { TagsModalComponent } from "src/app/stories/components/tags-modal/tags-m
 import { ModalServiceStub } from "src/app/shared/modal/modal-service/modal.service.stub";
 import { ModalService } from "src/app/shared/modal/modal-service/modal.service";
 import { IconComponentStub } from "../../../icons/icon/icon.component.stub";
+import { GetElement } from "src/app/testing/get-element/get-element";
+import { GithubConfigModalComponent } from "../github-config-modal/github-config-modal.component";
 
 describe("BoardHeaderComponent", () => {
-  let component: BoardHeaderComponent;
-  let fixture: ComponentFixture<BoardHeaderComponent>;
-  let dependencies: {
-    modalService: ModalServiceStub;
-  };
-
-  function getTagsButton(): DebugElement {
-    return fixture.debugElement.query(By.css(".boardHeader-tags"));
-  }
-
-  function getBoardTitle(): DebugElement {
-    return fixture.debugElement.query(By.css(".boardHeader-title"));
-  }
+  let component: BoardHeaderComponent,
+    fixture: ComponentFixture<BoardHeaderComponent>,
+    getElement: GetElement<BoardHeaderComponent>,
+    dependencies: {
+      modalService: ModalServiceStub;
+    };
 
   beforeEach(async(() => {
     dependencies = {
@@ -40,6 +35,7 @@ describe("BoardHeaderComponent", () => {
     fixture = TestBed.createComponent(BoardHeaderComponent);
     component = fixture.componentInstance;
     component.appBoardHeaderTitle = "Test board";
+    getElement = new GetElement(fixture, "boardHeader");
   });
 
   describe("on initialisation", () => {
@@ -48,17 +44,32 @@ describe("BoardHeaderComponent", () => {
     });
 
     it("should display the board title", () => {
-      expect(getBoardTitle().nativeElement.innerText).toBe("Test board");
+      expect(getElement.byCss("title").nativeElement.innerText).toBe(
+        "Test board"
+      );
     });
 
     describe("when the open tags button is clicked", () => {
       beforeEach(() => {
-        getTagsButton().nativeElement.click();
+        getElement.byCss("tags").nativeElement.click();
       });
 
       it("should open the tags modal", () => {
         expect(dependencies.modalService.openModal).toHaveBeenCalledWith(
           TagsModalComponent,
+          {}
+        );
+      });
+    });
+
+    describe("when the github button is clicked", () => {
+      beforeEach(() => {
+        getElement.byCss("github").nativeElement.click();
+      });
+
+      it("should open the github modal", () => {
+        expect(dependencies.modalService.openModal).toHaveBeenCalledWith(
+          GithubConfigModalComponent,
           {}
         );
       });
