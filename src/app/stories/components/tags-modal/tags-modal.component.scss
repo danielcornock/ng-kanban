@@ -25,12 +25,7 @@
   }
 
   &-header {
-    font-size: $text-lg;
-    letter-spacing: 2px;
-    font-weight: 500;
-    padding-bottom: $spacing-2;
-    border-bottom: 2px solid $gray-200;
-    margin-bottom: $spacing-4;
+    @include modal-header;
   }
 
   &-input {
