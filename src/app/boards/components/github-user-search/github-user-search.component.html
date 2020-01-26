@@ -1,0 +1,16 @@
+<div class="githubUserSerarch-container">
+  <form
+    (ngSubmit)="emitSearchedUsername()"
+    [formGroup]="searchForm"
+    class="githubUserSearch-nameSearch"
+  >
+    <input
+      type="text"
+      formControlName="username"
+      class="githubUserSearch-nameInput"
+    />
+    <button type="submit" class="githubUserSearch-submitName">
+      Search username
+    </button>
+  </form>
+</div>
