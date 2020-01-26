@@ -1,0 +1,42 @@
+<div class="githubConfigModal-container">
+  <h2 class="githubConfigModal-header">Github Config</h2>
+
+  <app-github-user-search
+    (appGithubUserSearchOnSearch)="searchUsername($event)"
+  ></app-github-user-search>
+
+  <button class="githubConfigModal-profileButton" (click)="selectProfile()">
+    <app-github-profile
+      [appGithubProfile]="userDetails"
+      *ngIf="userDetails"
+    ></app-github-profile>
+  </button>
+
+  <div class="githubConfigModal-reposContainer" *ngIf="filteredRepos">
+    <h3 class="githubConfigModal-reposTitle">Select repos for this board</h3>
+    <input
+      type="text"
+      class="githubConfigModal-input"
+      (keyup)="filterRepos($event)"
+      placeholder="Search for repos..."
+    />
+
+    <app-github-repo-list
+      class="githubConfigModal-selectedRepos"
+      *ngIf="selectedRepos.length"
+      [appGithubRepoListRepos]="selectedRepos"
+      [appGithubRepoListIsSelected]="true"
+      (appGithubRepoListOnSelect)="removeFromSelectedRepos($event)"
+    ></app-github-repo-list>
+
+    <app-github-repo-list
+      class="githubConfigModal-repos"
+      [appGithubRepoListRepos]="filteredRepos"
+      (appGithubRepoListOnSelect)="addToSelectedRepos($event)"
+    ></app-github-repo-list>
+
+    <button (click)="saveRepos()" class="githubConfigModal-save">
+      Save repos
+    </button>
+  </div>
+</div>

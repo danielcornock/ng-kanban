@@ -6,5 +6,5 @@ import { IGithubProfile } from "./interfaces/github-profile.interface";
   template: ""
 })
 export class GithubProfileComponentStub {
-  @Input() githubProfile: IGithubProfile;
+  @Input() appGithubProfile: IGithubProfile;
 }

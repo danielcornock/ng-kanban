@@ -1,0 +1,56 @@
+@import "src/assets/styles/themes.scss";
+
+.githubConfigModal {
+  $cmp: &;
+
+  &-container {
+  }
+
+  &-header {
+    @include modal-header;
+  }
+
+  &-profileButton {
+    @include button-reset;
+    margin-top: $spacing-4;
+    font-size: $text-base;
+    width: 100%;
+  }
+
+  &-reposContainer {
+    @include flex(column);
+    margin-top: $spacing-4;
+    height: 500px;
+  }
+
+  &-repos {
+    overflow-y: scroll;
+    margin-top: $spacing-2;
+  }
+
+  &-selectedRepos {
+    margin-top: $spacing-2;
+    max-width: 380px;
+    padding-bottom: $spacing-2;
+    border-bottom: solid 2px $gray-200;
+  }
+
+  &-reposTitle {
+    font-weight: 500;
+    color: $gray-800;
+    margin-bottom: $spacing-2;
+  }
+
+  &-save {
+    @include button-reset;
+    @include button-default($blue-600, $blue-200);
+    margin-top: $spacing-2;
+  }
+
+  &-input {
+    border: 2px solid $blue-200;
+    border-radius: $br-small;
+    padding: $spacing-2;
+    font-size: $text-lg;
+  }
+}
