@@ -1,0 +1,10 @@
+<div class="githubRepoList-container">
+  <button
+    class="githubRepoList-repo"
+    [class.githubRepoList-repo--selected]="appGithubRepoListIsSelected"
+    *ngFor="let repo of appGithubRepoListRepos; let i = index"
+    (click)="onRepoSelect(repo, i)"
+  >
+    {{ repo.name }}
+  </button>
+</div>
