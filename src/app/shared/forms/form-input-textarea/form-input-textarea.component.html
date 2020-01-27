@@ -1,15 +1,12 @@
-<label
-  class="formInputTextarea-label"
-  [formGroup]="parentForm"
-  [for]="controlName"
->
+<label class="formInputTextarea-label" [for]="fieldConfig.name">
   <textarea
     appTextAreaAutoSize
-    [id]="controlName"
+    [id]="fieldConfig.name"
     class="formInputTextarea-textarea"
-    (blur)="onTitleEnter($event)"
+    (blur)="onInputEnter($event)"
     #textarea
-    [formControlName]="controlName"
-    (keydown)="onTitleEnter($event)"
+    [formControl]="fieldConfig.control"
+    (keydown)="onInputEnter($event)"
+    rows="1"
   ></textarea>
 </label>
