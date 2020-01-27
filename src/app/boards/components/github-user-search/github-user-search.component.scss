@@ -1,0 +1,19 @@
+@import "src/assets/styles/themes.scss";
+
+.githubUserSearch {
+  &-nameInput {
+    border: 2px solid $blue-200;
+    border-radius: $br-small;
+    padding: $spacing-2;
+    font-size: $text-lg;
+  }
+
+  &-nameSearch {
+    @include flex;
+  }
+
+  &-submitName {
+    @include button-reset;
+    @include button-default($blue-600, $blue-200);
+  }
+}

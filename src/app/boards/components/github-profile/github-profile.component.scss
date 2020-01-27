@@ -1,0 +1,37 @@
+@import "src/assets/styles/themes.scss";
+
+.githubProfile {
+  &-container {
+    @include flex(column);
+    align-items: center;
+    padding: $spacing-4;
+    background-color: $gray-100;
+    border-radius: $br-small;
+    border: 2px solid $blue-100;
+    @include hover(0) {
+      background-color: $blue-100;
+    }
+  }
+
+  &-name {
+    color: $gray-800;
+  }
+
+  &-image {
+    display: block;
+    object-fit: cover;
+    height: 80px;
+    width: 80px;
+    border-radius: $br-max;
+    margin-bottom: $spacing-2;
+  }
+
+  &-company {
+    color: $gray-800;
+  }
+
+  &-bio {
+    margin-top: $spacing-1;
+    color: $gray-800;
+  }
+}

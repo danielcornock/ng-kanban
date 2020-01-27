@@ -1,0 +1,14 @@
+@import "src/assets/styles/themes.scss";
+
+.githubRepoList {
+  &-repo {
+    @include button-reset;
+    @include button-default($gray-600, $gray-200);
+    @include space(down, $spacing-2);
+    width: 100%;
+
+    &--selected {
+      @include button-default($green-700, $green-200);
+    }
+  }
+}

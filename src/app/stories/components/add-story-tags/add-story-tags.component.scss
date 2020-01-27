@@ -16,6 +16,7 @@
     padding: $spacing-2 $spacing-4;
     border-radius: $br-small;
     margin: $spacing-1;
+    font-size: $text-base;
 
     @include hover($t150) {
       transform: translateY(-8%);

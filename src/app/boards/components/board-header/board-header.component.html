@@ -1,7 +1,7 @@
 <div class="boardHeader-container">
   <h1 class="boardHeader-title">{{ appBoardHeaderTitle }}</h1>
   <div class="boardHeader-menuItems">
-    <button class="boardHeader-github">
+    <button class="boardHeader-github" (click)="openGithubModal()">
       <app-icon appIcon="github" class="app-icon--med"></app-icon>
     </button>
     <button class="boardHeader-tags" (click)="openTagsModal()">

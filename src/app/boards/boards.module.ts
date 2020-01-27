@@ -6,8 +6,12 @@ import { ColumnComponent } from "./components/column/column.component";
 import { StoriesModule } from "../stories/stories.module";
 import { ColumnCreateComponent } from "./components/column-create/column-create.component";
 import { SharedModule } from "../shared/shared.module";
-import { BoardCreateComponent } from './components/board-create/board-create.component';
-import { BoardHeaderComponent } from './components/board-header/board-header.component';
+import { BoardCreateComponent } from "./components/board-create/board-create.component";
+import { BoardHeaderComponent } from "./components/board-header/board-header.component";
+import { GithubConfigModalComponent } from "./components/github-config-modal/github-config-modal.component";
+import { GithubProfileComponent } from "./components/github-profile/github-profile.component";
+import { GithubUserSearchComponent } from "./components/github-user-search/github-user-search.component";
+import { GithubRepoListComponent } from './components/github-repo-list/github-repo-list.component';
 
 @NgModule({
   declarations: [
@@ -16,8 +20,13 @@ import { BoardHeaderComponent } from './components/board-header/board-header.com
     ColumnComponent,
     ColumnCreateComponent,
     BoardCreateComponent,
-    BoardHeaderComponent
+    BoardHeaderComponent,
+    GithubConfigModalComponent,
+    GithubProfileComponent,
+    GithubUserSearchComponent,
+    GithubRepoListComponent
   ],
+  entryComponents: [GithubConfigModalComponent],
   imports: [CommonModule, StoriesModule, SharedModule],
   exports: [BoardsListComponent]
 })
