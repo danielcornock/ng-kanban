@@ -3,7 +3,7 @@ import { TestBed } from "@angular/core/testing";
 import { FormFactory } from "./form-factory.service";
 import { IFormConfig } from "../interfaces/form-config.interface";
 import { AbstractControl, FormControl, FormGroup } from "@angular/forms";
-import { FormInputField } from "../form-input-control/form-input-control";
+import { FormInputField } from "../form-input-field/form-input-field";
 import { FormContainer } from "../form-container/form-container";
 import { ReactiveFormFactory } from "../form-group/reactive-form.factory";
 import { IFormInputField } from "../interfaces/form-input-field.interface";
