@@ -60,7 +60,6 @@ export class GithubConfigModalComponent
   }
 
   public removeFromSelectedRepos({ index }) {
-    console.log(index);
     this.selectedRepos.splice(index, 1);
   }
 

@@ -1,21 +1,17 @@
-<div class="editStoryModal-container" *ngIf="story">
-  <form [formGroup]="storyForm">
+<div class="editStoryModal-container" *ngIf="storyFormContainer">
+  <form [formGroup]="storyFormContainer.form">
     <div class="editStoryModal-section">
       <h3 class="editStoryModal-titleHeader">Title</h3>
       <app-form-input-textarea
-        class="editStoryModal-title"
-        [parentForm]="storyForm"
-        controlName="title"
-        (setValue)="onInputChange($event)"
+        class="editStoryModal-titleField"
+        [fieldConfig]="titleField"
       ></app-form-input-textarea>
     </div>
     <div class="editStoryModal-section">
       <h3 class="editStoryModal-descriptionHeader">Description</h3>
       <app-form-input-textarea
-        class="editStoryModal-description"
-        [parentForm]="storyForm"
-        controlName="description"
-        (setValue)="onInputChange($event)"
+        class="editStoryModal-descriptionField"
+        [fieldConfig]="descriptionField"
       ></app-form-input-textarea>
     </div>
   </form>
