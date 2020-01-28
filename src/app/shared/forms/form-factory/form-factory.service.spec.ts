@@ -57,10 +57,6 @@ describe("FormFactory", () => {
       it("should contain the control fields", () => {
         expect(result.fields).toBe(formConfig.fields);
       });
-
-      it("should attach the form group to each form control", () => {
-        expect(result.fields[0].formGroup).toBe(mockFormGroup);
-      });
     });
   });
 

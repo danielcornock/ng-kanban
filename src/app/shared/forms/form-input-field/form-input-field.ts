@@ -4,7 +4,6 @@ import { IFormInputConfig } from "../interfaces/form-input-config.interface";
 export class FormInputField {
   public control: AbstractControl;
   public name: string;
-  public formGroup: FormGroup;
   public config: IFormInputConfig;
 
   constructor(

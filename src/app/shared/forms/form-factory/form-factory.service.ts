@@ -17,8 +17,6 @@ export class FormFactory {
 
     form.fields = formConfig.fields;
 
-    this._addFormGroupToFields(form);
-
     return form;
   }
 
@@ -55,11 +53,5 @@ export class FormFactory {
     });
 
     return ReactiveFormFactory.createFormGroup(formObj);
-  }
-
-  private _addFormGroupToFields(form: FormContainer): void {
-    form.fields.forEach(field => {
-      field.formGroup = form.form;
-    });
   }
 }
