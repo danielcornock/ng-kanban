@@ -15,31 +15,34 @@ import { TestPromise } from "src/app/testing/test-promise/test-promise";
 import { By } from "@angular/platform-browser";
 import { DebugElement } from "@angular/core";
 import { FormInputTextareaComponentStub } from "src/app/shared/forms/form-input-textarea/form-input-textarea.component.stub";
-import { FormBuilder, ReactiveFormsModule, FormGroup } from "@angular/forms";
+import { ReactiveFormsModule, FormGroup } from "@angular/forms";
 import { BoardRefreshServiceStub } from "src/app/boards/services/board-refresh/board-refresh.service.stub";
 import { BoardRefreshService } from "src/app/boards/services/board-refresh/board-refresh.service";
 import { IStory } from "../../interfaces/story.interface";
 import { StoryApiServiceStub } from "../../services/story-api.service.stub";
 import { StoryApiService } from "../../services/story-api.service";
 import { TagsComponentStub } from "../tags/tags.component.stub";
-import { SharedModule } from "src/app/shared/shared.module";
+import { FormFactoryStub } from "src/app/shared/forms/form-factory/form-factory.service.stub";
+import { FormFactory } from "src/app/shared/forms/form-factory/form-factory.service";
+import { IFormInputField } from "src/app/shared/forms/interfaces/form-input-field.interface";
+import { FormContainerStub } from "src/app/shared/forms/form-container/form-container.stub";
 
 describe("EditStoryModalComponent", () => {
   let component: EditStoryModalComponent,
     fixture: ComponentFixture<EditStoryModalComponent>,
-    mockForm: FormGroup,
+    formContainerStub: FormContainerStub,
     getStoryPromise: TestPromise<any>,
     dependencies: {
       dialogData: any;
       matDialogRef: MatDialogRefStub;
       httpService: HttpServiceStub;
-      formBuilder: FormBuilder;
+      formFactory: FormFactoryStub;
       boardRefreshService: BoardRefreshServiceStub;
       storyApiService: StoryApiServiceStub;
     };
 
   function getTags(): DebugElement {
-    return fixture.debugElement.query(By.directive(TagsComponentStub));
+    return fixture.debugElement.query(By.css(".editStoryModal-tags"));
   }
 
   function getStoryTitle(): DebugElement {
@@ -62,7 +65,7 @@ describe("EditStoryModalComponent", () => {
       },
       matDialogRef: new MatDialogRefStub(),
       httpService: new HttpServiceStub(),
-      formBuilder: new FormBuilder(),
+      formFactory: new FormFactoryStub(),
       boardRefreshService: new BoardRefreshServiceStub(),
       storyApiService: new StoryApiServiceStub()
     };
@@ -78,7 +81,7 @@ describe("EditStoryModalComponent", () => {
         { provide: MAT_DIALOG_DATA, useValue: dependencies.dialogData },
         { provide: MatDialogRef, useValue: dependencies.matDialogRef },
         { provide: HttpService, useValue: dependencies.httpService },
-        { provide: FormBuilder, useValue: dependencies.formBuilder },
+        { provide: FormFactory, useValue: dependencies.formFactory },
         {
           provide: BoardRefreshService,
           useValue: dependencies.boardRefreshService
@@ -92,12 +95,6 @@ describe("EditStoryModalComponent", () => {
   }));
 
   beforeEach(() => {
-    mockForm = dependencies.formBuilder.group({
-      title: "",
-      description: ""
-    });
-    spyOn(dependencies.formBuilder, "group").and.returnValue(mockForm);
-
     getStoryPromise = new TestPromise<any>();
     (dependencies.httpService.get as jasmine.Spy).and.returnValue(
       getStoryPromise.promise
@@ -105,6 +102,17 @@ describe("EditStoryModalComponent", () => {
 
     fixture = TestBed.createComponent(EditStoryModalComponent);
     component = fixture.componentInstance;
+
+    (dependencies.formFactory.createInput as jasmine.Spy).and.callFake(
+      (config: Partial<IFormInputField>) => {
+        return config.name;
+      }
+    );
+
+    formContainerStub = new FormContainerStub();
+    (dependencies.formFactory.createForm as jasmine.Spy).and.returnValue(
+      formContainerStub
+    );
   });
 
   describe("on initialisation", () => {
@@ -136,17 +144,6 @@ describe("EditStoryModalComponent", () => {
         fixture.detectChanges();
       }));
 
-      it("should build the form", () => {
-        expect(dependencies.formBuilder.group).toHaveBeenCalledWith({
-          title: ["story-title", jasmine.any(Function)],
-          description: [undefined]
-        });
-      });
-
-      it("should pass the form config to the form input", () => {
-        expect(getStoryTitle().componentInstance.parentForm).toBe(mockForm);
-      });
-
       it("it should pass the tags to the tags component", () => {
         expect(getTags().componentInstance.appTags).toEqual([
           {
@@ -154,6 +151,55 @@ describe("EditStoryModalComponent", () => {
             label: "#1"
           }
         ]);
+      });
+
+      describe("when building the form", () => {
+        it("should create the title field", () => {
+          expect(dependencies.formFactory.createInput).toHaveBeenCalledWith({
+            name: "title",
+            config: {
+              getValue: jasmine.any(Function),
+              required: true,
+              setValue: jasmine.any(Function)
+            }
+          });
+        });
+
+        it("should create the description field", () => {
+          expect(dependencies.formFactory.createInput).toHaveBeenCalledWith({
+            name: "description",
+            config: {
+              getValue: jasmine.any(Function),
+              setValue: jasmine.any(Function)
+            }
+          });
+        });
+
+        it("should create the form", () => {
+          expect(dependencies.formFactory.createForm).toHaveBeenCalledWith({
+            fields: ["title", "description"]
+          });
+        });
+
+        describe("when getting the values for the fields", () => {
+          let titleValue: string, descriptionValue: string;
+
+          beforeEach(() => {
+            titleValue = (dependencies.formFactory
+              .createInput as jasmine.Spy).calls
+              .argsFor(0)[0]
+              .config.getValue();
+            descriptionValue = (dependencies.formFactory
+              .createInput as jasmine.Spy).calls
+              .argsFor(1)[0]
+              .config.getValue();
+          });
+
+          it("should get the correct values", () => {
+            expect(titleValue).toBe("story-title");
+            expect(descriptionValue).toBe(undefined);
+          });
+        });
       });
 
       describe("when a new tag is selected", () => {
@@ -240,41 +286,83 @@ describe("EditStoryModalComponent", () => {
           (dependencies.httpService.put as jasmine.Spy).and.returnValue(
             putPromise.promise
           );
+        });
 
-          getStoryTitle().componentInstance.setValue.emit({
-            value: "new-story",
-            name: "title"
+        describe("when it is the same as the stored value", () => {
+          beforeEach(() => {
+            (dependencies.formFactory.createInput as jasmine.Spy).calls
+              .argsFor(0)[0]
+              .config.setValue({
+                value: "story-title",
+                name: "title"
+              });
+          });
+
+          it("should not update the story", () => {
+            expect(dependencies.httpService.put).not.toHaveBeenCalled();
           });
         });
 
-        it("should update the story with the updated information", () => {
-          expect(dependencies.httpService.put).toHaveBeenCalledWith(
-            "stories/story-id",
-            {
-              title: "new-story",
-              storyNumber: 12,
-              _id: "story-id",
-              tags: [{ color: "#1", label: "#1" }]
-            }
-          );
-        });
+        describe("when it is different from the stored value", () => {
+          beforeEach(() => {
+            (dependencies.formFactory.createInput as jasmine.Spy).calls
+              .argsFor(0)[0]
+              .config.setValue({
+                value: "new-story",
+                name: "title"
+              });
+          });
 
-        describe("when the board has been successfully updated", () => {
-          let boardRefreshSpy: jasmine.Spy;
-
-          beforeEach(fakeAsync(() => {
-            boardRefreshSpy = spyOn(
-              dependencies.boardRefreshService.boardListRefresh,
-              "next"
+          it("should update the story with the updated information", () => {
+            expect(dependencies.httpService.put).toHaveBeenCalledWith(
+              "stories/story-id",
+              {
+                title: "new-story",
+                storyNumber: 12,
+                _id: "story-id",
+                tags: [{ color: "#1", label: "#1" }]
+              }
             );
-            putPromise.resolve();
-            tick();
-            fixture.detectChanges();
-          }));
-
-          it("should refresh the board", () => {
-            expect(boardRefreshSpy).toHaveBeenCalledWith();
           });
+
+          describe("when the board has been successfully updated", () => {
+            let boardRefreshSpy: jasmine.Spy;
+
+            beforeEach(fakeAsync(() => {
+              boardRefreshSpy = spyOn(
+                dependencies.boardRefreshService.boardListRefresh,
+                "next"
+              );
+              putPromise.resolve();
+              tick();
+              fixture.detectChanges();
+            }));
+
+            it("should refresh the board", () => {
+              expect(boardRefreshSpy).toHaveBeenCalledWith();
+            });
+          });
+        });
+      });
+
+      describe("when the input for the description changes", () => {
+        let putPromise: TestPromise<void>;
+        beforeEach(() => {
+          putPromise = new TestPromise<void>();
+          (dependencies.httpService.put as jasmine.Spy).and.returnValue(
+            putPromise.promise
+          );
+
+          (dependencies.formFactory.createInput as jasmine.Spy).calls
+            .argsFor(1)[0]
+            .config.setValue({
+              value: "new-description",
+              name: "description"
+            });
+        });
+
+        it("should update the story", () => {
+          expect(dependencies.httpService.put).toHaveBeenCalled();
         });
       });
     });

@@ -28,15 +28,10 @@
     @include section-header;
   }
 
-  &-title {
-    @include textbox-auto-margin;
+  &-titleField {
     font-weight: 500;
     font-size: $text-lg;
     margin-bottom: $spacing-3;
-  }
-
-  &-description {
-    @include textbox-auto-margin;
   }
 
   &-descriptionHeader {

@@ -1,15 +1,11 @@
-import { Input, Output, EventEmitter, Component } from "@angular/core";
-import { IControlExport } from "../interfaces/control-export.interface";
-import { FormGroup } from "@angular/forms";
+import { Input, Component } from "@angular/core";
+import { IFormInputField } from "../interfaces/form-input-field.interface";
+import { FormInputField } from "../form-input-field/form-input-field";
 
 @Component({
   selector: "app-form-input-textarea",
   template: ""
 })
 export class FormInputTextareaComponentStub {
-  @Input() public parentForm: FormGroup;
-  @Input() public controlName: string;
-  @Output() public setValue: EventEmitter<IControlExport> = new EventEmitter<
-    IControlExport
-  >();
+  @Input() public fieldConfig: FormInputField;
 }

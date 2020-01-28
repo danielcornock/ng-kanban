@@ -1,19 +1,15 @@
-import {
-  Component,
-  OnInit,
-  Inject,
-  ViewChild,
-  ElementRef
-} from "@angular/core";
+import { Component, OnInit, Inject } from "@angular/core";
 import { ModalDialog } from "src/app/shared/modal/modal-dialog/modal-dialog";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
 import { HttpService } from "src/app/shared/api/http-service/http.service";
 import { IStory } from "../../interfaces/story.interface";
-import { FormBuilder, Validators, FormGroup } from "@angular/forms";
+import { Validators, FormGroup } from "@angular/forms";
 import { BoardRefreshService } from "src/app/boards/services/board-refresh/board-refresh.service";
 import { IControlExport } from "src/app/shared/forms/interfaces/control-export.interface";
 import { StoryApiService } from "../../services/story-api.service";
 import { ITag } from "src/app/boards/interfaces/board-config.interface";
+import { FormFactory } from "src/app/shared/forms/form-factory/form-factory.service";
+import { FormContainer } from "src/app/shared/forms/form-container/form-container";
 
 @Component({
   selector: "app-edit-story-modal",
@@ -24,13 +20,16 @@ export class EditStoryModalComponent
   extends ModalDialog<EditStoryModalComponent>
   implements OnInit {
   public story: IStory;
-  public storyForm: FormGroup;
+  public storyFormContainer: FormContainer;
+
+  public titleField: any;
+  public descriptionField: any;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) data: any,
     matDialogRef: MatDialogRef<EditStoryModalComponent>,
     private readonly _httpService: HttpService,
-    private readonly _formBuilder: FormBuilder,
+    private readonly _formFactory: FormFactory,
     private readonly _boardRefreshService: BoardRefreshService,
     private readonly _storyApiService: StoryApiService
   ) {
@@ -39,6 +38,7 @@ export class EditStoryModalComponent
 
   async ngOnInit() {
     await this._fetchStory();
+    this._initialiseInputs();
     this._buildform();
   }
 
@@ -79,10 +79,43 @@ export class EditStoryModalComponent
     this.story = httpRes.story;
   }
 
+  private _initialiseInputs() {
+    this._createTitleField();
+    this._createDescriptionField();
+  }
+
   private _buildform(): void {
-    this.storyForm = this._formBuilder.group({
-      title: [this.story.title, Validators.required],
-      description: [this.story.description]
+    this.storyFormContainer = this._formFactory.createForm({
+      fields: [this.titleField, this.descriptionField]
+    });
+  }
+
+  private _createTitleField() {
+    this.titleField = this._formFactory.createInput({
+      name: "title",
+      config: {
+        getValue: (): string => {
+          return this.story.title;
+        },
+        required: true,
+        setValue: (value: IControlExport) => {
+          this.onInputChange(value);
+        }
+      }
+    });
+  }
+
+  private _createDescriptionField() {
+    this.descriptionField = this._formFactory.createInput({
+      name: "description",
+      config: {
+        getValue: () => {
+          return this.story.description;
+        },
+        setValue: (value: IControlExport) => {
+          this.onInputChange(value);
+        }
+      }
     });
   }
 }
