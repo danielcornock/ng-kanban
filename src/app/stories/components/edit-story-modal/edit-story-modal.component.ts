@@ -10,6 +10,8 @@ import { StoryApiService } from "../../services/story-api.service";
 import { ITag } from "src/app/boards/interfaces/board-config.interface";
 import { FormFactory } from "src/app/shared/forms/form-factory/form-factory.service";
 import { FormContainer } from "src/app/shared/forms/form-container/form-container";
+import { IFormInputConfig } from "src/app/shared/forms/interfaces/form-input-config.interface";
+import { IFormInputFieldConfig } from "src/app/shared/forms/interfaces/form-input-field-config.interface";
 
 @Component({
   selector: "app-edit-story-modal",
@@ -21,9 +23,6 @@ export class EditStoryModalComponent
   implements OnInit {
   public story: IStory;
   public storyFormContainer: FormContainer;
-
-  public titleField: any;
-  public descriptionField: any;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) data: any,
@@ -38,7 +37,6 @@ export class EditStoryModalComponent
 
   async ngOnInit() {
     await this._fetchStory();
-    this._initialiseInputs();
     this._buildform();
   }
 
@@ -79,43 +77,38 @@ export class EditStoryModalComponent
     this.story = httpRes.story;
   }
 
-  private _initialiseInputs() {
-    this._createTitleField();
-    this._createDescriptionField();
-  }
-
   private _buildform(): void {
-    this.storyFormContainer = this._formFactory.createForm({
-      fields: [this.titleField, this.descriptionField]
-    });
+    this.storyFormContainer = this._formFactory.createModelForm<IStory>(
+      this.story,
+      {
+        fields: [
+          this._createTitleFieldConfig(),
+          this._createDescriptionFieldConfig()
+        ]
+      }
+    );
   }
 
-  private _createTitleField() {
-    this.titleField = this._formFactory.createInput({
+  private _createTitleFieldConfig(): IFormInputFieldConfig {
+    return {
       name: "title",
       config: {
-        getValue: (): string => {
-          return this.story.title;
-        },
         required: true,
         setValue: (value: IControlExport) => {
           this.onInputChange(value);
         }
       }
-    });
+    };
   }
 
-  private _createDescriptionField() {
-    this.descriptionField = this._formFactory.createInput({
+  private _createDescriptionFieldConfig(): IFormInputFieldConfig {
+    return {
       name: "description",
       config: {
-        getValue: () => {
-          return this.story.description;
-        },
         setValue: (value: IControlExport) => {
           this.onInputChange(value);
         }
       }
-    });
+    };
   }
 }

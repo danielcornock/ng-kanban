@@ -24,8 +24,9 @@ import { StoryApiService } from "../../services/story-api.service";
 import { TagsComponentStub } from "../tags/tags.component.stub";
 import { FormFactoryStub } from "src/app/shared/forms/form-factory/form-factory.service.stub";
 import { FormFactory } from "src/app/shared/forms/form-factory/form-factory.service";
-import { IFormInputField } from "src/app/shared/forms/interfaces/form-input-field.interface";
+import { IFormInputFieldConfig } from "src/app/shared/forms/interfaces/form-input-field-config.interface";
 import { FormContainerStub } from "src/app/shared/forms/form-container/form-container.stub";
+import { FormInputField } from "src/app/shared/forms/form-input-field/form-input-field";
 
 describe("EditStoryModalComponent", () => {
   let component: EditStoryModalComponent,
@@ -103,14 +104,10 @@ describe("EditStoryModalComponent", () => {
     fixture = TestBed.createComponent(EditStoryModalComponent);
     component = fixture.componentInstance;
 
-    (dependencies.formFactory.createInput as jasmine.Spy).and.callFake(
-      (config: Partial<IFormInputField>) => {
-        return config.name;
-      }
-    );
-
     formContainerStub = new FormContainerStub();
-    (dependencies.formFactory.createForm as jasmine.Spy).and.returnValue(
+    formContainerStub.fields.title = ("title" as unknown) as FormInputField;
+    formContainerStub.fields.description = ("description" as unknown) as FormInputField;
+    (dependencies.formFactory.createModelForm as jasmine.Spy).and.returnValue(
       formContainerStub
     );
   });
@@ -154,51 +151,27 @@ describe("EditStoryModalComponent", () => {
       });
 
       describe("when building the form", () => {
-        it("should create the title field", () => {
-          expect(dependencies.formFactory.createInput).toHaveBeenCalledWith({
-            name: "title",
-            config: {
-              getValue: jasmine.any(Function),
-              required: true,
-              setValue: jasmine.any(Function)
-            }
-          });
-        });
-
-        it("should create the description field", () => {
-          expect(dependencies.formFactory.createInput).toHaveBeenCalledWith({
-            name: "description",
-            config: {
-              getValue: jasmine.any(Function),
-              setValue: jasmine.any(Function)
-            }
-          });
-        });
-
         it("should create the form", () => {
-          expect(dependencies.formFactory.createForm).toHaveBeenCalledWith({
-            fields: ["title", "description"]
-          });
-        });
-
-        describe("when getting the values for the fields", () => {
-          let titleValue: string, descriptionValue: string;
-
-          beforeEach(() => {
-            titleValue = (dependencies.formFactory
-              .createInput as jasmine.Spy).calls
-              .argsFor(0)[0]
-              .config.getValue();
-            descriptionValue = (dependencies.formFactory
-              .createInput as jasmine.Spy).calls
-              .argsFor(1)[0]
-              .config.getValue();
-          });
-
-          it("should get the correct values", () => {
-            expect(titleValue).toBe("story-title");
-            expect(descriptionValue).toBe(undefined);
-          });
+          expect(dependencies.formFactory.createModelForm).toHaveBeenCalledWith(
+            mockStory,
+            {
+              fields: [
+                {
+                  name: "title",
+                  config: {
+                    setValue: jasmine.any(Function),
+                    required: true
+                  }
+                },
+                {
+                  name: "description",
+                  config: {
+                    setValue: jasmine.any(Function)
+                  }
+                }
+              ]
+            }
+          );
         });
       });
 
@@ -290,9 +263,13 @@ describe("EditStoryModalComponent", () => {
 
         describe("when it is the same as the stored value", () => {
           beforeEach(() => {
-            (dependencies.formFactory.createInput as jasmine.Spy).calls
-              .argsFor(0)[0]
-              .config.setValue({
+            console.log(
+              (dependencies.formFactory
+                .createModelForm as jasmine.Spy).calls.argsFor(0)[1][0]
+            );
+            (dependencies.formFactory.createModelForm as jasmine.Spy).calls
+              .argsFor(0)[1]
+              .fields[0].config.setValue({
                 value: "story-title",
                 name: "title"
               });
@@ -305,9 +282,9 @@ describe("EditStoryModalComponent", () => {
 
         describe("when it is different from the stored value", () => {
           beforeEach(() => {
-            (dependencies.formFactory.createInput as jasmine.Spy).calls
-              .argsFor(0)[0]
-              .config.setValue({
+            (dependencies.formFactory.createModelForm as jasmine.Spy).calls
+              .argsFor(0)[1]
+              .fields[0].config.setValue({
                 value: "new-story",
                 name: "title"
               });
@@ -353,9 +330,9 @@ describe("EditStoryModalComponent", () => {
             putPromise.promise
           );
 
-          (dependencies.formFactory.createInput as jasmine.Spy).calls
-            .argsFor(1)[0]
-            .config.setValue({
+          (dependencies.formFactory.createModelForm as jasmine.Spy).calls
+            .argsFor(0)[1]
+            .fields[1].config.setValue({
               value: "new-description",
               name: "description"
             });

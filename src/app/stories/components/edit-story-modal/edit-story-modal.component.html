@@ -4,14 +4,14 @@
       <h3 class="editStoryModal-titleHeader">Title</h3>
       <app-form-input-textarea
         class="editStoryModal-titleField"
-        [fieldConfig]="titleField"
+        [fieldConfig]="storyFormContainer.fields.title"
       ></app-form-input-textarea>
     </div>
     <div class="editStoryModal-section">
       <h3 class="editStoryModal-descriptionHeader">Description</h3>
       <app-form-input-textarea
         class="editStoryModal-descriptionField"
-        [fieldConfig]="descriptionField"
+        [fieldConfig]="storyFormContainer.fields.description"
       ></app-form-input-textarea>
     </div>
   </form>
