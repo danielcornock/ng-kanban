@@ -7,12 +7,12 @@ import {
 } from "@angular/forms";
 import { FormContainer } from "../form-container/form-container";
 import { FormInputField } from "../form-input-field/form-input-field";
-import { IFormInputFieldConfig } from "../interfaces/form-input-field-config.interface";
+import { IFormInputConfig } from "../interfaces/form-input-config.interface";
 import { IFormConfig } from "../interfaces/form-config.interface";
 import { IAbstractControlDict } from "../interfaces/abstract-control-dict.interface";
 import { ReactiveFormFactory } from "../form-group/reactive-form.factory";
 import { IFormInputFieldGroup } from "../interfaces/form-input-field-group.interface";
-import { IFormInputConfig } from "../interfaces/form-input-config.interface";
+import { IFormInputConfigConfig } from "../interfaces/form-input-config-config.interface";
 import { IFormCreateManualConfig } from "../interfaces/form-create-manual-config.interface";
 
 @Injectable({
@@ -20,84 +20,54 @@ import { IFormCreateManualConfig } from "../interfaces/form-create-manual-config
 })
 export class FormFactory {
   public createForm(formConfig: IFormConfig): FormContainer {
-    return new FormContainer(
-      this._createFieldGroup(formConfig.fields),
-      this._createFormGroup(formConfig.fields)
+    const controlFields: Array<FormInputField> = this._createInputFields(
+      formConfig.fields
     );
+
+    return new FormContainer(controlFields);
   }
 
-  public createInput(inputConfig: IFormInputFieldConfig): FormInputField {
-    return new FormInputField(
-      this._createControl(inputConfig.config),
-      inputConfig.name,
-      inputConfig.config
-    );
+  public createInput(inputConfig: IFormInputConfig): FormInputField {
+    return new FormInputField(inputConfig);
   }
 
   public createModelForm<T>(model: T, formConfig: IFormCreateManualConfig) {
-    const formInputArray: Array<FormInputField> = [];
+    return this.createForm({
+      fields: this._generateFromModelFieldsConfig<T>(formConfig.fields, model)
+    });
+  }
 
-    formConfig.fields.forEach(item => {
+  private _generateFromModelFieldsConfig<T>(
+    fields: Array<IFormInputConfig>,
+    model: T
+  ): Array<IFormInputConfig> {
+    fields.forEach(item => {
       this._setModelGetterFn<T>(item, model);
       this._setModelSetterFn<T>(item, model);
-
-      formInputArray.push(this.createInput(item));
     });
 
-    return this.createForm({ fields: formInputArray });
+    return fields;
   }
 
-  private _createControl(inputConfigConfig: IFormInputConfig): FormControl {
-    const control = ReactiveFormFactory.createFormControl(
-      inputConfigConfig.getValue()
-    );
-
-    control.setValidators(this._createValidators(inputConfigConfig));
-
-    return control;
+  private _createInputFields(
+    inputConfig: Array<IFormInputConfig>
+  ): Array<FormInputField> {
+    return inputConfig.map(field => {
+      return field instanceof FormInputField ? field : this.createInput(field);
+    });
   }
 
-  private _setModelGetterFn<T>(fieldConfig: IFormInputFieldConfig, model: T) {
+  private _setModelGetterFn<T>(fieldConfig: IFormInputConfig, model: T) {
     if (!fieldConfig.config.getValue) {
       fieldConfig.config.getValue = () => model[fieldConfig.name];
     }
   }
 
-  private _setModelSetterFn<T>(fieldConfig: IFormInputFieldConfig, model: T) {
+  private _setModelSetterFn<T>(fieldConfig: IFormInputConfig, model: T) {
     if (!fieldConfig.config.setValue) {
       fieldConfig.config.setValue = (val: any) => {
         model[fieldConfig.name] = val;
       };
     }
-  }
-
-  private _createValidators(inputConfig: IFormInputConfig) {
-    const validators: Array<ValidatorFn> = [];
-
-    if (inputConfig.required) {
-      validators.push(Validators.required);
-    }
-
-    return validators;
-  }
-
-  private _createFieldGroup(
-    inputFieldsArray: Array<IFormInputFieldConfig>
-  ): IFormInputFieldGroup {
-    const fieldObj = {};
-    inputFieldsArray.forEach(field => {
-      fieldObj[field.name] = field;
-    });
-
-    return fieldObj;
-  }
-
-  private _createFormGroup(fields: Array<FormInputField>): FormGroup {
-    const formObj: IAbstractControlDict = {};
-    fields.forEach(field => {
-      formObj[field.name] = field.control;
-    });
-
-    return ReactiveFormFactory.createFormGroup(formObj);
   }
 }
