@@ -1,5 +1,5 @@
-import { IFormInputFieldConfig } from "./form-input-field-config.interface";
+import { IFormInputConfig } from "./form-input-config.interface";
 
 export interface IFormCreateManualConfig {
-  fields: Array<IFormInputFieldConfig>;
+  fields: Array<IFormInputConfig>;
 }

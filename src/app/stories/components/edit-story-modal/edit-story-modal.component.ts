@@ -11,7 +11,6 @@ import { ITag } from "src/app/boards/interfaces/board-config.interface";
 import { FormFactory } from "src/app/shared/forms/form-factory/form-factory.service";
 import { FormContainer } from "src/app/shared/forms/form-container/form-container";
 import { IFormInputConfig } from "src/app/shared/forms/interfaces/form-input-config.interface";
-import { IFormInputFieldConfig } from "src/app/shared/forms/interfaces/form-input-field-config.interface";
 
 @Component({
   selector: "app-edit-story-modal",
@@ -89,7 +88,7 @@ export class EditStoryModalComponent
     );
   }
 
-  private _createTitleFieldConfig(): IFormInputFieldConfig {
+  private _createTitleFieldConfig(): IFormInputConfig {
     return {
       name: "title",
       config: {
@@ -101,7 +100,7 @@ export class EditStoryModalComponent
     };
   }
 
-  private _createDescriptionFieldConfig(): IFormInputFieldConfig {
+  private _createDescriptionFieldConfig(): IFormInputConfig {
     return {
       name: "description",
       config: {

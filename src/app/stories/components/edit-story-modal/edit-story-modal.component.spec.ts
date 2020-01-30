@@ -24,7 +24,7 @@ import { StoryApiService } from "../../services/story-api.service";
 import { TagsComponentStub } from "../tags/tags.component.stub";
 import { FormFactoryStub } from "src/app/shared/forms/form-factory/form-factory.service.stub";
 import { FormFactory } from "src/app/shared/forms/form-factory/form-factory.service";
-import { IFormInputFieldConfig } from "src/app/shared/forms/interfaces/form-input-field-config.interface";
+import { IFormInputConfig } from "src/app/shared/forms/interfaces/form-input-config.interface";
 import { FormContainerStub } from "src/app/shared/forms/form-container/form-container.stub";
 import { FormInputField } from "src/app/shared/forms/form-input-field/form-input-field";
 

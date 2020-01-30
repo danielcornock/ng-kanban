@@ -1,7 +1,6 @@
-import { IControlExport } from "./control-export.interface";
+import { IFormInputConfigConfig } from "./form-input-config-config.interface";
 
 export interface IFormInputConfig {
-  required?: boolean;
-  getValue?: () => any;
-  setValue?: (value: IControlExport) => void;
+  name: string;
+  config: IFormInputConfigConfig;
 }
