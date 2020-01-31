@@ -24,7 +24,7 @@ describe("FormContainer", () => {
     beforeEach(() => {
       spyOn(ReactiveFormFactory, "createFormGroup").and.returnValue(formGroup);
 
-      formContainer = new FormContainer(inputControls);
+      formContainer = FormContainer.create(inputControls);
     });
 
     it("should create the form group ", () => {

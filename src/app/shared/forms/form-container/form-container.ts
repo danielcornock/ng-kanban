@@ -13,6 +13,10 @@ export class FormContainer {
     this.form = this._createFormGroup(controls);
   }
 
+  static create(controls: Array<FormInputField>) {
+    return new FormContainer(controls);
+  }
+
   private _createFormGroup(fields: Array<FormInputField>): FormGroup {
     const formObj: IAbstractControlDict = {};
     fields.forEach(field => {

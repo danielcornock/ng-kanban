@@ -29,7 +29,7 @@ describe("FormInputField", () => {
       (ReactiveFormFactory.createFormControl as jasmine.Spy).and.returnValue(
         inputControl
       );
-      formInputField = new FormInputField(inputConfig);
+      formInputField = FormInputField.create(inputConfig);
     });
 
     it("should get the value of the field", () => {

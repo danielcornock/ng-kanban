@@ -19,11 +19,15 @@ export class FormInputField {
     this.config = inputConfig.config;
   }
 
+  static create(inputConfig: IFormInputConfig) {
+    return new FormInputField(inputConfig);
+  }
+
   private _createControl(
     inputConfigConfig: IFormInputConfigConfig
   ): FormControl {
     const control = ReactiveFormFactory.createFormControl(
-      inputConfigConfig.getValue()
+      inputConfigConfig.getValue ? inputConfigConfig.getValue() : ""
     );
 
     control.setValidators(this._createValidators(inputConfigConfig));
