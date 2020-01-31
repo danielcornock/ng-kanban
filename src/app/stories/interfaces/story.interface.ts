@@ -4,6 +4,6 @@ export interface IStory {
   _id: string;
   title: string;
   storyNumber: number;
-  description: string;
+  description?: string;
   tags: Array<ITag>;
 }

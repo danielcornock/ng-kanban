@@ -1,7 +1,8 @@
 import { FormControl } from "@angular/forms";
+import { IFormInputConfigConfig } from "../interfaces/form-input-config-config.interface";
 
 export class FormInputFieldStub {
-  public name = "";
-  public Config = {};
+  public name: string = "";
+  public Config: IFormInputConfigConfig = {};
   public control = new FormControl("");
 }

@@ -1,123 +1,136 @@
-import { TestBed } from "@angular/core/testing";
-
 import { FormFactory } from "./form-factory.service";
 import { IFormConfig } from "../interfaces/form-config.interface";
 import { AbstractControl, FormControl, FormGroup } from "@angular/forms";
 import { FormInputField } from "../form-input-field/form-input-field";
 import { FormContainer } from "../form-container/form-container";
 import { ReactiveFormFactory } from "../form-group/reactive-form.factory";
-import { IFormInputField } from "../interfaces/form-input-field.interface";
+import { FormInputFieldStub } from "../form-input-field/form-input-field.stub";
+import { IFormInputConfig } from "../interfaces/form-input-config.interface";
+import { FormContainerStub } from "../form-container/form-container.stub";
+import { IStory } from "src/app/stories/interfaces/story.interface";
 
 describe("FormFactory", () => {
-  let service: FormFactory;
+  let service: FormFactory,
+    formContainerStub: FormContainer,
+    generatedFormField: FormInputFieldStub,
+    inputConfig: IFormInputConfig;
 
   beforeEach(() => {
+    formContainerStub = (new FormContainerStub() as Partial<
+      FormContainer
+    >) as FormContainer;
+
+    generatedFormField = new FormInputFieldStub();
+    generatedFormField.name = "generated-input";
+
+    spyOn(FormContainer, "create").and.returnValue(formContainerStub);
+
+    spyOn(FormInputField, "create").and.returnValue(generatedFormField);
+
+    inputConfig = {
+      name: "input",
+      config: {}
+    };
+
     service = new FormFactory();
   });
 
   describe("when creating a form", () => {
     let formConfig: IFormConfig,
-      formControl1: AbstractControl,
-      result: any,
-      mockFormGroup: FormGroup,
-      createFormGroupSpy: jasmine.Spy;
+      preGeneratedFormField: FormInputField,
+      result: FormContainer;
 
     beforeEach(() => {
-      formControl1 = new FormControl("");
+      preGeneratedFormField = (new FormInputFieldStub() as Partial<
+        FormInputField
+      >) as FormInputField;
+      preGeneratedFormField.name = "provided-field";
+
       formConfig = {
-        fields: [
-          {
-            control: formControl1,
-            name: "formControl1",
-            config: {}
-          } as FormInputField
-        ]
+        fields: [preGeneratedFormField, inputConfig]
       };
 
-      mockFormGroup = new FormGroup({});
-      createFormGroupSpy = spyOn(ReactiveFormFactory, "createFormGroup");
-      createFormGroupSpy.and.returnValue(mockFormGroup);
       result = service.createForm(formConfig);
     });
 
-    describe("when returning the form", () => {
-      it("should create the form group", () => {
-        expect(createFormGroupSpy).toHaveBeenCalledWith({
-          formControl1: formConfig.fields[0].control
-        });
-      });
-      it("should be a form container instance", () => {
-        expect(result instanceof FormContainer).toBe(true);
-      });
+    it("should create the form input field for the provided config", () => {
+      expect(FormInputField.create).toHaveBeenCalledWith(inputConfig);
+    });
 
-      it("should contain a form group", () => {
-        expect(result.form).toBe(mockFormGroup);
-      });
+    it("should create the form with the two input fields", () => {
+      expect(FormContainer.create).toHaveBeenCalledWith([
+        preGeneratedFormField,
+        generatedFormField
+      ]);
+    });
 
-      it("should contain the control fields", () => {
-        expect(result.fields).toBe(formConfig.fields);
-      });
+    it("should create the form container", () => {
+      expect(result).toBe(formContainerStub);
     });
   });
 
   describe("when creating an input", () => {
-    let inputConfig: IFormInputField,
-      result: any,
-      mockFormControl: FormControl,
-      controlFactorySpy: jasmine.Spy;
+    let result: FormInputField;
 
     beforeEach(() => {
-      inputConfig = {
-        name: "input-1",
-        config: {
-          required: true,
-          getValue: jasmine.createSpy("getValue"),
-          setValue: jasmine.createSpy("setValue")
-        }
-      };
-
-      mockFormControl = new FormControl("generated-field");
-      controlFactorySpy = spyOn(
-        ReactiveFormFactory,
-        "createFormControl"
-      ).and.returnValue(mockFormControl);
-      (inputConfig.config.getValue as jasmine.Spy).and.returnValue(
-        "test-field"
-      );
-
-      spyOn(mockFormControl, "setValidators");
       result = service.createInput(inputConfig);
     });
 
-    describe("when returning the input", () => {
-      it("should create the form control", () => {
-        expect(controlFactorySpy).toHaveBeenCalledWith("test-field");
+    it("should call the create form field static method", () => {
+      expect(FormInputField.create).toHaveBeenCalledWith(inputConfig);
+    });
+
+    it("should return a form field", () => {
+      expect(result).toBe(
+        (generatedFormField as Partial<FormInputField>) as FormInputField
+      );
+    });
+  });
+
+  describe("when creating a model form", () => {
+    let result: FormContainer, model: IStory;
+    beforeEach(() => {
+      model = {
+        title: "story",
+        storyNumber: 12,
+        tags: [],
+        _id: "id"
+      };
+
+      inputConfig = {
+        name: "title",
+        config: {}
+      };
+
+      spyOn(service, "createForm").and.returnValue(formContainerStub);
+      result = service.createModelForm(model, { fields: [inputConfig] });
+    });
+
+    it("should call the create form method with the added getters and setters", () => {
+      expect(service.createForm).toHaveBeenCalledWith({
+        fields: [
+          {
+            name: "title",
+            config: {
+              getValue: jasmine.any(Function),
+              setValue: jasmine.any(Function)
+            }
+          }
+        ]
+      });
+    });
+
+    describe("when calling get value", () => {
+      let result: string;
+
+      beforeEach(() => {
+        result = (service.createForm as jasmine.Spy).calls
+          .argsFor(0)[0]
+          .fields[0].config.getValue();
       });
 
-      it("should attach the required validator", () => {
-        expect(mockFormControl.setValidators).toHaveBeenCalledWith([
-          jasmine.any(Function)
-        ]);
-      });
-
-      it("should return a form input field", () => {
-        expect(result instanceof FormInputField).toBe(true);
-      });
-
-      it("should have the value set in the config", () => {
-        expect(result.control.value).toBe("generated-field");
-      });
-
-      it("should return the form control", () => {
-        expect(result.control instanceof FormControl).toBe(true);
-      });
-
-      it("should attach the name to the input", () => {
-        expect(result.name).toBe("input-1");
-      });
-
-      it("should attach the config to the input", () => {
-        expect(result.config).toBe(inputConfig.config);
+      it("should return the value ", () => {
+        expect(result).toBe("story");
       });
     });
   });

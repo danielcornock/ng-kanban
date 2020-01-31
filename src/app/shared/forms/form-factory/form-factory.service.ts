@@ -1,18 +1,8 @@
 import { Injectable } from "@angular/core";
-import {
-  FormGroup,
-  Validators,
-  ValidatorFn,
-  FormControl
-} from "@angular/forms";
 import { FormContainer } from "../form-container/form-container";
 import { FormInputField } from "../form-input-field/form-input-field";
 import { IFormInputConfig } from "../interfaces/form-input-config.interface";
 import { IFormConfig } from "../interfaces/form-config.interface";
-import { IAbstractControlDict } from "../interfaces/abstract-control-dict.interface";
-import { ReactiveFormFactory } from "../form-group/reactive-form.factory";
-import { IFormInputFieldGroup } from "../interfaces/form-input-field-group.interface";
-import { IFormInputConfigConfig } from "../interfaces/form-input-config-config.interface";
 import { IFormCreateManualConfig } from "../interfaces/form-create-manual-config.interface";
 
 @Injectable({
@@ -24,14 +14,17 @@ export class FormFactory {
       formConfig.fields
     );
 
-    return new FormContainer(controlFields);
+    return FormContainer.create(controlFields);
   }
 
   public createInput(inputConfig: IFormInputConfig): FormInputField {
-    return new FormInputField(inputConfig);
+    return FormInputField.create(inputConfig);
   }
 
-  public createModelForm<T>(model: T, formConfig: IFormCreateManualConfig) {
+  public createModelForm<T>(
+    model: T,
+    formConfig: IFormCreateManualConfig
+  ): FormContainer {
     return this.createForm({
       fields: this._generateFromModelFieldsConfig<T>(formConfig.fields, model)
     });
@@ -53,7 +46,9 @@ export class FormFactory {
     inputConfig: Array<IFormInputConfig>
   ): Array<FormInputField> {
     return inputConfig.map(field => {
-      return field instanceof FormInputField ? field : this.createInput(field);
+      return field.hasOwnProperty("control")
+        ? (field as FormInputField)
+        : this.createInput(field);
     });
   }
 
