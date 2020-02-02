@@ -31,7 +31,7 @@ describe("HttpService", () => {
 
     beforeEach(() => {});
 
-    describe("when a correctly formatted URL is supplied", () => {
+    describe("when a partial URL is supplied", () => {
       beforeEach(() => {
         getReturnPromise("get");
         result = service.get("get/url");
@@ -47,10 +47,10 @@ describe("HttpService", () => {
       });
     });
 
-    describe("when an incorrectly formatted URL is supplied", () => {
+    describe("when an full URL is supplied", () => {
       beforeEach(() => {
         getReturnPromise("get");
-        service.get("/get/url");
+        service.get(`${apiUrl}get/url`);
         args = (client.get as jasmine.Spy).calls.mostRecent().args;
       });
 

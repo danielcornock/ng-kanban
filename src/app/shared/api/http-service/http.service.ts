@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpModel } from "../http-model/http-model";
 
 @Injectable({
   providedIn: "root"
@@ -7,7 +8,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 export class HttpService {
   constructor(private http: HttpClient) {}
 
-  private apiUrl = "http://localhost:3000/api/v1/";
+  private _apiUrl = "http://localhost:3000/api/v1/";
 
   private addAuthHeaders() {
     return new HttpHeaders({
@@ -16,13 +17,9 @@ export class HttpService {
     });
   }
 
-  private _processUrl(url: string): string {
-    return url[0] === "/" ? url.slice(1) : url;
-  }
-
   public post(url: string, data: object): Promise<any> {
     return this.http
-      .post(this.apiUrl + this._processUrl(url), data, {
+      .post(this._generateCompleteUrl(url), data, {
         headers: this.addAuthHeaders()
       })
       .toPromise();
@@ -30,7 +27,7 @@ export class HttpService {
 
   public put(url: string, data: object): Promise<any> {
     return this.http
-      .put(this.apiUrl + this._processUrl(url), data, {
+      .put(this._generateCompleteUrl(url), data, {
         headers: this.addAuthHeaders()
       })
       .toPromise();
@@ -38,7 +35,7 @@ export class HttpService {
 
   public get(url: string): Promise<any> {
     return this.http
-      .get(this.apiUrl + this._processUrl(url), {
+      .get(this._generateCompleteUrl(url), {
         headers: this.addAuthHeaders()
       })
       .toPromise();
@@ -46,9 +43,15 @@ export class HttpService {
 
   public delete(url: string): Promise<any> {
     return this.http
-      .delete(this.apiUrl + this._processUrl(url), {
+      .delete(this._generateCompleteUrl(url), {
         headers: this.addAuthHeaders()
       })
       .toPromise();
+  }
+
+  private _generateCompleteUrl(url: string) {
+    return url.includes("http://localhost:3000/api/v1/")
+      ? url
+      : this._apiUrl + url;
   }
 }
