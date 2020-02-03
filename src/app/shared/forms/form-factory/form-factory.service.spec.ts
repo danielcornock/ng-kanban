@@ -8,6 +8,8 @@ import { FormInputFieldStub } from "../form-input-field/form-input-field.stub";
 import { IFormInputConfig } from "../interfaces/form-input-config.interface";
 import { FormContainerStub } from "../form-container/form-container.stub";
 import { IStory } from "src/app/stories/interfaces/story.interface";
+import { IHttpModel } from "../../api/http-model/http-model.interface";
+import { HttpModelStub } from "../../api/http-model/http-model.stub";
 
 describe("FormFactory", () => {
   let service: FormFactory,
@@ -88,22 +90,25 @@ describe("FormFactory", () => {
   });
 
   describe("when creating a model form", () => {
-    let result: FormContainer, model: IStory;
-    beforeEach(() => {
-      model = {
-        title: "story",
-        storyNumber: 12,
-        tags: [],
-        _id: "id"
-      };
+    let result: FormContainer, model: IStory, modelStub: IHttpModel;
 
+    beforeEach(() => {
       inputConfig = {
         name: "title",
         config: {}
       };
 
       spyOn(service, "createForm").and.returnValue(formContainerStub);
-      result = service.createModelForm(model, { fields: [inputConfig] });
+
+      modelStub = new HttpModelStub();
+      modelStub.data = {
+        title: "story",
+        storyNumber: 12,
+        tags: [],
+        _id: "id"
+      };
+
+      result = service.createModelForm(modelStub, { fields: [inputConfig] });
     });
 
     it("should call the create form method with the added getters and setters", () => {

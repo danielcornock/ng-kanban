@@ -4,6 +4,8 @@ import { FormInputField } from "../form-input-field/form-input-field";
 import { IFormInputConfig } from "../interfaces/form-input-config.interface";
 import { IFormConfig } from "../interfaces/form-config.interface";
 import { IFormCreateManualConfig } from "../interfaces/form-create-manual-config.interface";
+import { IHttpModel } from "../../api/http-model/http-model.interface";
+import { IHttpObject } from "../../api/interfaces/http-response.interface";
 
 @Injectable({
   providedIn: "root"
@@ -21,22 +23,22 @@ export class FormFactory {
     return FormInputField.create(inputConfig);
   }
 
-  public createModelForm<T>(
-    model: T,
+  public createModelForm(
+    model: IHttpModel,
     formConfig: IFormCreateManualConfig
   ): FormContainer {
     return this.createForm({
-      fields: this._generateFromModelFieldsConfig<T>(formConfig.fields, model)
+      fields: this._generateFromModelFieldsConfig(formConfig.fields, model.data)
     });
   }
 
-  private _generateFromModelFieldsConfig<T>(
+  private _generateFromModelFieldsConfig(
     fields: Array<IFormInputConfig>,
-    model: T
+    data: IHttpObject
   ): Array<IFormInputConfig> {
     fields.forEach(item => {
-      this._setModelGetterFn<T>(item, model);
-      this._setModelSetterFn<T>(item, model);
+      this._setModelGetterFn(item, data);
+      this._setModelSetterFn(item, data);
     });
 
     return fields;
@@ -52,13 +54,13 @@ export class FormFactory {
     });
   }
 
-  private _setModelGetterFn<T>(fieldConfig: IFormInputConfig, model: T) {
+  private _setModelGetterFn(fieldConfig: IFormInputConfig, data: IHttpObject) {
     if (!fieldConfig.config.getValue) {
-      fieldConfig.config.getValue = () => model[fieldConfig.name];
+      fieldConfig.config.getValue = () => data[fieldConfig.name];
     }
   }
 
-  private _setModelSetterFn<T>(fieldConfig: IFormInputConfig, model: T) {
+  private _setModelSetterFn(fieldConfig: IFormInputConfig, model: IHttpObject) {
     if (!fieldConfig.config.setValue) {
       fieldConfig.config.setValue = (val: any) => {
         model[fieldConfig.name] = val;
