@@ -31,13 +31,6 @@ export class StoryApiService {
       })
       .catch(() => null);
   }
-
-  public async deleteStory(storyId: string, columnId: string): Promise<void> {
-    try {
-      await this._httpService.delete(`stories/${storyId}`);
-      this.deleteStorySubject.next({ storyId, columnId });
-    } catch {}
-  }
 }
 
 export interface IBoardUpdate {
