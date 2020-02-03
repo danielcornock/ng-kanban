@@ -11,6 +11,8 @@ import { ITag } from "src/app/boards/interfaces/board-config.interface";
 import { FormFactory } from "src/app/shared/forms/form-factory/form-factory.service";
 import { FormContainer } from "src/app/shared/forms/form-container/form-container";
 import { IFormInputConfig } from "src/app/shared/forms/interfaces/form-input-config.interface";
+import { IHttpModel } from "src/app/shared/api/http-model/http-model.interface";
+import { ModelService } from "src/app/shared/api/model-service/model.service";
 
 @Component({
   selector: "app-edit-story-modal",
@@ -20,16 +22,16 @@ import { IFormInputConfig } from "src/app/shared/forms/interfaces/form-input-con
 export class EditStoryModalComponent
   extends ModalDialog<EditStoryModalComponent>
   implements OnInit {
-  public story: IStory;
   public storyFormContainer: FormContainer;
+  public storyModel: IHttpModel;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) data: any,
     matDialogRef: MatDialogRef<EditStoryModalComponent>,
-    private readonly _httpService: HttpService,
     private readonly _formFactory: FormFactory,
     private readonly _boardRefreshService: BoardRefreshService,
-    private readonly _storyApiService: StoryApiService
+    private readonly _storyApiService: StoryApiService,
+    private readonly _modelService: ModelService
   ) {
     super(matDialogRef, data);
   }
@@ -40,45 +42,46 @@ export class EditStoryModalComponent
   }
 
   public onInputChange(event: IControlExport) {
-    if (this.story[event.name] === event.value) return;
-    this.story[event.name] = event.value;
+    if (this.storyModel.data[event.name] === event.value) return;
+    this.storyModel.data[event.name] = event.value;
     this._updateStory();
   }
 
   public addTagToStory(tag: ITag) {
-    this.story.tags.push(tag);
+    this.storyModel.data.tags.push(tag);
     this._updateStory();
   }
 
   public removeTag(index: number) {
-    this.story.tags.splice(index, 1);
+    this.storyModel.data.tags.splice(index, 1);
     this._updateStory();
   }
 
   public async deleteStory(): Promise<void> {
-    await this._storyApiService.deleteStory(
-      this.story._id,
-      this.dialogData.columnId
-    );
+    await this.storyModel.delete();
+    this._storyApiService.deleteStorySubject.next({
+      storyId: this.storyModel.data._id,
+      columnId: this.dialogData.columnId
+    });
     this.closeModal();
   }
 
   private async _updateStory(): Promise<void> {
-    await this._httpService.put(`stories/${this.story._id}`, this.story);
+    await this.storyModel.update();
     this._boardRefreshService.boardListRefresh.next();
   }
 
   private async _fetchStory(): Promise<void> {
-    const httpRes: any = await this._httpService.get(
+    const model: IHttpModel = await this._modelService.get(
       `stories/${this.dialogData.storyId}`
     );
 
-    this.story = httpRes.story;
+    this.storyModel = model;
   }
 
   private _buildform(): void {
-    this.storyFormContainer = this._formFactory.createModelForm<IStory>(
-      this.story,
+    this.storyFormContainer = this._formFactory.createModelForm(
+      this.storyModel,
       {
         fields: [
           this._createTitleFieldConfig(),

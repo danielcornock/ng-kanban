@@ -19,11 +19,11 @@
     <h3 class="editStoryModal-tagsHeader">Tags</h3>
     <app-tags
       class="editStoryModal-tags"
-      [appTags]="story.tags"
+      [appTags]="storyModel.data.tags"
       (appTagsSelectedTag)="addTagToStory($event)"
       (appTagsDeletedTag)="removeTag($event)"
     ></app-tags>
   </div>
-  <p class="editStoryModal-storyNumber">#{{ story.storyNumber }}</p>
+  <p class="editStoryModal-storyNumber">#{{ storyModel.data.storyNumber }}</p>
   <button class="editStoryModal-delete" (click)="deleteStory()">Delete</button>
 </div>
