@@ -1,20 +1,15 @@
 import { Injectable } from "@angular/core";
-import { HttpService } from "src/app/shared/api/http-service/http.service";
-import { IBoard } from "../../interfaces/board.interface";
 import { BoardConfigStoreService } from "../board-config-store/board-config-store.service";
+import { IHttpModel } from "src/app/shared/api/http-model/http-model.interface";
+import { ModelService } from "src/app/shared/api/model-service/model.service";
 
 @Injectable({
   providedIn: "root"
 })
 export class BoardApiService {
-  constructor(
-    private readonly _httpService: HttpService,
-    private readonly _boardConfigStoreService: BoardConfigStoreService
-  ) {}
+  constructor(private readonly _modelService: ModelService) {}
 
-  public async fetchBoard(boardId: string): Promise<IBoard> {
-    const { board } = await this._httpService.get(`boards/${boardId}`);
-    this._boardConfigStoreService.setConfig(board.config);
-    return board;
+  public async fetchBoard(boardId: string): Promise<IHttpModel> {
+    return await this._modelService.get(`boards/${boardId}`);
   }
 }
