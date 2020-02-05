@@ -5,12 +5,14 @@ import { HttpServiceStub } from "../http-service/http.service.stub";
 import { TestPromise } from "src/app/testing/test-promise/test-promise";
 import { IHttpModel } from "./http-model.interface";
 import { async } from "@angular/core/testing";
+import { ModelStatus } from "./constants/model-status";
 
 describe("HttpModel", () => {
   let mockData: IHttpResponse,
     model: HttpModel,
     httpService: HttpService,
-    result: Promise<IHttpModel>;
+    result: Promise<IHttpModel>,
+    modelStatus: ModelStatus;
 
   beforeEach(() => {
     mockData = {
@@ -32,6 +34,10 @@ describe("HttpModel", () => {
     >) as HttpService;
 
     model = new HttpModel(mockData, httpService);
+
+    model.onStatusChanges().subscribe((val: ModelStatus) => {
+      modelStatus = val;
+    });
   });
 
   describe("when initialising the model", () => {
@@ -41,6 +47,10 @@ describe("HttpModel", () => {
 
     it("should assign the data", () => {
       expect(model.data).toBe(mockData.data.story);
+    });
+
+    it("should have a status of fetched", () => {
+      expect(modelStatus).toBe(ModelStatus.FETCHED);
     });
   });
 
@@ -52,6 +62,10 @@ describe("HttpModel", () => {
       (httpService.put as jasmine.Spy).and.returnValue(putPromise.promise);
 
       result = model.update();
+    });
+
+    it("should set the state as updating", () => {
+      expect(modelStatus).toBe(ModelStatus.UPDATING);
     });
 
     it("should update the model in the api", () => {
@@ -83,6 +97,10 @@ describe("HttpModel", () => {
         putPromise.resolve(returnData);
       }));
 
+      it("should set the state as updated", () => {
+        expect(modelStatus).toBe(ModelStatus.UPDATED);
+      });
+
       it("should update the data in the model", () => {
         expect(model.data).toBe(returnData.data.story);
       });
@@ -104,11 +122,15 @@ describe("HttpModel", () => {
       result = model.reload();
     });
 
+    it("should set the state as RELOADING", () => {
+      expect(modelStatus).toBe(ModelStatus.RELOADING);
+    });
+
     it("should fetch the updated model information", () => {
       expect(httpService.get).toHaveBeenCalledWith("link/self");
     });
 
-    describe("when the model has updated", () => {
+    describe("when the model has reloaded", () => {
       let returnData: IHttpResponse;
 
       beforeEach(async(() => {
@@ -129,6 +151,10 @@ describe("HttpModel", () => {
 
         getPromise.resolve(returnData);
       }));
+
+      it("should set the state as reloaded", () => {
+        expect(modelStatus).toBe(ModelStatus.RELOADED);
+      });
 
       it("should update the data in the model", () => {
         expect(model.data).toBe(returnData.data.story);
@@ -153,6 +179,10 @@ describe("HttpModel", () => {
       result = (model.delete() as unknown) as Promise<IHttpModel>;
     });
 
+    it("should set the state as DELETING", () => {
+      expect(modelStatus).toBe(ModelStatus.DELETING);
+    });
+
     it("should delete the model in the api", () => {
       expect(httpService.delete).toHaveBeenCalledWith("link/self");
     });
@@ -161,6 +191,10 @@ describe("HttpModel", () => {
       beforeEach(async(() => {
         deletePromise.resolve();
       }));
+
+      it("should set the state as updating", () => {
+        expect(modelStatus).toBe(ModelStatus.DELETED);
+      });
 
       it("should return undefined", async () => {
         expect(await result).toBeUndefined();
