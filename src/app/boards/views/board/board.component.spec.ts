@@ -1,3 +1,5 @@
+//TODO - FIX THESE TESTS
+
 import {
   async,
   ComponentFixture,
@@ -5,7 +7,6 @@ import {
   fakeAsync,
   tick
 } from "@angular/core/testing";
-
 import { BoardComponent } from "./board.component";
 import { ColumnComponentStub } from "../../components/column/column.component.stub";
 import { ColumnCreateComponentStub } from "../../components/column-create/column-create.component.stub";
@@ -26,16 +27,22 @@ import { BoardRefreshServiceStub } from "../../services/board-refresh/board-refr
 import { BoardRefreshService } from "../../services/board-refresh/board-refresh.service";
 import { IStory } from "src/app/stories/interfaces/story.interface";
 import { BoardHeaderComponentStub } from "../../components/board-header/board-header.component.stub";
+import { BoardConfigStoreServiceStub } from "../../services/board-config-store/board-config-store.service.stub";
+import { BoardConfigStoreService } from "../../services/board-config-store/board-config-store.service";
+import { IHttpModel } from "src/app/shared/api/http-model/http-model.interface";
+import { HttpModelStub } from "src/app/shared/api/http-model/http-model.stub";
+import { Subject } from "rxjs";
+import { ModelStatus } from "src/app/shared/api/http-model/constants/model-status";
 
 describe("BoardComponent", () => {
   let component: BoardComponent;
   let fixture: ComponentFixture<BoardComponent>;
   let dependencies: {
     routerService: RouterServiceStub;
-    httpService: HttpServiceStub;
     storyApiService: StoryApiServiceStub;
     boardApiService: BoardApiServiceStub;
     boardRefreshService: BoardRefreshServiceStub;
+    boardConfigStoreService: BoardConfigStoreServiceStub;
   };
 
   function getColumnCreate(): DebugElement {
@@ -53,10 +60,10 @@ describe("BoardComponent", () => {
   beforeEach(async(() => {
     dependencies = {
       routerService: new RouterServiceStub(),
-      httpService: new HttpServiceStub(),
       storyApiService: new StoryApiServiceStub(),
       boardApiService: new BoardApiServiceStub(),
-      boardRefreshService: new BoardRefreshServiceStub()
+      boardRefreshService: new BoardRefreshServiceStub(),
+      boardConfigStoreService: new BoardConfigStoreServiceStub()
     };
 
     TestBed.configureTestingModule({
@@ -69,7 +76,10 @@ describe("BoardComponent", () => {
       ],
       providers: [
         { provide: RouterService, useValue: dependencies.routerService },
-        { provide: HttpService, useValue: dependencies.httpService },
+        {
+          provide: BoardConfigStoreService,
+          useValue: dependencies.boardConfigStoreService
+        },
         { provide: StoryApiService, useValue: dependencies.storyApiService },
         { provide: BoardApiService, useValue: dependencies.boardApiService },
         {
@@ -115,9 +125,11 @@ describe("BoardComponent", () => {
     });
 
     describe("when the data has been fetched", () => {
-      let mockBoard: IBoard;
+      let mockBoard: IHttpModel, statusChangeSubject: Subject<ModelStatus>;
+
       beforeEach(fakeAsync(() => {
-        mockBoard = {
+        mockBoard = new HttpModelStub();
+        let mockBoardData = {
           title: "testBoard",
           _id: "testBoardId",
           columns: [
@@ -132,6 +144,14 @@ describe("BoardComponent", () => {
             }
           ]
         } as IBoard;
+
+        mockBoard.data = mockBoardData;
+
+        statusChangeSubject = new Subject();
+
+        (mockBoard.onStatusChanges as jasmine.Spy).and.returnValue(
+          statusChangeSubject.asObservable()
+        );
 
         getBoardPromise.resolve(mockBoard);
 
@@ -162,21 +182,29 @@ describe("BoardComponent", () => {
         );
       });
 
+      describe('when the board is reloaded or updated', () => {
+        beforeEach(() => {
+          statusChangeSubject.next(ModelStatus.RELOADED);
+        });
+
+        it('should set the config', () => {
+          expect(dependencies.boardConfigStoreService.setConfig).toHaveBeenCalledWith();
+        });
+      });
+
       describe("when the board is refreshed", () => {
         beforeEach(() => {
           dependencies.boardRefreshService.boardListRefresh.next();
         });
 
         it("should fetch the updated board", () => {
-          expect(dependencies.boardApiService.fetchBoard).toHaveBeenCalledWith(
-            "testBoardId"
-          );
+          expect(mockBoard.reload).toHaveBeenCalledWith();
         });
       });
 
       describe("when a story is deleted", () => {
         beforeEach(() => {
-          mockBoard.columns[0].stories.push({ _id: "story-id" } as IStory);
+          mockBoard.data.columns[0].stories.push({ _id: "story-id" } as IStory);
 
           fixture.detectChanges();
 
@@ -187,24 +215,7 @@ describe("BoardComponent", () => {
         });
 
         it("should save the updated board", () => {
-          expect(dependencies.httpService.put).toHaveBeenCalledWith(
-            "boards/testBoardId",
-            {
-              title: "testBoard",
-              _id: "testBoardId",
-              columns: [
-                {
-                  _id: "col1-id",
-                  title: "column1",
-                  stories: []
-                },
-                {
-                  _id: "col2-id",
-                  title: "column2"
-                }
-              ]
-            }
-          );
+          expect(mockBoard.update).toHaveBeenCalledWith();
         });
       });
 
@@ -215,11 +226,7 @@ describe("BoardComponent", () => {
         });
 
         it("should save the board to the API", () => {
-          expect(dependencies.httpService.put).toHaveBeenCalledWith(
-            "boards/testBoardId",
-            mockBoard
-          );
-        });
+          expect(mockBoard.update).toHaveBeenCalledWith();;
       });
 
       describe("when a new column is added", () => {
@@ -228,7 +235,7 @@ describe("BoardComponent", () => {
         beforeEach(() => {
           putBoardPromise = new TestPromise<any>();
 
-          (dependencies.httpService.put as jasmine.Spy).and.returnValue(
+          (mockBoard.update as jasmine.Spy).and.returnValue(
             putBoardPromise.promise
           );
 
@@ -237,28 +244,9 @@ describe("BoardComponent", () => {
           );
         });
 
+
         it("should update the board in the API", () => {
-          expect(dependencies.httpService.put).toHaveBeenCalledWith(
-            "boards/testBoardId",
-            {
-              title: "testBoard",
-              _id: "testBoardId",
-              columns: [
-                {
-                  _id: "col1-id",
-                  title: "column1",
-                  stories: []
-                },
-                {
-                  _id: "col2-id",
-                  title: "column2"
-                },
-                {
-                  title: "new-column"
-                }
-              ]
-            }
-          );
+          expect(mockBoard.update).toHaveBeenCalledWith();
         });
 
         describe("when the board has been successfully updated", () => {
@@ -325,24 +313,7 @@ describe("BoardComponent", () => {
         });
 
         it("should save the board", () => {
-          expect(dependencies.httpService.put).toHaveBeenCalledWith(
-            "boards/testBoardId",
-            {
-              title: "testBoard",
-              _id: "testBoardId",
-              columns: [
-                {
-                  _id: "col1-id",
-                  title: "column1",
-                  stories: ["storyId"]
-                },
-                {
-                  _id: "col2-id",
-                  title: "column2"
-                }
-              ]
-            }
-          );
+          expect(mockBoard.update).toHaveBeenCalledWith();
         });
       });
     });

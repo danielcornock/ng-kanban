@@ -1,14 +1,16 @@
 import { Component, OnInit } from "@angular/core";
 import { RouterService } from "src/app/shared/router/router.service";
-import { HttpService } from "src/app/shared/api/http-service/http.service";
 import {
   StoryApiService,
   IBoardUpdate
 } from "src/app/stories/services/story-api.service";
 import { BoardApiService } from "../../services/board-api/board-api.service";
-import { IBoard } from "../../interfaces/board.interface";
 import { BoardRefreshService } from "../../services/board-refresh/board-refresh.service";
 import { IStory } from "src/app/stories/interfaces/story.interface";
+import { IHttpModel } from "src/app/shared/api/http-model/http-model.interface";
+import { BoardConfigStoreService } from "../../services/board-config-store/board-config-store.service";
+import { filter } from "rxjs/operators";
+import { ModelStatus } from "src/app/shared/api/http-model/constants/model-status";
 
 @Component({
   selector: "app-board",
@@ -16,84 +18,72 @@ import { IStory } from "src/app/stories/interfaces/story.interface";
   styleUrls: ["./board.component.scss"]
 })
 export class BoardComponent implements OnInit {
-  public board: IBoard;
   private _boardId: string;
+  public boardModel: IHttpModel;
 
   constructor(
     private readonly _routerService: RouterService,
-    private readonly _httpService: HttpService,
     private readonly _storyApiService: StoryApiService,
     private readonly _boardApiService: BoardApiService,
-    private readonly _boardRefreshService: BoardRefreshService
+    private readonly _boardRefreshService: BoardRefreshService,
+    private readonly _boardConfigStoreService: BoardConfigStoreService
   ) {}
 
-  ngOnInit() {
-    this._fetchBoard();
+  public async ngOnInit(): Promise<void> {
+    await this._fetchBoard();
+    this._watchBoardChanges();
     this._subscribeToNewStories();
     this._subscribeToDeletedStories();
     this._onBoardRefresh();
   }
 
   public addColumn(title: string) {
-    this.board.columns.push({ title });
-    this._saveBoardAndRefresh();
+    this.boardModel.data.columns.push({ title });
+    this.boardModel.update();
   }
 
-  public async saveBoard() {
-    await this._httpService.put(`boards/${this._boardId}`, this.board);
+  private _watchBoardChanges(): void {
+    this.boardModel
+      .onStatusChanges()
+      .pipe(
+        filter(
+          (status: ModelStatus) =>
+            status === ModelStatus.RELOADED || status === ModelStatus.UPDATED
+        )
+      )
+      .subscribe(() => {
+        this._boardConfigStoreService.setConfig(this.boardModel.data.config);
+      });
   }
-
-  //! Deprecated until future use - drag drop columns
-  // public drop(event: CdkDragDrop<IColumn>): void {
-  //   console.log(event);
-  //   if (event.currentIndex === event.previousIndex) {
-  //     return;
-  //   }
-
-  //   moveItemInArray(
-  //     this.board.columns,
-  //     event.previousIndex,
-  //     event.currentIndex
-  //   );
-
-  //   this.saveBoard();
-  // }
 
   private _onBoardRefresh(): void {
     this._boardRefreshService.boardListRefresh.subscribe(() => {
-      this._fetchBoard(this._boardId);
+      this.boardModel.reload();
     });
   }
 
-  private async _saveBoardAndRefresh() {
-    await this.saveBoard();
-    this._fetchBoard(this._boardId);
-  }
-
   private async _fetchBoard(boardId?: string) {
-    if (!boardId) {
-      this._boardId = this._routerService.getUrlParams("boardId");
-    }
-    this.board = await this._boardApiService.fetchBoard(this._boardId);
+    this._boardId = this._routerService.getUrlParams("boardId");
+    this.boardModel = await this._boardApiService.fetchBoard(this._boardId);
   }
 
   private _subscribeToNewStories(): void {
-    this._storyApiService.updateBoardSubject.subscribe((val: IBoardUpdate) => {
-      const col = this.board.columns.find(col => col._id === val.columnId);
-      col.stories.push(val.storyId);
-      this._saveBoardAndRefresh();
+    this._storyApiService.updateBoardSubject.subscribe(() => {
+      this.boardModel.reload();
     });
   }
 
   private _subscribeToDeletedStories(): void {
     this._storyApiService.deleteStorySubject.subscribe((val: IBoardUpdate) => {
-      const col = this.board.columns.find(col => col._id === val.columnId);
+      const col = this.boardModel.data.columns.find(
+        col => col._id === val.columnId
+      );
 
       col.stories = col.stories.filter((story: IStory) => {
         return story._id !== val.storyId;
       });
 
-      this._saveBoardAndRefresh();
+      this.boardModel.update();
     });
   }
 }

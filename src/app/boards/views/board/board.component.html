@@ -1,13 +1,15 @@
-<div *ngIf="board" class="board-container">
-  <app-board-header [appBoardHeaderTitle]="board.title"></app-board-header>
+<div *ngIf="boardModel" class="board-container">
+  <app-board-header
+    [appBoardHeaderTitle]="boardModel.data.title"
+  ></app-board-header>
   <div class="board-board">
     <div class="board-columnsContainer" cdkDropListGroup>
       <app-column
-        *ngFor="let column of board.columns"
+        *ngFor="let column of boardModel.data.columns"
         class="board-column"
         [appColumn]="column"
-        [appColumnBoardId]="board._id"
-        (appColumnOnDrop)="saveBoard()"
+        [appColumnBoardId]="boardModel.data._id"
+        (appColumnOnDrop)="boardModel.update()"
       ></app-column>
       <app-column-create
         class="board-column"
