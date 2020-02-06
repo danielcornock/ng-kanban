@@ -1,14 +1,13 @@
 import { Injectable } from "@angular/core";
 import { HttpService } from "src/app/shared/api/http-service/http.service";
 import { Subject } from "rxjs";
+import { IStory } from "../interfaces/story.interface";
 
 @Injectable({
   providedIn: "root"
 })
 export class StoryApiService {
-  public updateBoardSubject: Subject<IBoardUpdate> = new Subject<
-    IBoardUpdate
-  >();
+  public updateBoardSubject: Subject<void> = new Subject<void>();
 
   public deleteStorySubject: Subject<IBoardUpdate> = new Subject<
     IBoardUpdate
@@ -22,14 +21,10 @@ export class StoryApiService {
 
   public addNewStory(title: string, columnId: string, boardId: string): void {
     this._httpService
-      .post(`boards/${boardId}/stories`, { title })
-      .then(({ story }) => {
-        this.updateBoardSubject.next({
-          storyId: story._id,
-          columnId: columnId
-        });
-      })
-      .catch(() => null);
+      .post(`boards/${boardId}/columns/${columnId}/stories`, { title })
+      .then(() => {
+        this.updateBoardSubject.next();
+      });
   }
 }
 

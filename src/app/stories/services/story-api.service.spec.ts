@@ -23,14 +23,14 @@ describe("StoryApiService", () => {
   });
 
   describe("when adding a new story", () => {
-    let observableData: IBoardUpdate;
+    let observableData: boolean;
     beforeEach(() => {
       (dependencies.httpService.post as jasmine.Spy).and.returnValue(
-        Promise.resolve({ story: { _id: "testId" } })
+        Promise.resolve()
       );
 
-      service.updateBoardSubject.subscribe(data => {
-        observableData = data;
+      service.updateBoardSubject.subscribe(() => {
+        observableData = true;
       });
 
       service.addNewStory("storyTitle", "columnId", "boardId");
@@ -38,7 +38,7 @@ describe("StoryApiService", () => {
 
     it("should post the story to the API", () => {
       expect(dependencies.httpService.post).toHaveBeenCalledWith(
-        "boards/boardId/stories",
+        "boards/boardId/columns/columnId/stories",
         {
           title: "storyTitle"
         }
@@ -46,10 +46,7 @@ describe("StoryApiService", () => {
     });
 
     it("should next the story title and column id", () => {
-      expect(observableData).toEqual({
-        storyId: "testId",
-        columnId: "columnId"
-      });
+      expect(observableData).toBe(true);
     });
   });
 });
