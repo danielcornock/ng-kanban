@@ -1,5 +1,3 @@
-//TODO - FIX THESE TESTS
-
 import {
   async,
   ComponentFixture,
@@ -182,13 +180,15 @@ describe("BoardComponent", () => {
         );
       });
 
-      describe('when the board is reloaded or updated', () => {
+      describe("when the board is reloaded or updated", () => {
         beforeEach(() => {
           statusChangeSubject.next(ModelStatus.RELOADED);
         });
 
-        it('should set the config', () => {
-          expect(dependencies.boardConfigStoreService.setConfig).toHaveBeenCalledWith();
+        it("should set the config", () => {
+          expect(
+            dependencies.boardConfigStoreService.setConfig
+          ).toHaveBeenCalledWith(undefined);
         });
       });
 
@@ -226,94 +226,94 @@ describe("BoardComponent", () => {
         });
 
         it("should save the board to the API", () => {
-          expect(mockBoard.update).toHaveBeenCalledWith();;
-      });
-
-      describe("when a new column is added", () => {
-        let putBoardPromise: TestPromise<any>;
-
-        beforeEach(() => {
-          putBoardPromise = new TestPromise<any>();
-
-          (mockBoard.update as jasmine.Spy).and.returnValue(
-            putBoardPromise.promise
-          );
-
-          getColumnCreate().componentInstance.appColumnCreateOnCreate.emit(
-            "new-column"
-          );
-        });
-
-
-        it("should update the board in the API", () => {
           expect(mockBoard.update).toHaveBeenCalledWith();
         });
 
-        describe("when the board has been successfully updated", () => {
-          let refreshBoardPromise: TestPromise<any>;
+        describe("when a new column is added", () => {
+          let putBoardPromise: TestPromise<any>;
 
           beforeEach(() => {
-            refreshBoardPromise = new TestPromise<any>();
+            putBoardPromise = new TestPromise<any>();
 
-            (dependencies.boardApiService
-              .fetchBoard as jasmine.Spy).and.returnValue(
-              refreshBoardPromise.promise
+            (mockBoard.update as jasmine.Spy).and.returnValue(
+              putBoardPromise.promise
             );
 
-            putBoardPromise.resolve();
+            getColumnCreate().componentInstance.appColumnCreateOnCreate.emit(
+              "new-column"
+            );
           });
 
-          it("should refresh the board", () => {
-            expect(
-              dependencies.boardApiService.fetchBoard
-            ).toHaveBeenCalledWith("testBoardId");
+          it("should update the board in the API", () => {
+            expect(mockBoard.update).toHaveBeenCalledWith();
           });
 
-          describe("when the board has successfully refreshed", () => {
-            beforeEach(fakeAsync(() => {
-              refreshBoardPromise.resolve({
-                title: "testBoard",
-                _id: "testBoardId",
-                columns: [
-                  {
-                    _id: "col1-id",
-                    title: "column1"
-                  },
-                  {
-                    _id: "col2-id",
-                    title: "column2"
-                  },
-                  {
-                    _id: "col3-id",
-                    title: "new-column"
-                  }
-                ]
-              });
+          describe("when the board has been successfully updated", () => {
+            let refreshBoardPromise: TestPromise<any>;
 
-              tick();
+            beforeEach(() => {
+              refreshBoardPromise = new TestPromise<any>();
 
-              fixture.detectChanges();
-            }));
+              (dependencies.boardApiService
+                .fetchBoard as jasmine.Spy).and.returnValue(
+                refreshBoardPromise.promise
+              );
 
-            it("should render the new columns", () => {
-              expect(getColumns()[2].componentInstance.appColumn).toEqual({
-                title: "new-column"
+              putBoardPromise.resolve();
+            });
+
+            it("should refresh the board", () => {
+              expect(
+                dependencies.boardApiService.fetchBoard
+              ).toHaveBeenCalledWith("testBoardId");
+            });
+
+            describe("when the board has successfully refreshed", () => {
+              beforeEach(fakeAsync(() => {
+                refreshBoardPromise.resolve({
+                  title: "testBoard",
+                  _id: "testBoardId",
+                  columns: [
+                    {
+                      _id: "col1-id",
+                      title: "column1"
+                    },
+                    {
+                      _id: "col2-id",
+                      title: "column2"
+                    },
+                    {
+                      _id: "col3-id",
+                      title: "new-column"
+                    }
+                  ]
+                });
+
+                tick();
+
+                fixture.detectChanges();
+              }));
+
+              it("should render the new columns", () => {
+                expect(getColumns()[2].componentInstance.appColumn).toEqual({
+                  title: "new-column"
+                });
               });
             });
           });
         });
-      });
 
-      describe("when a new story is added", () => {
-        beforeEach(() => {
-          dependencies.storyApiService.updateBoardSubject.next({
-            columnId: "col1-id",
-            storyId: "storyId"
+        describe("when a new story is added", () => {
+          beforeEach(() => {
+            dependencies.storyApiService.updateBoardSubject.next({
+              columnId: "col1-id",
+              storyId: "storyId"
+            });
           });
-        });
 
-        it("should save the board", () => {
-          expect(mockBoard.update).toHaveBeenCalledWith();
+          it("should save the board", () => {
+            expect(mockBoard.update).toHaveBeenCalledWith();
+          });
         });
       });
     });
