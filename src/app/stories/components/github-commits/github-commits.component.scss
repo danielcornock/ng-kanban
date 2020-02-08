@@ -1,0 +1,69 @@
+@import "src/assets/styles/themes.scss";
+
+.githubCommits {
+  &-container {
+  }
+
+  &-commitContainer {
+    @include flex(row);
+    background-color: $gray-100;
+    border-radius: $br-small;
+    padding: $spacing-4;
+  }
+
+  &-addCommit {
+    @include button-default($gray-400, $gray-100);
+
+    @include hover(0) {
+      @include button-default($gray-600, $gray-200);
+    }
+  }
+
+  &-link {
+    color: inherit;
+    text-decoration: none;
+
+    @include hover(0) {
+      text-decoration: underline;
+    }
+  }
+
+  &-author {
+    color: $gray-600;
+  }
+
+  &-addIcon {
+    width: 25px;
+    height: 25px;
+  }
+
+  &-delete {
+    margin-left: auto;
+    @include button-reset;
+    color: $gray-400;
+
+    @include hover(0) {
+      color: $red-500;
+    }
+  }
+
+  &-deleteIcon {
+    height: 30px;
+    width: 30px;
+  }
+
+  &-commit {
+    font-size: 18px;
+    // @include button-default($teal-600, $teal-100);
+    // @include flex();
+    // align-items: center;
+    // width: auto;
+    // cursor: default;
+  }
+
+  &-icon {
+    width: 25px;
+    height: 25px;
+    margin-right: $spacing-2;
+  }
+}

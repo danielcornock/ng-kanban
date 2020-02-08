@@ -1,0 +1,28 @@
+<div class="githubCommits-container">
+  <div class="githubCommits-commitContainer" *ngIf="appGithubCommitsCommit">
+    <app-icon class="githubCommits-icon" appIcon="git-commit"></app-icon>
+    <div class="githubCommits-commit">
+      <a
+        target="_blank"
+        rel="noopener noreferrer"
+        href="{{ appGithubCommitsCommit.url }}"
+        class="githubCommits-link"
+        >{{ appGithubCommitsCommit.message }}</a
+      >
+      <p class=" githubCommits-author">
+        by {{ appGithubCommitsCommit.author }}
+      </p>
+    </div>
+    <button class="githubCommits-delete" (click)="removeCommit()">
+      <app-icon class="githubCommits-deleteIcon" appIcon="x-circle"></app-icon>
+    </button>
+  </div>
+
+  <button
+    class="githubCommits-addCommit"
+    *ngIf="!appGithubCommitsCommit"
+    (click)="openCommitsModal()"
+  >
+    <app-icon class="githubCommits-addIcon" appIcon="plus"></app-icon>
+  </button>
+</div>
