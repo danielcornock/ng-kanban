@@ -1,0 +1,25 @@
+<div class="githubCommitsModal-container">
+  <h2 class="githubCommitsModal-header">Github Config</h2>
+
+  <div class="githubCommitsModal-content">
+    <div class="githubCommitsModal-selectedRepos">
+      <button
+        *ngFor="let repo of repos"
+        (click)="searchCommits(repo.url)"
+        class="githubCommitsModal-selectedRepo"
+      >
+        {{ repo.name }}
+      </button>
+    </div>
+
+    <div class="githubCommitsModal-commits">
+      <button
+        class="githubCommitsModal-commit"
+        *ngFor="let commit of commits"
+        (click)="selectCommit(commit)"
+      >
+        {{ commit.commit.message }}
+      </button>
+    </div>
+  </div>
+</div>

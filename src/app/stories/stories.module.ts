@@ -7,7 +7,9 @@ import { EditStoryModalComponent } from "./components/edit-story-modal/edit-stor
 import { FormInputTextareaComponent } from "../shared/forms/form-input-textarea/form-input-textarea.component";
 import { TagsModalComponent } from "./components/tags-modal/tags-modal.component";
 import { TagsComponent } from "./components/tags/tags.component";
-import { AddStoryTagsComponent } from './components/add-story-tags/add-story-tags.component';
+import { AddStoryTagsComponent } from "./components/add-story-tags/add-story-tags.component";
+import { GithubCommitsComponent } from "./components/github-commits/github-commits.component";
+import { GithubCommitsModalComponent } from "./components/github-commits-modal/github-commits-modal.component";
 
 @NgModule({
   declarations: [
@@ -16,10 +18,16 @@ import { AddStoryTagsComponent } from './components/add-story-tags/add-story-tag
     EditStoryModalComponent,
     TagsModalComponent,
     TagsComponent,
-    AddStoryTagsComponent
+    AddStoryTagsComponent,
+    GithubCommitsComponent,
+    GithubCommitsModalComponent
   ],
   imports: [CommonModule, SharedModule],
-  entryComponents: [EditStoryModalComponent, TagsModalComponent],
+  entryComponents: [
+    EditStoryModalComponent,
+    TagsModalComponent,
+    GithubCommitsModalComponent
+  ],
   exports: [StoryComponent, StoryCreateComponent, TagsModalComponent]
 })
 export class StoriesModule {}
