@@ -27,7 +27,6 @@ export class BoardHeaderComponent implements OnInit {
   }
 
   public openGithubModal(): void {
-    console.log(this.appBoardHeaderBoardModel);
     const modalClose = this._modalService.openModal(
       GithubConfigModalComponent,
       {

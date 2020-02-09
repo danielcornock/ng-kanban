@@ -36,7 +36,6 @@ export class GithubCommitsModalComponent
   public async searchCommits(url: string): Promise<void> {
     const commits = await this._githubService.fetchCommits(url);
     this.commits = commits;
-    console.log(this.commits);
   }
 
   public selectCommit(commit: any) {
