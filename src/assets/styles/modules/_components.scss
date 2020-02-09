@@ -22,6 +22,8 @@
 }
 
 @mixin button-default($textColor, $bgColor) {
+  cursor: pointer;
+  border: none;
   padding: $spacing-2 $spacing-4;
   font-size: $text-lg;
   background-color: $bgColor;
