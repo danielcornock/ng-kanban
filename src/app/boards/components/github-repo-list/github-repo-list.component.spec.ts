@@ -23,7 +23,7 @@ describe("GithubRepoListComponent", () => {
     fixture = TestBed.createComponent(GithubRepoListComponent);
     component = fixture.componentInstance;
 
-    component.appGithubRepoListRepos = [{ name: "repo1" }];
+    component.appGithubRepoListRepos = [{ name: "repo1", url: "url" }];
     onSelectSpy = spyOn(component.appGithubRepoListOnSelect, "emit");
   });
 
@@ -49,7 +49,7 @@ describe("GithubRepoListComponent", () => {
 
       it("should emit the selected repo with its index", () => {
         expect(onSelectSpy).toHaveBeenCalledWith({
-          repo: { name: "repo1" },
+          repo: { name: "repo1", url: "url" },
           index: 0
         });
       });
