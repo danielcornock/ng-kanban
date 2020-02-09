@@ -2,14 +2,33 @@
 
 .header {
   &-container {
+    @include flex;
+    align-items: center;
     width: 100vw;
     background: $blue-400;
     padding: $spacing-2 $spacing-4;
     box-shadow: 0px 2px 8px $gray-400;
     overflow-x: hidden;
+    position: relative;
+    height: 50px;
   }
 
   &-title {
     color: $white;
+    @include center-self;
+    font-size: $text-2xl;
+  }
+
+  &-backButton {
+    @include button-reset;
+    @include center-contents;
+    color: $white;
+    font-size: $text-lg;
+    margin-right: $spacing-2;
+  }
+
+  &-backIcon {
+    height: 30px;
+    width: 30px;
   }
 }

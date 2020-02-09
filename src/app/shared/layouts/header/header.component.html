@@ -1,3 +1,11 @@
 <div class="header-container">
+  <button
+    class="header-backButton"
+    (click)="navigateToHome()"
+    *ngIf="isOnBoard()"
+  >
+    <app-icon appIcon="chevron-left" class="header-backIcon"></app-icon>
+    Back
+  </button>
   <h1 class="header-title">ngKanban</h1>
 </div>
