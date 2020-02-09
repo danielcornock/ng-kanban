@@ -7,7 +7,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 export class HttpService {
   constructor(private http: HttpClient) {}
 
-  private _apiUrl = "http://localhost:3000/api/v1/";
+  private _apiUrl = "https://nest-kanban.herokuapp.com/api/v1/";
 
   private addAuthHeaders() {
     return new HttpHeaders({
