@@ -9,5 +9,11 @@
     </div>
   </div>
   <h2 class="story-title">{{ appStory.title }}</h2>
-  <span class="story-storyNumber">#{{ appStory.storyNumber }}</span>
+  <div class="story-footer">
+    <span class="story-storyNumber">#{{ appStory.storyNumber }}</span>
+    <span class="story-commit" *ngIf="appStory.commit">
+      <app-icon class="story-commitIcon" appIcon="git-commit"></app-icon>
+      <span class="story-commitMessage">{{ appStory.commit.id }}</span>
+    </span>
+  </div>
 </button>

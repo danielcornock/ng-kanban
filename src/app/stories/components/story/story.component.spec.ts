@@ -23,6 +23,10 @@ describe("StoryComponent", () => {
     return fixture.debugElement.query(By.css(".story-title"));
   }
 
+  function getByCss(element: string): DebugElement {
+    return fixture.debugElement.query(By.css(`.story-${element}`));
+  }
+
   function getOpenModalButton(): DebugElement {
     return fixture.debugElement.query(By.css(".story-container"));
   }
@@ -51,7 +55,10 @@ describe("StoryComponent", () => {
         title: "story-title",
         _id: "story-id",
         storyNumber: 5,
-        tags: [{ color: "#1", label: "#1" }]
+        tags: [{ color: "#1", label: "#1" }],
+        commit: {
+          id: "commit-id"
+        }
       } as IStory;
 
       component.appStoryColumnId = "column-id";
@@ -74,6 +81,12 @@ describe("StoryComponent", () => {
     it("should display the tags", () => {
       expect(getTags().length).toBe(1);
       expect(getTags()[0].nativeElement.innerText).toBe("#1");
+    });
+
+    it("should display the commit", () => {
+      expect(getByCss("commitMessage").nativeElement.innerText).toBe(
+        "commit-id"
+      );
     });
 
     describe("when the story is clicked on", () => {
