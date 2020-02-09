@@ -73,8 +73,7 @@ describe("ColumnComponent", () => {
       );
     });
 
-    // TODO - work out how to spy on drag drop methods
-    xdescribe("when a story is dragged and dropped", () => {
+    describe("when a story is dragged and dropped", () => {
       let mockEvent: any = {};
 
       beforeEach(() => {
@@ -83,19 +82,28 @@ describe("ColumnComponent", () => {
       });
 
       describe("when it is dropped in the same container", () => {
+        let moveItemSpy: jasmine.Spy;
+
         beforeEach(() => {
           mockEvent.container = { id: 123 };
+
+          moveItemSpy = jasmine
+            .createSpy("moveItem")
+            .and.returnValue("mockReturn");
+
+          spyOnProperty(ngDragDrop, "moveItemInArray", "get").and.returnValue(
+            moveItemSpy
+          );
         });
 
         describe("when the story has moved index", () => {
           beforeEach(() => {
-            spyOn(ngDragDrop, "moveItemInArray");
-            mockEvent.index = 2;
+            mockEvent.currentIndex = 2;
             component.drop(mockEvent);
           });
 
           it("should move the item in the array", () => {
-            expect(ngDragDrop.moveItemInArray).toHaveBeenCalledWith(
+            expect(moveItemSpy).toHaveBeenCalledWith(
               component.appColumn.stories,
               mockEvent.previousIndex,
               mockEvent.currentIndex
@@ -105,20 +113,31 @@ describe("ColumnComponent", () => {
 
         describe("when the story has not moved index", () => {
           beforeEach(() => {
-            mockEvent.index = 1;
+            mockEvent.currentIndex = 1;
+            component.drop(mockEvent);
           });
 
           it("should not move the item", () => {
-            expect(ngDragDrop.moveItemInArray).not.toHaveBeenCalled();
+            expect(moveItemSpy).not.toHaveBeenCalled();
           });
         });
       });
 
       describe("when it is dropped in to a different container", () => {
+        let moveItemSpy: jasmine.Spy;
+
         beforeEach(() => {
-          spyOn(ngDragDrop, "transferArrayItem").and.returnValue(undefined);
-          mockEvent.index = 2;
+          moveItemSpy = jasmine
+            .createSpy("transferArray")
+            .and.returnValue("mockReturn");
+
+          spyOnProperty(ngDragDrop, "transferArrayItem", "get").and.returnValue(
+            moveItemSpy
+          );
+          mockEvent.currentIndex = 2;
           mockEvent.container = { id: 456, data: "data" };
+
+          component.drop(mockEvent);
         });
 
         it("should transfer the story to another column", () => {
