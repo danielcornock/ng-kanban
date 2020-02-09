@@ -15,8 +15,11 @@ describe("ModalService", () => {
   });
 
   describe("when opening a modal", () => {
+    let result: any;
+
     beforeEach(() => {
-      service.openModal(EditStoryModalComponent, { id: "test" });
+      (dependencies.matDialog.open as jasmine.Spy).and.returnValue("modalRef");
+      result = service.openModal(EditStoryModalComponent, { id: "test" });
     });
 
     it("should open the modal service with the provided config", () => {
@@ -26,6 +29,10 @@ describe("ModalService", () => {
           data: { data: { id: "test" } }
         }
       );
+    });
+
+    it("should return the modal reference", () => {
+      expect(result.toBe("modalRef"));
     });
   });
 });

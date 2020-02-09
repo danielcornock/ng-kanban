@@ -1,5 +1,5 @@
 import { Injectable, Component, Type } from "@angular/core";
-import { MatDialog } from "@angular/material";
+import { MatDialog, MatDialogRef } from "@angular/material";
 import { ComponentType } from "@angular/cdk/portal";
 import { ModalDialog } from "../modal-dialog/modal-dialog";
 
@@ -9,8 +9,11 @@ import { ModalDialog } from "../modal-dialog/modal-dialog";
 export class ModalService {
   constructor(private readonly _matDialog: MatDialog) {}
 
-  public openModal<T extends ModalDialog<T>>(component: any, data: any): void {
-    this._matDialog.open(component, {
+  public openModal<T extends ModalDialog<T>>(
+    component: any,
+    data: any
+  ): MatDialogRef<T> {
+    return this._matDialog.open(component, {
       data: {
         data
       }
