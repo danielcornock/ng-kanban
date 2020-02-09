@@ -1,6 +1,7 @@
 <div *ngIf="boardModel" class="board-container">
   <app-board-header
     [appBoardHeaderTitle]="boardModel.data.title"
+    [appBoardHeaderBoardModel]="boardModel"
   ></app-board-header>
   <div class="board-board">
     <div class="board-columnsContainer" cdkDropListGroup>

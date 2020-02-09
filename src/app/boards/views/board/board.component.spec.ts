@@ -10,9 +10,7 @@ import { ColumnComponentStub } from "../../components/column/column.component.st
 import { ColumnCreateComponentStub } from "../../components/column-create/column-create.component.stub";
 import { RouterService } from "src/app/shared/router/router.service";
 import { RouterServiceStub } from "src/app/shared/router/router.service.stub";
-import { HttpServiceStub } from "src/app/shared/api/http-service/http.service.stub";
 import { StoryApiServiceStub } from "src/app/stories/services/story-api.service.stub";
-import { HttpService } from "src/app/shared/api/http-service/http.service";
 import { StoryApiService } from "src/app/stories/services/story-api.service";
 import { DebugElement } from "@angular/core";
 import { By } from "@angular/platform-browser";
@@ -33,7 +31,6 @@ import { Subject } from "rxjs";
 import { ModelStatus } from "src/app/shared/api/http-model/constants/model-status";
 
 describe("BoardComponent", () => {
-  let component: BoardComponent;
   let fixture: ComponentFixture<BoardComponent>;
   let dependencies: {
     routerService: RouterServiceStub;
@@ -90,7 +87,6 @@ describe("BoardComponent", () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(BoardComponent);
-    component = fixture.componentInstance;
   });
 
   describe("on initialisation", () => {
@@ -161,6 +157,12 @@ describe("BoardComponent", () => {
       it("should display the board title", () => {
         expect(getHeader().componentInstance.appBoardHeaderTitle).toBe(
           "testBoard"
+        );
+      });
+
+      it("should pass the config to the board header", () => {
+        expect(getHeader().componentInstance.appBoardHeaderBoardModel).toBe(
+          mockBoard
         );
       });
 

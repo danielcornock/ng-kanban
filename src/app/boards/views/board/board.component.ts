@@ -48,7 +48,9 @@ export class BoardComponent implements OnInit {
       .pipe(
         filter(
           (status: ModelStatus) =>
-            status === ModelStatus.RELOADED || status === ModelStatus.UPDATED
+            status === ModelStatus.RELOADED ||
+            status === ModelStatus.UPDATED ||
+            status === ModelStatus.FETCHED
         )
       )
       .subscribe(() => {
