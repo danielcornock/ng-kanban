@@ -21,4 +21,8 @@ export class GithubService {
       .get(`${this._githubUrl}/users/${username}/repos`)
       .toPromise();
   }
+
+  public fetchCommits(url: string): Promise<any> {
+    return this._httpClient.get(`${url}/commits`).toPromise();
+  }
 }

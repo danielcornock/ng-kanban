@@ -70,4 +70,19 @@ describe("GithubService", () => {
       expect(result).toBe("getPromise");
     });
   });
+
+  describe("when fetching commits", () => {
+    beforeEach(() => {
+      getReturnPromise("get");
+      result = service.fetchCommits("url");
+    });
+
+    it("should fetch the repos", () => {
+      expect(dependencies.httpModule.get).toHaveBeenCalledWith("url/commits");
+    });
+
+    it("should return the promise", () => {
+      expect(result).toBe("getPromise");
+    });
+  });
 });
