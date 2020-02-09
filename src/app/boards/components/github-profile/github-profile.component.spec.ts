@@ -35,9 +35,7 @@ describe("GithubProfileComponent", () => {
     });
 
     it("should render the image", () => {
-      expect(getByCSS("image").nativeElement.src).toBe(
-        "http://localhost:9876/url/image"
-      );
+      expect(getByCSS("image").nativeElement.src).toContain("url/image");
     });
 
     it("should render the users name", () => {

@@ -45,7 +45,7 @@ describe("HeaderComponent", () => {
     });
 
     it("should display the back button", () => {
-      expect(getByCss("backButton") === null).toBe(true);
+      expect(getByCss("backButton") === null).toBe(false);
     });
 
     describe("when the back button is clicked", () => {
