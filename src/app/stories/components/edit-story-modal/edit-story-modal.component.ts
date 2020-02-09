@@ -66,6 +66,22 @@ export class EditStoryModalComponent
     this.closeModal();
   }
 
+  public async addCommitToStory(commit: any) {
+    if (!commit) {
+      this.storyModel.data.commit = null;
+    } else {
+      this.storyModel.data.commit = {
+        id: commit.sha.slice(0, 7),
+        message: commit.commit.message,
+        author: commit.commit.author.name,
+        url: commit.html_url
+      };
+    }
+
+    await this.storyModel.update();
+    this._boardRefreshService.boardListRefresh.next();
+  }
+
   private async _updateStory(): Promise<void> {
     await this.storyModel.update();
     this._boardRefreshService.boardListRefresh.next();

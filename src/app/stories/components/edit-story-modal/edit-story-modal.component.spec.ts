@@ -5,7 +5,6 @@ import {
   fakeAsync,
   tick
 } from "@angular/core/testing";
-
 import { EditStoryModalComponent } from "./edit-story-modal.component";
 import { MatDialogRefStub } from "src/app/shared/modal/modal-dialog/mat-dialog-ref.stub";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
@@ -16,7 +15,6 @@ import { FormInputTextareaComponentStub } from "src/app/shared/forms/form-input-
 import { ReactiveFormsModule, FormGroup } from "@angular/forms";
 import { BoardRefreshServiceStub } from "src/app/boards/services/board-refresh/board-refresh.service.stub";
 import { BoardRefreshService } from "src/app/boards/services/board-refresh/board-refresh.service";
-import { IStory } from "../../interfaces/story.interface";
 import { StoryApiServiceStub } from "../../services/story-api.service.stub";
 import { StoryApiService } from "../../services/story-api.service";
 import { TagsComponentStub } from "../tags/tags.component.stub";
@@ -28,6 +26,7 @@ import { ModelServiceStub } from "src/app/shared/api/model-service/model.service
 import { IHttpModel } from "src/app/shared/api/http-model/http-model.interface";
 import { HttpModelStub } from "src/app/shared/api/http-model/http-model.stub";
 import { ModelService } from "src/app/shared/api/model-service/model.service";
+import { GithubCommitsComponentStub } from "../github-commits/github-commits.component.stub";
 
 describe("EditStoryModalComponent", () => {
   let component: EditStoryModalComponent,
@@ -68,7 +67,8 @@ describe("EditStoryModalComponent", () => {
       declarations: [
         EditStoryModalComponent,
         FormInputTextareaComponentStub,
-        TagsComponentStub
+        TagsComponentStub,
+        GithubCommitsComponentStub
       ],
       providers: [
         { provide: MAT_DIALOG_DATA, useValue: dependencies.dialogData },
@@ -182,6 +182,63 @@ describe("EditStoryModalComponent", () => {
         expect(getByCss("descriptionField").componentInstance.fieldConfig).toBe(
           "description"
         );
+      });
+
+      describe("when a commit is added to a story", () => {
+        beforeEach(async(() => {
+          (storyModel.update as jasmine.Spy).and.returnValue(Promise.resolve());
+
+          getByCss("commits").componentInstance.appGithubCommitsSelect.emit({
+            sha: "123456789",
+            html_url: "html_url",
+            commit: {
+              message: "Commit message",
+              author: {
+                name: "Test Author"
+              }
+            }
+          });
+
+          fixture.detectChanges();
+        }));
+
+        it("should display the commit", () => {
+          expect(
+            getByCss("commits").componentInstance.appGithubCommitsCommit
+          ).toEqual({
+            id: "1234567",
+            message: "Commit message",
+            url: "html_url",
+            author: "Test Author"
+          });
+        });
+
+        it("should save the model", () => {
+          expect(storyModel.update).toHaveBeenCalledWith();
+        });
+
+        it("should refresh the board", () => {
+          expect(boardRefreshSpy).toHaveBeenCalledWith();
+        });
+
+        describe("when a commit is removed from a story", () => {
+          beforeEach(() => {
+            (storyModel.update as jasmine.Spy).and.returnValue(
+              Promise.resolve()
+            );
+            getByCss("commits").componentInstance.appGithubCommitsSelect.emit(
+              null
+            );
+
+            fixture.detectChanges();
+          });
+
+          it("should remove the commit from the story", () => {
+            expect(
+              getByCss("commits").componentInstance.appGithubCommitsCommit
+            ).toBe(null);
+          });
+        });
       });
 
       describe("when a new tag is selected", () => {

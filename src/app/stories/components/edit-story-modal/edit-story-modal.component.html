@@ -24,6 +24,15 @@
       (appTagsDeletedTag)="removeTag($event)"
     ></app-tags>
   </div>
+
+  <div class="editstoryModal-section">
+    <h3 class="editStoryModal-commitsHeader">Commits</h3>
+    <app-github-commits
+      class="editStoryModal-commits"
+      [appGithubCommitsCommit]="storyModel.data.commit"
+      (appGithubCommitsSelect)="addCommitToStory($event)"
+    ></app-github-commits>
+  </div>
   <p class="editStoryModal-storyNumber">#{{ storyModel.data.storyNumber }}</p>
   <button class="editStoryModal-delete" (click)="deleteStory()">Delete</button>
 </div>

@@ -60,6 +60,11 @@
     display: block;
   }
 
+  &-commits {
+    padding-top: $spacing-2;
+    display: block;
+  }
+
   &-section {
     margin-bottom: $spacing-4;
   }
@@ -67,6 +72,10 @@
   &-tagModalButton {
     @include button-reset;
     @include button-default($blue-600, $blue-200);
+  }
+
+  &-commitsHeader {
+    @include section-header;
   }
 
   &-storyNumber {
