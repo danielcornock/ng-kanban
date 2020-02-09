@@ -5,6 +5,7 @@ import { IconComponentStub } from "src/app/icons/icon/icon.component.stub";
 import { RouterServiceStub } from "../../router/router.service.stub";
 import { RouterService } from "../../router/router.service";
 import { DebugElement } from "@angular/core";
+import { By } from "@angular/platform-browser";
 
 describe("HeaderComponent", () => {
   let component: HeaderComponent;
