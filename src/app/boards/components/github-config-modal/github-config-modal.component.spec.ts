@@ -38,7 +38,11 @@ describe("GithubConfigModalComponent", () => {
 
   beforeEach(async(() => {
     dependencies = {
-      dialogData: { data: {} },
+      dialogData: {
+        data: {
+          selectedRepos: []
+        }
+      },
       matDialogRef: new MatDialogRefStub(),
       githubService: new GithubServiceStub()
     };
@@ -118,7 +122,10 @@ describe("GithubConfigModalComponent", () => {
             let allRepos: Array<any>;
 
             beforeEach(fakeAsync(() => {
-              allRepos = [{ name: "repo1" }, { name: "repo2" }];
+              allRepos = [
+                { name: "repo1", url: "repo1/url" },
+                { name: "repo2", url: "repo2/url" }
+              ];
               fetchReposPromise.resolve(allRepos);
 
               tick();
@@ -154,7 +161,7 @@ describe("GithubConfigModalComponent", () => {
               it("should remove the selected repo from the list of all repos", () => {
                 expect(
                   getCss("repos").componentInstance.appGithubRepoListRepos
-                ).toEqual([{ name: "repo2" }]);
+                ).toEqual([{ name: "repo2", url: "repo2/url" }]);
               });
 
               describe("when removing a repo from the selected list", () => {
@@ -198,9 +205,9 @@ describe("GithubConfigModalComponent", () => {
               });
 
               it("should close the instance", () => {
-                expect(dependencies.matDialogRef.close).toHaveBeenCalledWith(
-                  undefined
-                );
+                expect(dependencies.matDialogRef.close).toHaveBeenCalledWith({
+                  selectedRepos: []
+                });
               });
             });
           });

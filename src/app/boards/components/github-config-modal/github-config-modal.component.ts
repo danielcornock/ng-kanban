@@ -3,6 +3,8 @@ import { ModalDialog } from "src/app/shared/modal/modal-dialog/modal-dialog";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
 import { GithubService } from "../../services/github/github.service";
 import { IGithubRepoListOnSelectOutput } from "../github-repo-list/github-repo-list.component";
+import { IGithubUserDetails } from "./interfaces/github-user-details.interface";
+import { IGithubRepo } from "../github-repo-list/interfaces/github-repo.interface";
 
 @Component({
   selector: "app-github-config-modal",
@@ -12,12 +14,12 @@ import { IGithubRepoListOnSelectOutput } from "../github-repo-list/github-repo-l
 export class GithubConfigModalComponent
   extends ModalDialog<GithubConfigModalComponent>
   implements OnInit {
-  public userDetails;
-  public filteredRepos: Array<any>;
-  public selectedRepos: Array<any> = [];
+  public userDetails: IGithubUserDetails;
+  public filteredRepos: Array<IGithubRepo>;
+  public selectedRepos: Array<IGithubRepo>;
 
   private _username: string;
-  private _allRepos: Array<any>;
+  private _allRepos: Array<IGithubRepo>;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) data: any,
@@ -27,7 +29,9 @@ export class GithubConfigModalComponent
     super(matDialogRef, data);
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.selectedRepos = this.dialogData.repos ? this.dialogData.repos : [];
+  }
 
   public async searchUsername(username: string): Promise<void> {
     const rawUserDetails = await this._githubService
@@ -43,7 +47,13 @@ export class GithubConfigModalComponent
   }
 
   public async selectProfile(): Promise<void> {
-    this._allRepos = await this._githubService.fetchRepos(this._username);
+    const res = await this._githubService.fetchRepos(this._username);
+    this._allRepos = res.map((repo: IGithubRepo) => {
+      return {
+        name: repo.name,
+        url: repo.url
+      };
+    });
     this.filteredRepos = this._allRepos;
   }
 
@@ -64,6 +74,8 @@ export class GithubConfigModalComponent
   }
 
   public saveRepos(): void {
-    this.closeModal();
+    this.closeModal({
+      selectedRepos: this.selectedRepos
+    });
   }
 }

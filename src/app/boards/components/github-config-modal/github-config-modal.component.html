@@ -39,4 +39,12 @@
       Save repos
     </button>
   </div>
+
+  <app-github-repo-list
+    class="githubConfigModal-selectedRepos"
+    *ngIf="selectedRepos.length && !filteredRepos"
+    [appGithubRepoListRepos]="selectedRepos"
+    [appGithubRepoListIsSelected]="true"
+    (appGithubRepoListOnSelect)="removeFromSelectedRepos($event)"
+  ></app-github-repo-list>
 </div>
