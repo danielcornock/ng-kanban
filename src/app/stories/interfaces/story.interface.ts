@@ -6,4 +6,10 @@ export interface IStory {
   storyNumber: number;
   description?: string;
   tags: Array<ITag>;
+  commit: IStoryCommit;
+}
+
+export interface IStoryCommit {
+  id: string;
+  message: string;
 }
