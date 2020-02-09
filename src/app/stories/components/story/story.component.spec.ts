@@ -7,6 +7,7 @@ import { By } from "@angular/platform-browser";
 import { ModalServiceStub } from "src/app/shared/modal/modal-service/modal.service.stub";
 import { ModalService } from "src/app/shared/modal/modal-service/modal.service";
 import { EditStoryModalComponent } from "../edit-story-modal/edit-story-modal.component";
+import { IconComponentStub } from "src/app/icons/icon/icon.component.stub";
 
 describe("StoryComponent", () => {
   let component: StoryComponent;
@@ -37,7 +38,7 @@ describe("StoryComponent", () => {
     };
 
     TestBed.configureTestingModule({
-      declarations: [StoryComponent],
+      declarations: [StoryComponent, IconComponentStub],
       providers: [
         { provide: ModalService, useValue: dependencies.modalService }
       ]

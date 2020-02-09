@@ -49,8 +49,6 @@ export class HttpService {
   }
 
   private _generateCompleteUrl(url: string) {
-    return url.includes("http://localhost:3000/api/v1/")
-      ? url
-      : this._apiUrl + url;
+    return url.includes("https://") ? url : this._apiUrl + url;
   }
 }

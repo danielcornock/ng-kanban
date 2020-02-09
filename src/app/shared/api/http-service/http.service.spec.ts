@@ -16,7 +16,7 @@ describe("HttpService", () => {
   }
 
   beforeEach(() => {
-    apiUrl = "http://localhost:3000/api/v1/";
+    apiUrl = "https://nest-kanban.herokuapp.com/api/v1/";
     client = new HttpClientStub();
 
     TestBed.configureTestingModule({

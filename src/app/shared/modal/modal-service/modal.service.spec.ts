@@ -32,7 +32,7 @@ describe("ModalService", () => {
     });
 
     it("should return the modal reference", () => {
-      expect(result.toBe("modalRef"));
+      expect(result).toBe("modalRef");
     });
   });
 });
