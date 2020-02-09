@@ -5,5 +5,6 @@ export enum ModelStatus {
   UPDATING = 4,
   UPDATED = 5,
   DELETING = 6,
-  DELETED = 7
+  DELETED = 7,
+  ERROR = 8
 }

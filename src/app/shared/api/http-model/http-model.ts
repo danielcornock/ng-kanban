@@ -26,38 +26,53 @@ export class HttpModel implements IHttpModel {
   public async update(): Promise<IHttpModel> {
     this._statusChanges.next(ModelStatus.UPDATING);
 
-    const updatedData: IHttpResponse = await this._httpService.put(
-      this._links.self,
-      this.data
-    );
+    try {
+      const updatedData: IHttpResponse = await this._httpService.put(
+        this._links.self,
+        this.data
+      );
 
-    this._initialise(updatedData);
+      this._initialise(updatedData);
 
-    this._statusChanges.next(ModelStatus.UPDATED);
+      this._statusChanges.next(ModelStatus.UPDATED);
 
-    return this;
+      return this;
+    } catch (e) {
+      console.log(e);
+      this._statusChanges.next(ModelStatus.ERROR);
+    }
   }
 
   public async reload(): Promise<IHttpModel> {
     this._statusChanges.next(ModelStatus.RELOADING);
 
-    const updatedRes: IHttpResponse = await this._httpService.get(
-      this._links.self
-    );
+    try {
+      const updatedRes: IHttpResponse = await this._httpService.get(
+        this._links.self
+      );
 
-    this._initialise(updatedRes);
+      this._initialise(updatedRes);
 
-    this._statusChanges.next(ModelStatus.RELOADED);
+      this._statusChanges.next(ModelStatus.RELOADED);
 
-    return this;
+      return this;
+    } catch (e) {
+      console.log(e);
+      this._statusChanges.next(ModelStatus.ERROR);
+    }
   }
 
   public async delete(): Promise<void> {
     this._statusChanges.next(ModelStatus.DELETING);
 
-    await this._httpService.delete(this._links.self);
+    try {
+      await this._httpService.delete(this._links.self);
 
-    this._statusChanges.next(ModelStatus.DELETED);
+      this._statusChanges.next(ModelStatus.DELETED);
+    } catch (e) {
+      console.log(e);
+      this._statusChanges.next(ModelStatus.ERROR);
+    }
   }
 
   public getLink(linkName: string): string {
