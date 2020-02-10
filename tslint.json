@@ -26,7 +26,7 @@
     "no-consecutive-blank-lines": false,
     "no-console": [true, "debug", "info", "time", "timeEnd", "trace"],
     "no-empty": false,
-    "no-inferrable-types": [true, "ignore-params"],
+    "no-inferrable-types": false,
     "no-non-null-assertion": true,
     "no-redundant-jsdoc": true,
     "no-switch-case-fall-through": true,
@@ -35,7 +35,7 @@
     "object-literal-key-quotes": [true, "as-needed"],
     "object-literal-sort-keys": false,
     "ordered-imports": false,
-    "quotemark": true,
+    "quotemark": false,
     "trailing-comma": false,
     "no-output-on-prefix": true,
     "no-inputs-metadata-property": true,
@@ -45,8 +45,11 @@
     "no-output-rename": true,
     "use-lifecycle-interface": true,
     "use-pipe-transform-interface": true,
-    "component-class-suffix": true,
+    "component-class-suffix": false,
     "directive-class-suffix": true,
-    "variable-name": [true, "check-format", "allow-leading-underscore"]
+    "variable-name": [true, "check-format", "allow-leading-underscore"],
+    "one-variable-per-declaration": false,
+    "curly": [true, "ignore-same-line"],
+    "prefer-const": false
   }
 }

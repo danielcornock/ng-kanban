@@ -1,17 +1,17 @@
-import { FormFactory } from "./form-factory.service";
-import { IFormConfig } from "../interfaces/form-config.interface";
-import { AbstractControl, FormControl, FormGroup } from "@angular/forms";
-import { FormInputField } from "../form-input-field/form-input-field";
-import { FormContainer } from "../form-container/form-container";
-import { ReactiveFormFactory } from "../form-group/reactive-form.factory";
-import { FormInputFieldStub } from "../form-input-field/form-input-field.stub";
-import { IFormInputConfig } from "../interfaces/form-input-config.interface";
-import { FormContainerStub } from "../form-container/form-container.stub";
-import { IStory } from "src/app/stories/interfaces/story.interface";
-import { IHttpModel } from "../../api/http-model/http-model.interface";
-import { HttpModelStub } from "../../api/http-model/http-model.stub";
+import { FormFactory } from './form-factory.service';
+import { IFormConfig } from '../interfaces/form-config.interface';
+import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
+import { FormInputField } from '../form-input-field/form-input-field';
+import { FormContainer } from '../form-container/form-container';
+import { ReactiveFormFactory } from '../form-group/reactive-form.factory';
+import { FormInputFieldStub } from '../form-input-field/form-input-field.stub';
+import { IFormInputConfig } from '../interfaces/form-input-config.interface';
+import { FormContainerStub } from '../form-container/form-container.stub';
+import { IStory } from 'src/app/stories/interfaces/story.interface';
+import { IHttpModel } from '../../api/http-model/http-model.interface';
+import { HttpModelStub } from '../../api/http-model/http-model.stub';
 
-describe("FormFactory", () => {
+describe('FormFactory', () => {
   let service: FormFactory,
     formContainerStub: FormContainer,
     generatedFormField: FormInputFieldStub,
@@ -23,21 +23,21 @@ describe("FormFactory", () => {
     >) as FormContainer;
 
     generatedFormField = new FormInputFieldStub();
-    generatedFormField.name = "generated-input";
+    generatedFormField.name = 'generated-input';
 
-    spyOn(FormContainer, "create").and.returnValue(formContainerStub);
+    spyOn(FormContainer, 'create').and.returnValue(formContainerStub);
 
-    spyOn(FormInputField, "create").and.returnValue(generatedFormField);
+    spyOn(FormInputField, 'create').and.returnValue(generatedFormField);
 
     inputConfig = {
-      name: "input",
+      name: 'input',
       config: {}
     };
 
     service = new FormFactory();
   });
 
-  describe("when creating a form", () => {
+  describe('when creating a form', () => {
     let formConfig: IFormConfig,
       preGeneratedFormField: FormInputField,
       result: FormContainer;
@@ -46,7 +46,7 @@ describe("FormFactory", () => {
       preGeneratedFormField = (new FormInputFieldStub() as Partial<
         FormInputField
       >) as FormInputField;
-      preGeneratedFormField.name = "provided-field";
+      preGeneratedFormField.name = 'provided-field';
 
       formConfig = {
         fields: [preGeneratedFormField, inputConfig]
@@ -55,67 +55,67 @@ describe("FormFactory", () => {
       result = service.createForm(formConfig);
     });
 
-    it("should create the form input field for the provided config", () => {
+    it('should create the form input field for the provided config', () => {
       expect(FormInputField.create).toHaveBeenCalledWith(inputConfig);
     });
 
-    it("should create the form with the two input fields", () => {
+    it('should create the form with the two input fields', () => {
       expect(FormContainer.create).toHaveBeenCalledWith([
         preGeneratedFormField,
         generatedFormField
       ]);
     });
 
-    it("should create the form container", () => {
+    it('should create the form container', () => {
       expect(result).toBe(formContainerStub);
     });
   });
 
-  describe("when creating an input", () => {
+  describe('when creating an input', () => {
     let result: FormInputField;
 
     beforeEach(() => {
       result = service.createInput(inputConfig);
     });
 
-    it("should call the create form field static method", () => {
+    it('should call the create form field static method', () => {
       expect(FormInputField.create).toHaveBeenCalledWith(inputConfig);
     });
 
-    it("should return a form field", () => {
+    it('should return a form field', () => {
       expect(result).toBe(
         (generatedFormField as Partial<FormInputField>) as FormInputField
       );
     });
   });
 
-  describe("when creating a model form", () => {
-    let result: FormContainer, model: IStory, modelStub: IHttpModel;
+  describe('when creating a model form', () => {
+    let result: any, model: IStory, modelStub: IHttpModel;
 
     beforeEach(() => {
       inputConfig = {
-        name: "title",
+        name: 'title',
         config: {}
       };
 
-      spyOn(service, "createForm").and.returnValue(formContainerStub);
+      spyOn(service, 'createForm').and.returnValue(formContainerStub);
 
       modelStub = new HttpModelStub();
       modelStub.data = {
-        title: "story",
+        title: 'story',
         storyNumber: 12,
         tags: [],
-        _id: "id"
+        _id: 'id'
       };
 
       result = service.createModelForm(modelStub, { fields: [inputConfig] });
     });
 
-    it("should call the create form method with the added getters and setters", () => {
+    it('should call the create form method with the added getters and setters', () => {
       expect(service.createForm).toHaveBeenCalledWith({
         fields: [
           {
-            name: "title",
+            name: 'title',
             config: {
               getValue: jasmine.any(Function),
               setValue: jasmine.any(Function)
@@ -125,17 +125,15 @@ describe("FormFactory", () => {
       });
     });
 
-    describe("when calling get value", () => {
-      let result: string;
-
+    describe('when calling get value', () => {
       beforeEach(() => {
         result = (service.createForm as jasmine.Spy).calls
           .argsFor(0)[0]
           .fields[0].config.getValue();
       });
 
-      it("should return the value ", () => {
-        expect(result).toBe("story");
+      it('should return the value ', () => {
+        expect(result).toBe('story');
       });
     });
   });

@@ -1,14 +1,14 @@
-import { Component, OnInit, Inject } from "@angular/core";
-import { ModalDialog } from "src/app/shared/modal/modal-dialog/modal-dialog";
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
-import { BoardConfigStoreService } from "src/app/boards/services/board-config-store/board-config-store.service";
-import { IBoardConfig } from "src/app/boards/interfaces/board-config.interface";
-import { Observable, Subscription } from "rxjs";
+import { Component, OnInit, Inject } from '@angular/core';
+import { ModalDialog } from 'src/app/shared/modal/modal-dialog/modal-dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { BoardConfigStoreService } from 'src/app/boards/services/board-config-store/board-config-store.service';
+import { IBoardConfig } from 'src/app/boards/interfaces/board-config.interface';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
-  selector: "app-tags-modal",
-  templateUrl: "./tags-modal.component.html",
-  styleUrls: ["./tags-modal.component.scss"]
+  selector: 'app-tags-modal',
+  templateUrl: './tags-modal.component.html',
+  styleUrls: ['./tags-modal.component.scss']
 })
 export class TagsModalComponent extends ModalDialog<TagsModalComponent>
   implements OnInit {
@@ -39,14 +39,10 @@ export class TagsModalComponent extends ModalDialog<TagsModalComponent>
   }
 
   public resetTag(index: number): void {
-    this.tags[index].label = "";
+    this.tags[index].label = '';
   }
 
   public onTextEnter(event: KeyboardEvent, index) {
     this.tags[index].label = (event.target as HTMLInputElement).value;
-  }
-
-  ngOnDestroy(): void {
-    this._configObservable$.unsubscribe();
   }
 }

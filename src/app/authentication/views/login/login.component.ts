@@ -1,13 +1,13 @@
-import { Component, OnInit } from "@angular/core";
-import { FormGroup, FormBuilder, Validators } from "@angular/forms";
-import { HttpService } from "src/app/shared/api/http-service/http.service";
-import { RouterService } from "src/app/shared/router/router.service";
-import { AuthService } from "../../services/auth/auth.service";
+import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { HttpService } from 'src/app/shared/api/http-service/http.service';
+import { RouterService } from 'src/app/shared/router/router.service';
+import { AuthService } from '../../services/auth/auth.service';
 
 @Component({
-  selector: "app-login",
-  templateUrl: "./login.component.html",
-  styleUrls: ["./login.component.scss"]
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
   public loginForm: FormGroup;
@@ -31,21 +31,21 @@ export class LoginComponent implements OnInit {
 
   public ngOnInit(): void {
     this.loginForm = this._formBuilder.group({
-      email: ["", [Validators.required, Validators.email]],
-      password: ["", Validators.required]
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required]
     });
   }
 
   public login(): void {
     if (!this.loginForm.valid) {
-      //TODO Add pop up message
-      console.error("Form Not Valid!");
+      // TODO Add pop up message
+      console.error('Form Not Valid!');
       return;
     }
 
-    this._httpService.post("auth/login", this.loginForm.value).then(res => {
+    this._httpService.post('auth/login', this.loginForm.value).then(res => {
       this._authService.setJwt(res.jwt);
-      this._router.navigate("home");
+      this._router.navigate('home');
     });
   }
 }

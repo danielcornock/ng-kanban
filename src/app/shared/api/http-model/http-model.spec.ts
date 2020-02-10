@@ -1,13 +1,13 @@
-import { IHttpResponse } from "../interfaces/http-response.interface";
-import { HttpModel } from "./http-model";
-import { HttpService } from "../http-service/http.service";
-import { HttpServiceStub } from "../http-service/http.service.stub";
-import { TestPromise } from "src/app/testing/test-promise/test-promise";
-import { IHttpModel } from "./http-model.interface";
-import { async } from "@angular/core/testing";
-import { ModelStatus } from "./constants/model-status";
+import { IHttpResponse } from '../interfaces/http-response.interface';
+import { HttpModel } from './http-model';
+import { HttpService } from '../http-service/http.service';
+import { HttpServiceStub } from '../http-service/http.service.stub';
+import { TestPromise } from 'src/app/testing/test-promise/test-promise';
+import { IHttpModel } from './http-model.interface';
+import { async } from '@angular/core/testing';
+import { ModelStatus } from './constants/model-status';
 
-describe("HttpModel", () => {
+describe('HttpModel', () => {
   let mockData: IHttpResponse,
     model: HttpModel,
     httpService: HttpService,
@@ -18,13 +18,13 @@ describe("HttpModel", () => {
     mockData = {
       data: {
         story: {
-          title: "story",
-          _id: "1"
+          title: 'story',
+          _id: '1'
         }
       },
       meta: {
         links: {
-          self: "link/self"
+          self: 'link/self'
         }
       }
     };
@@ -40,21 +40,23 @@ describe("HttpModel", () => {
     });
   });
 
-  describe("when initialising the model", () => {
-    it("should assign the links", () => {
-      expect(model["_links"]).toBe(mockData.meta.links);
+  describe('when initialising the model', () => {
+    it('should assign the links', () => {
+      /* tslint:disable:no-string-literal */
+      expect(model['_links']).toBe(mockData.meta.links);
+      /* tslint:enable:no-string-literal */
     });
 
-    it("should assign the data", () => {
+    it('should assign the data', () => {
       expect(model.data).toBe(mockData.data.story);
     });
 
-    it("should have a status of fetched", () => {
+    it('should have a status of fetched', () => {
       expect(modelStatus).toBe(ModelStatus.FETCHED);
     });
   });
 
-  describe("when updating the model", () => {
+  describe('when updating the model', () => {
     let putPromise: TestPromise<IHttpResponse>;
     beforeEach(() => {
       putPromise = new TestPromise<IHttpResponse>();
@@ -64,32 +66,32 @@ describe("HttpModel", () => {
       result = model.update();
     });
 
-    it("should set the state as updating", () => {
+    it('should set the state as updating', () => {
       expect(modelStatus).toBe(ModelStatus.UPDATING);
     });
 
-    it("should update the model in the api", () => {
+    it('should update the model in the api', () => {
       expect(httpService.put).toHaveBeenCalledWith(
-        "link/self",
+        'link/self',
         mockData.data.story
       );
     });
 
-    describe("when the model has updated", () => {
+    describe('when the model has updated', () => {
       let returnData: IHttpResponse;
 
       beforeEach(async(() => {
         returnData = {
           data: {
             story: {
-              title: "story",
-              _id: "1",
-              newfield: "newField"
+              title: 'story',
+              _id: '1',
+              newfield: 'newField'
             }
           },
           meta: {
             links: {
-              self: "link/self"
+              self: 'link/self'
             }
           }
         };
@@ -97,21 +99,21 @@ describe("HttpModel", () => {
         putPromise.resolve(returnData);
       }));
 
-      it("should set the state as updated", () => {
+      it('should set the state as updated', () => {
         expect(modelStatus).toBe(ModelStatus.UPDATED);
       });
 
-      it("should update the data in the model", () => {
+      it('should update the data in the model', () => {
         expect(model.data).toBe(returnData.data.story);
       });
 
-      it("should return the updated model", async () => {
+      it('should return the updated model', async () => {
         expect(await result).toBe(model);
       });
     });
   });
 
-  describe("when reloading the model", () => {
+  describe('when reloading the model', () => {
     let getPromise: TestPromise<IHttpResponse>;
 
     beforeEach(() => {
@@ -122,29 +124,29 @@ describe("HttpModel", () => {
       result = model.reload();
     });
 
-    it("should set the state as RELOADING", () => {
+    it('should set the state as RELOADING', () => {
       expect(modelStatus).toBe(ModelStatus.RELOADING);
     });
 
-    it("should fetch the updated model information", () => {
-      expect(httpService.get).toHaveBeenCalledWith("link/self");
+    it('should fetch the updated model information', () => {
+      expect(httpService.get).toHaveBeenCalledWith('link/self');
     });
 
-    describe("when the model has reloaded", () => {
+    describe('when the model has reloaded', () => {
       let returnData: IHttpResponse;
 
       beforeEach(async(() => {
         returnData = {
           data: {
             story: {
-              title: "story",
-              _id: "1",
-              newfield: "newField"
+              title: 'story',
+              _id: '1',
+              newfield: 'newField'
             }
           },
           meta: {
             links: {
-              self: "link/self"
+              self: 'link/self'
             }
           }
         };
@@ -152,21 +154,21 @@ describe("HttpModel", () => {
         getPromise.resolve(returnData);
       }));
 
-      it("should set the state as reloaded", () => {
+      it('should set the state as reloaded', () => {
         expect(modelStatus).toBe(ModelStatus.RELOADED);
       });
 
-      it("should update the data in the model", () => {
+      it('should update the data in the model', () => {
         expect(model.data).toBe(returnData.data.story);
       });
 
-      it("should return the updated model", async () => {
+      it('should return the updated model', async () => {
         expect(await result).toBe(model);
       });
     });
   });
 
-  describe("when deleting the model", () => {
+  describe('when deleting the model', () => {
     let deletePromise: TestPromise<void>;
 
     beforeEach(() => {
@@ -179,24 +181,24 @@ describe("HttpModel", () => {
       result = (model.delete() as unknown) as Promise<IHttpModel>;
     });
 
-    it("should set the state as DELETING", () => {
+    it('should set the state as DELETING', () => {
       expect(modelStatus).toBe(ModelStatus.DELETING);
     });
 
-    it("should delete the model in the api", () => {
-      expect(httpService.delete).toHaveBeenCalledWith("link/self");
+    it('should delete the model in the api', () => {
+      expect(httpService.delete).toHaveBeenCalledWith('link/self');
     });
 
-    describe("when the model has been successfully deleted", () => {
+    describe('when the model has been successfully deleted', () => {
       beforeEach(async(() => {
         deletePromise.resolve();
       }));
 
-      it("should set the state as updating", () => {
+      it('should set the state as updating', () => {
         expect(modelStatus).toBe(ModelStatus.DELETED);
       });
 
-      it("should return undefined", async () => {
+      it('should return undefined', async () => {
         expect(await result).toBeUndefined();
       });
     });

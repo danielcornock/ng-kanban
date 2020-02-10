@@ -1,8 +1,8 @@
-import { Injectable, NgZone } from "@angular/core";
-import { Router, ActivatedRoute, ParamMap } from "@angular/router";
+import { Injectable, NgZone } from '@angular/core';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
 export class RouterService {
   private readonly _ngZone: NgZone;
@@ -23,7 +23,7 @@ export class RouterService {
   }
 
   public getUrlParams(requestedParam: string): string {
-    //TODO This is hacky - fix it
+    // TODO This is hacky - fix it
     return this._activatedRoute.snapshot.children[0].params[requestedParam];
   }
 }

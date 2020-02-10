@@ -1,11 +1,11 @@
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FormInputComponent } from "./form-input.component";
-import { Component } from "@angular/core";
-import { FormInputField } from "../form-input-field/form-input-field";
+import { FormInputComponent } from './form-input.component';
+import { Component } from '@angular/core';
+import { FormInputField } from '../form-input-field/form-input-field';
 
 @Component({
-  template: ""
+  template: ''
 })
 class FormInputExtension extends FormInputComponent {
   constructor() {
@@ -13,7 +13,7 @@ class FormInputExtension extends FormInputComponent {
   }
 }
 
-describe("FormInputComponent", () => {
+describe('FormInputComponent', () => {
   let component: FormInputComponent;
   let fixture: ComponentFixture<FormInputExtension>;
 
@@ -28,38 +28,38 @@ describe("FormInputComponent", () => {
     component = fixture.componentInstance;
     component.fieldConfig = ({
       config: {
-        setValue: jasmine.createSpy("setValue")
+        setValue: jasmine.createSpy('setValue')
       },
       control: {},
-      name: "field",
+      name: 'field',
       formGroup: {}
     } as unknown) as FormInputField;
     fixture.detectChanges();
   });
 
-  describe("when an input is entered", () => {
+  describe('when an input is entered', () => {
     let keyboardEvent: Partial<KeyboardEvent>;
 
     beforeEach(() => {
       keyboardEvent = {
-        keyCode: 13,
+        key: 'Enter',
         target: ({
-          value: "hey",
-          blur: jasmine.createSpy("blur")
+          value: 'hey',
+          blur: jasmine.createSpy('blur')
         } as Partial<HTMLInputElement>) as HTMLInputElement
       };
 
       component.onInputEnter(keyboardEvent as KeyboardEvent);
     });
 
-    it("should set the value of the form control", () => {
+    it('should set the value of the form control', () => {
       expect(component.fieldConfig.config.setValue).toHaveBeenCalledWith({
-        value: "hey",
-        name: "field"
+        value: 'hey',
+        name: 'field'
       });
     });
 
-    it("should blur the html element", () => {
+    it('should blur the html element', () => {
       expect(
         (keyboardEvent.target as HTMLInputElement).blur
       ).toHaveBeenCalledWith();
