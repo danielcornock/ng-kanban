@@ -1,15 +1,15 @@
 import { FormFactory } from './form-factory.service';
-import { IFormConfig } from '../interfaces/form-config.interface';
+import { IFormConfig } from '../../interfaces/form-config.interface';
 import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
-import { FormInputField } from '../form-input-field/form-input-field';
-import { FormContainer } from '../form-container/form-container';
+import { FormInputField } from '../../form-input-field/form-input-field';
+import { FormContainer } from '../../form-container/form-container';
 import { ReactiveFormFactory } from '../form-group/reactive-form.factory';
-import { FormInputFieldStub } from '../form-input-field/form-input-field.stub';
-import { IFormInputConfig } from '../interfaces/form-input-config.interface';
-import { FormContainerStub } from '../form-container/form-container.stub';
+import { FormInputFieldStub } from '../../form-input-field/form-input-field.stub';
+import { IFormInputConfig } from '../../interfaces/form-input-config.interface';
+import { FormContainerStub } from '../../form-container/form-container.stub';
 import { IStory } from 'src/app/stories/interfaces/story.interface';
-import { IHttpModel } from '../../api/http-model/http-model.interface';
-import { HttpModelStub } from '../../api/http-model/http-model.stub';
+import { IHttpModel } from '../../../api/http-model/http-model.interface';
+import { HttpModelStub } from '../../../api/http-model/http-model.stub';
 
 describe('FormFactory', () => {
   let service: FormFactory,
