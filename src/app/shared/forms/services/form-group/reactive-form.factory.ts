@@ -1,5 +1,5 @@
-import { FormGroup, AbstractControl, FormControl } from "@angular/forms";
-import { IAbstractControlDict } from "../interfaces/abstract-control-dict.interface";
+import { FormGroup, AbstractControl, FormControl } from '@angular/forms';
+import { IAbstractControlDict } from '../../interfaces/abstract-control-dict.interface';
 
 export class ReactiveFormFactory {
   static createFormGroup(formConfig: IAbstractControlDict) {
