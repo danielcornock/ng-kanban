@@ -1,0 +1,7 @@
+@import 'src/assets/styles/themes.scss';
+
+.home {
+  &-logout {
+    @include button-default($white, $gray-700);
+  }
+}
