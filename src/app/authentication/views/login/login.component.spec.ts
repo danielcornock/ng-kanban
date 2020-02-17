@@ -7,14 +7,13 @@ import {
 } from '@angular/core/testing';
 
 import { LoginComponent } from './login.component';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { HttpService } from 'src/app/shared/api/http-service/http.service';
 import { HttpServiceStub } from 'src/app/shared/api/http-service/http.service.stub';
 import { RouterService } from 'src/app/shared/router/router.service';
 import { RouterServiceStub } from 'src/app/shared/router/router.service.stub';
 import { AuthService } from '../../services/auth/auth.service';
 import { AuthServiceStub } from '../../services/auth/auth.service.stub';
-import { SharedModule } from 'src/app/shared/shared.module';
 import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { TestPromise } from 'src/app/testing/test-promise/test-promise';
@@ -23,10 +22,9 @@ import { FormFactoryStub } from 'src/app/shared/forms/services/form-factory/form
 import { formInputTypes } from 'src/app/shared/forms/constants/form-input-types';
 import { FormContainerStub } from 'src/app/shared/forms/form-container/form-container.stub';
 import { FormInputTextComponentStub } from 'src/app/shared/forms/form-input-text/form-input-text.component.stub';
-import { FormInputFieldStub } from 'src/app/shared/forms/form-input-field/form-input-field.stub';
 import { FormInputField } from 'src/app/shared/forms/form-input-field/form-input-field';
 
-describe('LoginComponent', () => {
+fdescribe('LoginComponent', () => {
   let component: LoginComponent,
     fixture: ComponentFixture<LoginComponent>,
     loginForm: FormContainerStub,
@@ -77,7 +75,7 @@ describe('LoginComponent', () => {
       password: ('password' as unknown) as FormInputField
     };
 
-    (dependencies.formFactory.createForm as jasmine.Spy).and.returnValue(
+    (dependencies.formFactory.createObjectForm as jasmine.Spy).and.returnValue(
       loginForm
     );
   });
@@ -88,27 +86,28 @@ describe('LoginComponent', () => {
     });
 
     it('should create the form', () => {
-      expect(dependencies.formFactory.createForm).toHaveBeenCalledWith({
-        fields: [
-          {
-            name: 'email',
-            type: formInputTypes.EMAIL,
-            config: {
-              required: true,
-              customValidators: [jasmine.any(Function)],
-              setValue: jasmine.any(Function)
+      expect(dependencies.formFactory.createObjectForm).toHaveBeenCalledWith(
+        {},
+        {
+          fields: [
+            {
+              name: 'email',
+              type: formInputTypes.EMAIL,
+              config: {
+                required: true,
+                customValidators: [jasmine.any(Function)]
+              }
+            },
+            {
+              name: 'password',
+              type: formInputTypes.PASSWORD,
+              config: {
+                required: true
+              }
             }
-          },
-          {
-            name: 'password',
-            type: formInputTypes.PASSWORD,
-            config: {
-              required: true,
-              setValue: jasmine.any(Function)
-            }
-          }
-        ]
-      });
+          ]
+        }
+      );
     });
 
     it('should display the email field', () => {
@@ -118,12 +117,10 @@ describe('LoginComponent', () => {
 
     describe('when the user sets the values for the email and password', () => {
       beforeEach(() => {
-        (dependencies.formFactory.createForm as jasmine.Spy).calls
-          .argsFor(0)[0]
-          .fields[0].config.setValue({ name: 'email', value: 'dan@me.com' });
-        (dependencies.formFactory.createForm as jasmine.Spy).calls
-          .argsFor(0)[0]
-          .fields[1].config.setValue({ name: 'password', value: 'password' });
+        component['_userCredentials'] = {
+          email: 'email',
+          password: 'password'
+        };
       });
 
       describe('when the user submits the form', () => {
@@ -143,7 +140,7 @@ describe('LoginComponent', () => {
           expect(dependencies.httpService.post).toHaveBeenCalledWith(
             'auth/login',
             {
-              email: 'dan@me.com',
+              email: 'email',
               password: 'password'
             }
           );

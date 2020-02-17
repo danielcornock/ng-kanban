@@ -27,31 +27,28 @@ export class LoginComponent implements OnInit {
 
   public ngOnInit(): void {
     this._userCredentials = {} as IUserLoginCredentials;
-    this.formContainer = this._formFactory.createForm({
-      fields: [
-        {
-          name: 'email',
-          type: formInputTypes.EMAIL,
-          config: {
-            required: true,
-            customValidators: [Validators.email],
-            setValue: (result: IControlExport) => {
-              this._userCredentials.email = result.value;
+    this.formContainer = this._formFactory.createObjectForm(
+      this._userCredentials,
+      {
+        fields: [
+          {
+            name: 'email',
+            type: formInputTypes.EMAIL,
+            config: {
+              required: true,
+              customValidators: [Validators.email]
+            }
+          },
+          {
+            name: 'password',
+            type: formInputTypes.PASSWORD,
+            config: {
+              required: true
             }
           }
-        },
-        {
-          name: 'password',
-          type: formInputTypes.PASSWORD,
-          config: {
-            required: true,
-            setValue: (result: IControlExport) => {
-              this._userCredentials.password = result.value;
-            }
-          }
-        }
-      ]
-    });
+        ]
+      }
+    );
   }
 
   public login(): void {
