@@ -6,6 +6,7 @@ import { IFormConfig } from '../../interfaces/form-config.interface';
 import { IFormCreateManualConfig } from '../../interfaces/form-create-manual-config.interface';
 import { IHttpModel } from '../../../api/http-model/http-model.interface';
 import { IHttpObject } from '../../../api/interfaces/http-response.interface';
+import { IControlExport } from '../../interfaces/control-export.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -29,6 +30,15 @@ export class FormFactory {
   ): FormContainer {
     return this.createForm({
       fields: this._generateFromModelFieldsConfig(formConfig.fields, model.data)
+    });
+  }
+
+  public createObjectForm(
+    object: object,
+    formConfig: IFormCreateManualConfig
+  ): FormContainer {
+    return this.createForm({
+      fields: this._generateFromModelFieldsConfig(formConfig.fields, object)
     });
   }
 
@@ -62,8 +72,8 @@ export class FormFactory {
 
   private _setModelSetterFn(fieldConfig: IFormInputConfig, model: IHttpObject) {
     if (!fieldConfig.config.setValue) {
-      fieldConfig.config.setValue = (val: any) => {
-        model[fieldConfig.name] = val;
+      fieldConfig.config.setValue = (val: IControlExport) => {
+        model[fieldConfig.name] = val.value;
       };
     }
   }

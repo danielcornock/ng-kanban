@@ -90,7 +90,7 @@ describe('FormFactory', () => {
   });
 
   describe('when creating a model form', () => {
-    let result: any, model: IStory, modelStub: IHttpModel;
+    let result: any, modelStub: IHttpModel;
 
     beforeEach(() => {
       inputConfig = {
@@ -135,6 +135,55 @@ describe('FormFactory', () => {
       it('should return the value ', () => {
         expect(result).toBe('story');
       });
+    });
+
+    describe('when calling set value', () => {
+      beforeEach(() => {
+        (service.createForm as jasmine.Spy).calls
+          .argsFor(0)[0]
+          .fields[0].config.setValue({ name: 'title', value: 'new-title' });
+      });
+
+      it('should update the model', () => {
+        expect(modelStub.data.title).toBe('new-title');
+      });
+    });
+  });
+
+  describe('when creating an object form', () => {
+    let result: any, object: any;
+
+    beforeEach(() => {
+      inputConfig = {
+        name: 'title',
+        config: {}
+      };
+
+      spyOn(service, 'createForm').and.returnValue(formContainerStub);
+
+      object = {
+        title: 'test'
+      };
+
+      result = service.createObjectForm(object, { fields: [inputConfig] });
+    });
+
+    it('should call the create form method with the added getters and setters', () => {
+      expect(service.createForm).toHaveBeenCalledWith({
+        fields: [
+          {
+            name: 'title',
+            config: {
+              getValue: jasmine.any(Function),
+              setValue: jasmine.any(Function)
+            }
+          }
+        ]
+      });
+    });
+
+    it('should return the form', () => {
+      expect(result).toBe(formContainerStub);
     });
   });
 });
