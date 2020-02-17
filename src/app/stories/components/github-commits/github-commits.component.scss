@@ -1,4 +1,4 @@
-@import "src/assets/styles/themes.scss";
+@import 'src/assets/styles/themes.scss';
 
 .githubCommits {
   &-container {
@@ -22,6 +22,10 @@
   &-link {
     color: inherit;
     text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
 
     @include hover(0) {
       text-decoration: underline;
@@ -54,11 +58,7 @@
 
   &-commit {
     font-size: 18px;
-    // @include button-default($teal-600, $teal-100);
-    // @include flex();
-    // align-items: center;
-    // width: auto;
-    // cursor: default;
+    width: 85%;
   }
 
   &-icon {
