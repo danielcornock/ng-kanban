@@ -1,0 +1,14 @@
+<label class="formInputText-label" [attr.for]="fieldConfig.name">
+  <input
+    [attr.type]="fieldConfig.type ? fieldConfig.type : 'text'"
+    class="formInputText-input"
+    [attr.id]="fieldConfig.name"
+    [formControl]="fieldConfig.control"
+    (blur)="onInputEnter($event)"
+    [attr.placeholder]="fieldConfig.name | titlecase"
+    #input
+  />
+  <p *ngIf="showErrors()" class="formInputText-error">
+    {{ activeError }}
+  </p>
+</label>

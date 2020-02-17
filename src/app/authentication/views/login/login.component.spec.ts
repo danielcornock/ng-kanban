@@ -24,7 +24,7 @@ import { FormContainerStub } from 'src/app/shared/forms/form-container/form-cont
 import { FormInputTextComponentStub } from 'src/app/shared/forms/form-input-text/form-input-text.component.stub';
 import { FormInputField } from 'src/app/shared/forms/form-input-field/form-input-field';
 
-fdescribe('LoginComponent', () => {
+describe('LoginComponent', () => {
   let component: LoginComponent,
     fixture: ComponentFixture<LoginComponent>,
     loginForm: FormContainerStub,
