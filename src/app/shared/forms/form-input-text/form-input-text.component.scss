@@ -1,0 +1,23 @@
+@import 'src/assets/styles/themes.scss';
+
+.formInputText {
+  &-error {
+    color: $red-500;
+    font-size: $text-xs;
+    margin-top: $spacing-1;
+  }
+
+  &-label {
+    width: inherit;
+  }
+
+  &-input {
+    background-color: $gray-200;
+    padding: $spacing-3;
+    font-size: $text-base;
+    border: none;
+    border-radius: $br-small;
+    box-shadow: 2px 2px 4px $gray-300;
+    width: inherit;
+  }
+}

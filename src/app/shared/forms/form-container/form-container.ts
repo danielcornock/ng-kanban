@@ -1,8 +1,8 @@
-import { FormGroup } from "@angular/forms";
-import { FormInputField } from "../form-input-field/form-input-field";
-import { IFormInputFieldGroup } from "../interfaces/form-input-field-group.interface";
-import { IAbstractControlDict } from "../interfaces/abstract-control-dict.interface";
-import { ReactiveFormFactory } from "../form-group/reactive-form.factory";
+import { FormGroup } from '@angular/forms';
+import { FormInputField } from '../form-input-field/form-input-field';
+import { IFormInputFieldGroup } from '../interfaces/form-input-field-group.interface';
+import { IAbstractControlDict } from '../interfaces/abstract-control-dict.interface';
+import { ReactiveFormFactory } from '../services/form-group/reactive-form.factory';
 
 export class FormContainer {
   public fields: IFormInputFieldGroup;

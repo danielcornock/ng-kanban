@@ -24,6 +24,8 @@ export class RouterService {
 
   public getUrlParams(requestedParam: string): string {
     // TODO This is hacky - fix it
-    return this._activatedRoute.snapshot.children[0].params[requestedParam];
+    if (this._activatedRoute.snapshot.children[0]) {
+      return this._activatedRoute.snapshot.children[0].params[requestedParam];
+    }
   }
 }

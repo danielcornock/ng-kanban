@@ -1,10 +1,11 @@
-<label class="formInputTextarea-label" [for]="fieldConfig.name">
+<label class="formInputTextarea-label" [attr.for]="fieldConfig.name">
   <textarea
     appTextAreaAutoSize
-    [id]="fieldConfig.name"
+    [attr.id]="fieldConfig.name"
     class="formInputTextarea-textarea"
+    [class.formInputTextarea--invalid]="showErrors()"
     (blur)="onInputEnter($event)"
-    #textarea
+    #input
     [formControl]="fieldConfig.control"
     (keydown)="onInputEnter($event)"
     rows="1"

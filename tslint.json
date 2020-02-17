@@ -50,6 +50,7 @@
     "variable-name": [true, "check-format", "allow-leading-underscore"],
     "one-variable-per-declaration": false,
     "curly": [true, "ignore-same-line"],
-    "prefer-const": false
+    "prefer-const": false,
+    "no-string-literal": false
   }
 }

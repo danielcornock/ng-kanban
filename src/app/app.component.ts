@@ -1,20 +1,17 @@
-import { Component, OnInit } from "@angular/core";
-import { AuthService } from "./authentication/services/auth/auth.service";
+import { Component, OnInit } from '@angular/core';
+import { AuthService } from './authentication/services/auth/auth.service';
 
 @Component({
-  selector: "app-root",
-  templateUrl: "./app.component.html",
-  styleUrls: ["./app.component.scss"]
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  public isLoggedIn: boolean;
   constructor(private readonly _authService: AuthService) {}
 
-  ngOnInit() {
-    this._isAuthenticated();
-  }
+  ngOnInit() {}
 
-  private _isAuthenticated() {
-    this.isLoggedIn = this._authService.isAuthenticated();
+  public isAuthenticated() {
+    return this._authService.isAuthenticated();
   }
 }

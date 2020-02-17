@@ -4,31 +4,31 @@ import {
   TestBed,
   fakeAsync,
   tick
-} from "@angular/core/testing";
-import { EditStoryModalComponent } from "./edit-story-modal.component";
-import { MatDialogRefStub } from "src/app/shared/modal/modal-dialog/mat-dialog-ref.stub";
-import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
-import { TestPromise } from "src/app/testing/test-promise/test-promise";
-import { By } from "@angular/platform-browser";
-import { DebugElement } from "@angular/core";
-import { FormInputTextareaComponentStub } from "src/app/shared/forms/form-input-textarea/form-input-textarea.component.stub";
-import { ReactiveFormsModule, FormGroup } from "@angular/forms";
-import { BoardRefreshServiceStub } from "src/app/boards/services/board-refresh/board-refresh.service.stub";
-import { BoardRefreshService } from "src/app/boards/services/board-refresh/board-refresh.service";
-import { StoryApiServiceStub } from "../../services/story-api.service.stub";
-import { StoryApiService } from "../../services/story-api.service";
-import { TagsComponentStub } from "../tags/tags.component.stub";
-import { FormFactoryStub } from "src/app/shared/forms/form-factory/form-factory.service.stub";
-import { FormFactory } from "src/app/shared/forms/form-factory/form-factory.service";
-import { FormContainerStub } from "src/app/shared/forms/form-container/form-container.stub";
-import { FormInputField } from "src/app/shared/forms/form-input-field/form-input-field";
-import { ModelServiceStub } from "src/app/shared/api/model-service/model.service.stub";
-import { IHttpModel } from "src/app/shared/api/http-model/http-model.interface";
-import { HttpModelStub } from "src/app/shared/api/http-model/http-model.stub";
-import { ModelService } from "src/app/shared/api/model-service/model.service";
-import { GithubCommitsComponentStub } from "../github-commits/github-commits.component.stub";
+} from '@angular/core/testing';
+import { EditStoryModalComponent } from './edit-story-modal.component';
+import { MatDialogRefStub } from 'src/app/shared/modal/modal-dialog/mat-dialog-ref.stub';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { TestPromise } from 'src/app/testing/test-promise/test-promise';
+import { By } from '@angular/platform-browser';
+import { DebugElement } from '@angular/core';
+import { FormInputTextareaComponentStub } from 'src/app/shared/forms/form-input-textarea/form-input-textarea.component.stub';
+import { ReactiveFormsModule, FormGroup } from '@angular/forms';
+import { BoardRefreshServiceStub } from 'src/app/boards/services/board-refresh/board-refresh.service.stub';
+import { BoardRefreshService } from 'src/app/boards/services/board-refresh/board-refresh.service';
+import { StoryApiServiceStub } from '../../services/story-api.service.stub';
+import { StoryApiService } from '../../services/story-api.service';
+import { TagsComponentStub } from '../tags/tags.component.stub';
+import { FormFactoryStub } from 'src/app/shared/forms/services/form-factory/form-factory.service.stub';
+import { FormFactory } from 'src/app/shared/forms/services/form-factory/form-factory.service';
+import { FormContainerStub } from 'src/app/shared/forms/form-container/form-container.stub';
+import { FormInputField } from 'src/app/shared/forms/form-input-field/form-input-field';
+import { ModelServiceStub } from 'src/app/shared/api/model-service/model.service.stub';
+import { IHttpModel } from 'src/app/shared/api/http-model/http-model.interface';
+import { HttpModelStub } from 'src/app/shared/api/http-model/http-model.stub';
+import { ModelService } from 'src/app/shared/api/model-service/model.service';
+import { GithubCommitsComponentStub } from '../github-commits/github-commits.component.stub';
 
-describe("EditStoryModalComponent", () => {
+describe('EditStoryModalComponent', () => {
   let component: EditStoryModalComponent,
     fixture: ComponentFixture<EditStoryModalComponent>,
     formContainerStub: FormContainerStub,
@@ -51,8 +51,8 @@ describe("EditStoryModalComponent", () => {
     dependencies = {
       dialogData: {
         data: {
-          storyId: "story-id",
-          columnId: "column-id"
+          storyId: 'story-id',
+          columnId: 'column-id'
         }
       },
       matDialogRef: new MatDialogRefStub(),
@@ -97,39 +97,39 @@ describe("EditStoryModalComponent", () => {
     component = fixture.componentInstance;
 
     formContainerStub = new FormContainerStub();
-    formContainerStub.fields.title = ("title" as unknown) as FormInputField;
-    formContainerStub.fields.description = ("description" as unknown) as FormInputField;
+    formContainerStub.fields.title = ('title' as unknown) as FormInputField;
+    formContainerStub.fields.description = ('description' as unknown) as FormInputField;
     (dependencies.formFactory.createModelForm as jasmine.Spy).and.returnValue(
       formContainerStub
     );
 
     boardRefreshSpy = spyOn(
       dependencies.boardRefreshService.boardListRefresh,
-      "next"
+      'next'
     );
   });
 
-  describe("on initialisation", () => {
+  describe('on initialisation', () => {
     beforeEach(() => {
       fixture.detectChanges();
     });
 
-    it("should request the story", () => {
+    it('should request the story', () => {
       expect(dependencies.modelService.get).toHaveBeenCalledWith(
-        "stories/story-id"
+        'stories/story-id'
       );
     });
 
-    describe("when the story has been fetched", () => {
+    describe('when the story has been fetched', () => {
       let storyModel: IHttpModel;
 
       beforeEach(fakeAsync(() => {
         storyModel = new HttpModelStub();
         storyModel.data = {
-          _id: "story-id",
-          title: "story-title",
+          _id: 'story-id',
+          title: 'story-title',
           storyNumber: 12,
-          tags: [{ color: "#1", label: "#1" }]
+          tags: [{ color: '#1', label: '#1' }]
         };
 
         getStoryPromise.resolve(storyModel);
@@ -139,20 +139,20 @@ describe("EditStoryModalComponent", () => {
         fixture.detectChanges();
       }));
 
-      it("should create the form", () => {
+      it('should create the form', () => {
         expect(dependencies.formFactory.createModelForm).toHaveBeenCalledWith(
           storyModel,
           {
             fields: [
               {
-                name: "title",
+                name: 'title',
                 config: {
                   setValue: jasmine.any(Function),
                   required: true
                 }
               },
               {
-                name: "description",
+                name: 'description',
                 config: {
                   setValue: jasmine.any(Function)
                 }
@@ -162,39 +162,39 @@ describe("EditStoryModalComponent", () => {
         );
       });
 
-      it("should display the tags", () => {
-        expect(getByCss("tags").componentInstance.appTags).toBe(
+      it('should display the tags', () => {
+        expect(getByCss('tags').componentInstance.appTags).toBe(
           storyModel.data.tags
         );
       });
 
-      it("should display the story number", () => {
-        expect(getByCss("storyNumber").nativeElement.innerText).toBe("#12");
+      it('should display the story number', () => {
+        expect(getByCss('storyNumber').nativeElement.innerText).toBe('#12');
       });
 
-      it("should display the story title", () => {
-        expect(getByCss("titleField").componentInstance.fieldConfig).toBe(
-          "title"
+      it('should display the story title', () => {
+        expect(getByCss('titleField').componentInstance.fieldConfig).toBe(
+          'title'
         );
       });
 
-      it("should display the story description", () => {
-        expect(getByCss("descriptionField").componentInstance.fieldConfig).toBe(
-          "description"
+      it('should display the story description', () => {
+        expect(getByCss('descriptionField').componentInstance.fieldConfig).toBe(
+          'description'
         );
       });
 
-      describe("when a commit is added to a story", () => {
+      describe('when a commit is added to a story', () => {
         beforeEach(async(() => {
           (storyModel.update as jasmine.Spy).and.returnValue(Promise.resolve());
 
-          getByCss("commits").componentInstance.appGithubCommitsSelect.emit({
-            sha: "123456789",
-            html_url: "html_url",
+          getByCss('commits').componentInstance.appGithubCommitsSelect.emit({
+            sha: '123456789',
+            html_url: 'html_url',
             commit: {
-              message: "Commit message",
+              message: 'Commit message',
               author: {
-                name: "Test Author"
+                name: 'Test Author'
               }
             }
           });
@@ -202,77 +202,77 @@ describe("EditStoryModalComponent", () => {
           fixture.detectChanges();
         }));
 
-        it("should display the commit", () => {
+        it('should display the commit', () => {
           expect(
-            getByCss("commits").componentInstance.appGithubCommitsCommit
+            getByCss('commits').componentInstance.appGithubCommitsCommit
           ).toEqual({
-            id: "1234567",
-            message: "Commit message",
-            url: "html_url",
-            author: "Test Author"
+            id: '1234567',
+            message: 'Commit message',
+            url: 'html_url',
+            author: 'Test Author'
           });
         });
 
-        it("should save the model", () => {
+        it('should save the model', () => {
           expect(storyModel.update).toHaveBeenCalledWith();
         });
 
-        it("should refresh the board", () => {
+        it('should refresh the board', () => {
           expect(boardRefreshSpy).toHaveBeenCalledWith();
         });
 
-        describe("when a commit is removed from a story", () => {
+        describe('when a commit is removed from a story', () => {
           beforeEach(() => {
             (storyModel.update as jasmine.Spy).and.returnValue(
               Promise.resolve()
             );
-            getByCss("commits").componentInstance.appGithubCommitsSelect.emit(
+            getByCss('commits').componentInstance.appGithubCommitsSelect.emit(
               null
             );
 
             fixture.detectChanges();
           });
 
-          it("should remove the commit from the story", () => {
+          it('should remove the commit from the story', () => {
             expect(
-              getByCss("commits").componentInstance.appGithubCommitsCommit
+              getByCss('commits').componentInstance.appGithubCommitsCommit
             ).toBe(null);
           });
         });
       });
 
-      describe("when a new tag is selected", () => {
+      describe('when a new tag is selected', () => {
         beforeEach(() => {
-          getByCss("tags").componentInstance.appTagsSelectedTag.emit({
-            label: "#2",
-            color: "#2"
+          getByCss('tags').componentInstance.appTagsSelectedTag.emit({
+            label: '#2',
+            color: '#2'
           });
         });
 
-        it("should add the new tag to the story model", () => {
-          expect(getByCss("tags").componentInstance.appTags.length).toBe(2);
+        it('should add the new tag to the story model', () => {
+          expect(getByCss('tags').componentInstance.appTags.length).toBe(2);
         });
 
-        it("should update the story model in the api", () => {
+        it('should update the story model in the api', () => {
           expect(storyModel.update).toHaveBeenCalledWith();
         });
       });
 
-      describe("when a tag is removed", () => {
+      describe('when a tag is removed', () => {
         beforeEach(() => {
-          getByCss("tags").componentInstance.appTagsDeletedTag.emit(0);
+          getByCss('tags').componentInstance.appTagsDeletedTag.emit(0);
         });
 
-        it("should remove the tag from the story model", () => {
-          expect(getByCss("tags").componentInstance.appTags.length).toBe(0);
+        it('should remove the tag from the story model', () => {
+          expect(getByCss('tags').componentInstance.appTags.length).toBe(0);
         });
 
-        it("should update the story model in the api", () => {
+        it('should update the story model in the api', () => {
           expect(storyModel.update).toHaveBeenCalledWith();
         });
       });
 
-      describe("when values in the form change", () => {
+      describe('when values in the form change', () => {
         let updatePromise: TestPromise<void>;
 
         beforeEach(() => {
@@ -282,69 +282,69 @@ describe("EditStoryModalComponent", () => {
           );
         });
 
-        describe("when the input for the title changes", () => {
-          describe("when it is the same as the stored value", () => {
+        describe('when the input for the title changes', () => {
+          describe('when it is the same as the stored value', () => {
             beforeEach(() => {
               (dependencies.formFactory.createModelForm as jasmine.Spy).calls
                 .argsFor(0)[1]
                 .fields[0].config.setValue({
-                  value: "story-title",
-                  name: "title"
+                  value: 'story-title',
+                  name: 'title'
                 });
             });
 
-            it("should not update the story", () => {
+            it('should not update the story', () => {
               expect(storyModel.update).not.toHaveBeenCalled();
             });
           });
 
-          describe("when it is different from the stored value", () => {
+          describe('when it is different from the stored value', () => {
             beforeEach(() => {
               (dependencies.formFactory.createModelForm as jasmine.Spy).calls
                 .argsFor(0)[1]
                 .fields[0].config.setValue({
-                  value: "new-story",
-                  name: "title"
+                  value: 'new-story',
+                  name: 'title'
                 });
             });
 
-            it("should modify the title of the story", () => {
-              expect(storyModel.data.title).toBe("new-story");
+            it('should modify the title of the story', () => {
+              expect(storyModel.data.title).toBe('new-story');
             });
 
-            it("should update the story with the updated information", () => {
+            it('should update the story with the updated information', () => {
               expect(storyModel.update).toHaveBeenCalledWith();
             });
 
-            describe("when the story has been successfully updated", () => {
+            describe('when the story has been successfully updated', () => {
               beforeEach(async(() => {
                 updatePromise.resolve();
               }));
 
-              it("should refresh the board", () => {
+              it('should refresh the board', () => {
                 expect(boardRefreshSpy).toHaveBeenCalledWith();
               });
             });
           });
         });
 
-        describe("when the input for the description changes", () => {
+        describe('when the input for the description changes', () => {
           beforeEach(() => {
             (dependencies.formFactory.createModelForm as jasmine.Spy).calls
               .argsFor(0)[1]
               .fields[1].config.setValue({
-                value: "new-description",
-                name: "description"
+                value: 'new-description',
+                name: 'description'
               });
           });
 
-          it("should update the story", () => {
+          it('should update the story', () => {
             expect(storyModel.update).toHaveBeenCalledWith();
           });
         });
       });
 
-      describe("when the delete button is clicked", () => {
+      describe('when the delete button is clicked', () => {
         let deleteStoryPromise: TestPromise<void>;
 
         beforeEach(() => {
@@ -353,19 +353,19 @@ describe("EditStoryModalComponent", () => {
             deleteStoryPromise.promise
           );
 
-          getByCss("delete").nativeElement.click();
+          getByCss('delete').nativeElement.click();
         });
 
-        it("should delete the story", () => {
+        it('should delete the story', () => {
           expect(storyModel.delete).toHaveBeenCalledWith();
         });
 
-        describe("when the story has been successfully deleted", () => {
+        describe('when the story has been successfully deleted', () => {
           beforeEach(async(() => {
             deleteStoryPromise.resolve();
           }));
 
-          it("should close the modal", () => {
+          it('should close the modal', () => {
             expect(dependencies.matDialogRef.close).toHaveBeenCalledWith(
               undefined
             );

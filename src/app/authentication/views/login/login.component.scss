@@ -1,0 +1,33 @@
+@import 'src/assets/styles/themes.scss';
+
+.login {
+  &-container {
+    @include center-contents;
+    height: 100vh;
+    width: 100vw;
+    background-color: $teal-200;
+  }
+
+  &-form {
+    background-color: $white;
+    @include flex(column);
+    padding: $spacing-8;
+    border-radius: $br-small;
+    width: 100%;
+    max-width: 400px;
+  }
+
+  &-input {
+    margin-bottom: $spacing-6;
+    display: block;
+    width: 100%;
+  }
+
+  &-title {
+    @include modal-header;
+  }
+
+  &-submit {
+    @include button-default($white, $indigo-600);
+  }
+}

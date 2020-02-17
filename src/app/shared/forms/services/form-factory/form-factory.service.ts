@@ -1,14 +1,15 @@
-import { Injectable } from "@angular/core";
-import { FormContainer } from "../form-container/form-container";
-import { FormInputField } from "../form-input-field/form-input-field";
-import { IFormInputConfig } from "../interfaces/form-input-config.interface";
-import { IFormConfig } from "../interfaces/form-config.interface";
-import { IFormCreateManualConfig } from "../interfaces/form-create-manual-config.interface";
-import { IHttpModel } from "../../api/http-model/http-model.interface";
-import { IHttpObject } from "../../api/interfaces/http-response.interface";
+import { Injectable } from '@angular/core';
+import { FormContainer } from '../../form-container/form-container';
+import { FormInputField } from '../../form-input-field/form-input-field';
+import { IFormInputConfig } from '../../interfaces/form-input-config.interface';
+import { IFormConfig } from '../../interfaces/form-config.interface';
+import { IFormCreateManualConfig } from '../../interfaces/form-create-manual-config.interface';
+import { IHttpModel } from '../../../api/http-model/http-model.interface';
+import { IHttpObject } from '../../../api/interfaces/http-response.interface';
+import { IControlExport } from '../../interfaces/control-export.interface';
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
 export class FormFactory {
   public createForm(formConfig: IFormConfig): FormContainer {
@@ -32,6 +33,15 @@ export class FormFactory {
     });
   }
 
+  public createObjectForm(
+    object: object,
+    formConfig: IFormCreateManualConfig
+  ): FormContainer {
+    return this.createForm({
+      fields: this._generateFromModelFieldsConfig(formConfig.fields, object)
+    });
+  }
+
   private _generateFromModelFieldsConfig(
     fields: Array<IFormInputConfig>,
     data: IHttpObject
@@ -48,7 +58,7 @@ export class FormFactory {
     inputConfig: Array<IFormInputConfig>
   ): Array<FormInputField> {
     return inputConfig.map(field => {
-      return field.hasOwnProperty("control")
+      return field.hasOwnProperty('control')
         ? (field as FormInputField)
         : this.createInput(field);
     });
@@ -62,8 +72,8 @@ export class FormFactory {
 
   private _setModelSetterFn(fieldConfig: IFormInputConfig, model: IHttpObject) {
     if (!fieldConfig.config.setValue) {
-      fieldConfig.config.setValue = (val: any) => {
-        model[fieldConfig.name] = val;
+      fieldConfig.config.setValue = (val: IControlExport) => {
+        model[fieldConfig.name] = val.value;
       };
     }
   }

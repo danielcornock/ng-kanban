@@ -1,15 +1,15 @@
 import { FormFactory } from './form-factory.service';
-import { IFormConfig } from '../interfaces/form-config.interface';
+import { IFormConfig } from '../../interfaces/form-config.interface';
 import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
-import { FormInputField } from '../form-input-field/form-input-field';
-import { FormContainer } from '../form-container/form-container';
+import { FormInputField } from '../../form-input-field/form-input-field';
+import { FormContainer } from '../../form-container/form-container';
 import { ReactiveFormFactory } from '../form-group/reactive-form.factory';
-import { FormInputFieldStub } from '../form-input-field/form-input-field.stub';
-import { IFormInputConfig } from '../interfaces/form-input-config.interface';
-import { FormContainerStub } from '../form-container/form-container.stub';
+import { FormInputFieldStub } from '../../form-input-field/form-input-field.stub';
+import { IFormInputConfig } from '../../interfaces/form-input-config.interface';
+import { FormContainerStub } from '../../form-container/form-container.stub';
 import { IStory } from 'src/app/stories/interfaces/story.interface';
-import { IHttpModel } from '../../api/http-model/http-model.interface';
-import { HttpModelStub } from '../../api/http-model/http-model.stub';
+import { IHttpModel } from '../../../api/http-model/http-model.interface';
+import { HttpModelStub } from '../../../api/http-model/http-model.stub';
 
 describe('FormFactory', () => {
   let service: FormFactory,
@@ -90,7 +90,7 @@ describe('FormFactory', () => {
   });
 
   describe('when creating a model form', () => {
-    let result: any, model: IStory, modelStub: IHttpModel;
+    let result: any, modelStub: IHttpModel;
 
     beforeEach(() => {
       inputConfig = {
@@ -135,6 +135,55 @@ describe('FormFactory', () => {
       it('should return the value ', () => {
         expect(result).toBe('story');
       });
+    });
+
+    describe('when calling set value', () => {
+      beforeEach(() => {
+        (service.createForm as jasmine.Spy).calls
+          .argsFor(0)[0]
+          .fields[0].config.setValue({ name: 'title', value: 'new-title' });
+      });
+
+      it('should update the model', () => {
+        expect(modelStub.data.title).toBe('new-title');
+      });
+    });
+  });
+
+  describe('when creating an object form', () => {
+    let result: any, object: any;
+
+    beforeEach(() => {
+      inputConfig = {
+        name: 'title',
+        config: {}
+      };
+
+      spyOn(service, 'createForm').and.returnValue(formContainerStub);
+
+      object = {
+        title: 'test'
+      };
+
+      result = service.createObjectForm(object, { fields: [inputConfig] });
+    });
+
+    it('should call the create form method with the added getters and setters', () => {
+      expect(service.createForm).toHaveBeenCalledWith({
+        fields: [
+          {
+            name: 'title',
+            config: {
+              getValue: jasmine.any(Function),
+              setValue: jasmine.any(Function)
+            }
+          }
+        ]
+      });
+    });
+
+    it('should return the form', () => {
+      expect(result).toBe(formContainerStub);
     });
   });
 });
