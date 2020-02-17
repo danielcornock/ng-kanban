@@ -1,4 +1,4 @@
-@import "src/assets/styles/themes.scss";
+@import 'src/assets/styles/themes.scss';
 
 .formInputTextarea {
   &-label {
@@ -20,5 +20,9 @@
       outline: 2px solid $blue-500;
       padding-left: $spacing-2;
     }
+  }
+
+  &--invalid {
+    border: 2px solid $red-300;
   }
 }
