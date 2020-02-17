@@ -1,15 +1,7 @@
 import { AbstractFormInputComponent } from './abstract-form-input.component';
 import { FormInputField } from '../form-input-field/form-input-field';
 
-class TestAbstractFormInputComponent extends AbstractFormInputComponent {
-  public testSetValue(val: any) {
-    this.setValue(val);
-  }
-
-  public testBlur(): void {
-    this.blur();
-  }
-}
+class TestAbstractFormInputComponent extends AbstractFormInputComponent {}
 
 describe('AbstractFormInputComponent', () => {
   let component: TestAbstractFormInputComponent;
@@ -34,16 +26,20 @@ describe('AbstractFormInputComponent', () => {
     };
   });
 
-  describe('when setting the value', () => {
+  describe('when adding to the input', () => {
     beforeEach(() => {
-      component.testSetValue(5);
+      component.onInputEnter({ key: 'Esc', type: 'blur' } as KeyboardEvent);
     });
 
-    it('should set the value of the field', () => {
+    it('should set the value', () => {
       expect(component.fieldConfig.config.setValue).toHaveBeenCalledWith({
         name: 'field',
-        value: 5
+        value: 15
       });
+    });
+
+    it('should blur the input', () => {
+      expect(component.input.nativeElement.blur).toHaveBeenCalledWith();
     });
   });
 
@@ -60,16 +56,6 @@ describe('AbstractFormInputComponent', () => {
 
     it('should return as true', () => {
       expect(showError).toBe(true);
-    });
-  });
-
-  describe('when blurring the input', () => {
-    beforeEach(() => {
-      component.testBlur();
-    });
-
-    it('should blur the input', () => {
-      expect(component.input.nativeElement.blur).toHaveBeenCalledWith();
     });
   });
 
