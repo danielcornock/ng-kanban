@@ -1,23 +1,23 @@
-import { Component, OnInit, Inject } from "@angular/core";
-import { ModalDialog } from "src/app/shared/modal/modal-dialog/modal-dialog";
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
-import { HttpService } from "src/app/shared/api/http-service/http.service";
-import { IStory } from "../../interfaces/story.interface";
-import { Validators, FormGroup } from "@angular/forms";
-import { BoardRefreshService } from "src/app/boards/services/board-refresh/board-refresh.service";
-import { IControlExport } from "src/app/shared/forms/interfaces/control-export.interface";
-import { StoryApiService } from "../../services/story-api.service";
-import { ITag } from "src/app/boards/interfaces/board-config.interface";
-import { FormFactory } from "src/app/shared/forms/form-factory/form-factory.service";
-import { FormContainer } from "src/app/shared/forms/form-container/form-container";
-import { IFormInputConfig } from "src/app/shared/forms/interfaces/form-input-config.interface";
-import { IHttpModel } from "src/app/shared/api/http-model/http-model.interface";
-import { ModelService } from "src/app/shared/api/model-service/model.service";
+import { Component, OnInit, Inject } from '@angular/core';
+import { ModalDialog } from 'src/app/shared/modal/modal-dialog/modal-dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { HttpService } from 'src/app/shared/api/http-service/http.service';
+import { IStory } from '../../interfaces/story.interface';
+import { Validators, FormGroup } from '@angular/forms';
+import { BoardRefreshService } from 'src/app/boards/services/board-refresh/board-refresh.service';
+import { IControlExport } from 'src/app/shared/forms/interfaces/control-export.interface';
+import { StoryApiService } from '../../services/story-api.service';
+import { ITag } from 'src/app/boards/interfaces/board-config.interface';
+import { FormFactory } from 'src/app/shared/forms/services/form-factory/form-factory.service';
+import { FormContainer } from 'src/app/shared/forms/form-container/form-container';
+import { IFormInputConfig } from 'src/app/shared/forms/interfaces/form-input-config.interface';
+import { IHttpModel } from 'src/app/shared/api/http-model/http-model.interface';
+import { ModelService } from 'src/app/shared/api/model-service/model.service';
 
 @Component({
-  selector: "app-edit-story-modal",
-  templateUrl: "./edit-story-modal.component.html",
-  styleUrls: ["./edit-story-modal.component.scss"]
+  selector: 'app-edit-story-modal',
+  templateUrl: './edit-story-modal.component.html',
+  styleUrls: ['./edit-story-modal.component.scss']
 })
 export class EditStoryModalComponent
   extends ModalDialog<EditStoryModalComponent>
@@ -109,7 +109,7 @@ export class EditStoryModalComponent
 
   private _createTitleFieldConfig(): IFormInputConfig {
     return {
-      name: "title",
+      name: 'title',
       config: {
         required: true,
         setValue: (value: IControlExport) => {
@@ -121,7 +121,7 @@ export class EditStoryModalComponent
 
   private _createDescriptionFieldConfig(): IFormInputConfig {
     return {
-      name: "description",
+      name: 'description',
       config: {
         setValue: (value: IControlExport) => {
           this.onInputChange(value);
