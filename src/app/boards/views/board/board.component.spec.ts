@@ -182,9 +182,9 @@ describe('BoardComponent', () => {
         );
       });
 
-      describe('when the board is reloaded or updated', () => {
+      describe('when the board is reloaded, fetched or updated', () => {
         beforeEach(() => {
-          statusChangeSubject.next(ModelStatus.RELOADED);
+          statusChangeSubject.next(ModelStatus.FETCHED);
         });
 
         it('should set the config', () => {

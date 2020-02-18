@@ -3,12 +3,12 @@ import { Directive, ElementRef, OnInit, HostListener } from '@angular/core';
 @Directive({
   selector: '[appTextAreaAutoSize]'
 })
-export class TextAreaAutoSizeDirective implements OnInit {
+export class TextAreaAutoSizeDirective {
   private _scrollHeight: number;
   private _clientHeight: number;
   private _element: any;
 
-  @HostListener('keyup') onMouseLeave() {
+  @HostListener('keyup') onKeyup() {
     if (this._checkForHeightChange()) {
       this._setNewClientHeight();
     }
@@ -16,9 +16,6 @@ export class TextAreaAutoSizeDirective implements OnInit {
 
   constructor(el: ElementRef) {
     this._element = el.nativeElement;
-  }
-
-  public ngOnInit(): void {
     this._setInitialHeights();
     if (this._isScrolling()) {
       this._setNewClientHeight();

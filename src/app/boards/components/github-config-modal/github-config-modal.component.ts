@@ -1,15 +1,15 @@
-import { Component, OnInit, Inject } from "@angular/core";
-import { ModalDialog } from "src/app/shared/modal/modal-dialog/modal-dialog";
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
-import { GithubService } from "../../services/github/github.service";
-import { IGithubRepoListOnSelectOutput } from "../github-repo-list/github-repo-list.component";
-import { IGithubUserDetails } from "./interfaces/github-user-details.interface";
-import { IGithubRepo } from "../github-repo-list/interfaces/github-repo.interface";
+import { Component, OnInit, Inject } from '@angular/core';
+import { ModalDialog } from 'src/app/shared/modal/modal-dialog/modal-dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { GithubService } from '../../services/github/github.service';
+import { IGithubRepoListOnSelectOutput } from '../github-repo-list/github-repo-list.component';
+import { IGithubUserDetails } from './interfaces/github-user-details.interface';
+import { IGithubRepo } from '../github-repo-list/interfaces/github-repo.interface';
 
 @Component({
-  selector: "app-github-config-modal",
-  templateUrl: "./github-config-modal.component.html",
-  styleUrls: ["./github-config-modal.component.scss"]
+  selector: 'app-github-config-modal',
+  templateUrl: './github-config-modal.component.html',
+  styleUrls: ['./github-config-modal.component.scss']
 })
 export class GithubConfigModalComponent
   extends ModalDialog<GithubConfigModalComponent>

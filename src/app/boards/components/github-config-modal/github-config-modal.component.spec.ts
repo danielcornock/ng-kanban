@@ -4,22 +4,22 @@ import {
   TestBed,
   fakeAsync,
   tick
-} from "@angular/core/testing";
+} from '@angular/core/testing';
 
-import { GithubConfigModalComponent } from "./github-config-modal.component";
-import { GithubUserSearchComponentStub } from "../github-user-search/github-user-search.component.stub";
-import { GithubProfileComponentStub } from "../github-profile/github-profile.component.stub";
-import { GithubRepoListComponentStub } from "../github-repo-list/github-repo.list.component.stub";
-import { MatDialogRefStub } from "src/app/shared/modal/modal-dialog/mat-dialog-ref.stub";
-import { GithubServiceStub } from "../../services/github/github.service.stub";
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
-import { GithubService } from "../../services/github/github.service";
-import { DebugElement } from "@angular/core";
-import { By } from "@angular/platform-browser";
-import { TestPromise } from "src/app/testing/test-promise/test-promise";
-import { IGithubRepo } from "../github-repo-list/interfaces/github-repo.interface";
+import { GithubConfigModalComponent } from './github-config-modal.component';
+import { GithubUserSearchComponentStub } from '../github-user-search/github-user-search.component.stub';
+import { GithubProfileComponentStub } from '../github-profile/github-profile.component.stub';
+import { GithubRepoListComponentStub } from '../github-repo-list/github-repo.list.component.stub';
+import { MatDialogRefStub } from 'src/app/shared/modal/modal-dialog/mat-dialog-ref.stub';
+import { GithubServiceStub } from '../../services/github/github.service.stub';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { GithubService } from '../../services/github/github.service';
+import { DebugElement } from '@angular/core';
+import { By } from '@angular/platform-browser';
+import { TestPromise } from 'src/app/testing/test-promise/test-promise';
+import { IGithubRepo } from '../github-repo-list/interfaces/github-repo.interface';
 
-describe("GithubConfigModalComponent", () => {
+describe('GithubConfigModalComponent', () => {
   let component: GithubConfigModalComponent,
     fixture: ComponentFixture<GithubConfigModalComponent>,
     dependencies: {
@@ -40,7 +40,7 @@ describe("GithubConfigModalComponent", () => {
     dependencies = {
       dialogData: {
         data: {
-          selectedRepos: []
+          repos: []
         }
       },
       matDialogRef: new MatDialogRefStub(),
@@ -67,12 +67,12 @@ describe("GithubConfigModalComponent", () => {
     component = fixture.componentInstance;
   });
 
-  describe("on initialisation", () => {
+  describe('on initialisation', () => {
     beforeEach(() => {
       fixture.detectChanges();
     });
 
-    describe("when the user searches for a username", () => {
+    describe('when the user searches for a username', () => {
       let searchUserPromise: TestPromise<any>;
 
       beforeEach(() => {
@@ -82,25 +82,25 @@ describe("GithubConfigModalComponent", () => {
         );
         getDirective(
           GithubUserSearchComponentStub
-        ).componentInstance.appGithubUserSearchOnSearch.emit("github-username");
+        ).componentInstance.appGithubUserSearchOnSearch.emit('github-username');
       });
 
-      it("should search for the user", () => {
+      it('should search for the user', () => {
         expect(dependencies.githubService.searchUsers).toHaveBeenCalledWith(
-          "github-username"
+          'github-username'
         );
       });
 
-      describe("when the user profile has been fetched", () => {
+      describe('when the user profile has been fetched', () => {
         beforeEach(async(() => {
           searchUserPromise.resolve({
-            login: "github-username",
-            imageUrl: "github-url",
-            bio: "github-bio"
+            login: 'github-username',
+            imageUrl: 'github-url',
+            bio: 'github-bio'
           });
         }));
 
-        describe("when the profile is selected", () => {
+        describe('when the profile is selected', () => {
           let fetchReposPromise: TestPromise<any>;
 
           beforeEach(() => {
@@ -109,22 +109,22 @@ describe("GithubConfigModalComponent", () => {
               .fetchRepos as jasmine.Spy).and.returnValue(
               fetchReposPromise.promise
             );
-            getCss("profileButton").nativeElement.click();
+            getCss('profileButton').nativeElement.click();
           });
 
-          it("should fetch the users repos", () => {
+          it('should fetch the users repos', () => {
             expect(dependencies.githubService.fetchRepos).toHaveBeenCalledWith(
-              "github-username"
+              'github-username'
             );
           });
 
-          describe("when the users repos have been fetched", () => {
+          describe('when the users repos have been fetched', () => {
             let allRepos: Array<any>;
 
             beforeEach(fakeAsync(() => {
               allRepos = [
-                { name: "repo1", url: "repo1/url" },
-                { name: "repo2", url: "repo2/url" }
+                { name: 'repo1', url: 'repo1/url' },
+                { name: 'repo2', url: 'repo2/url' }
               ];
               fetchReposPromise.resolve(allRepos);
 
@@ -133,41 +133,41 @@ describe("GithubConfigModalComponent", () => {
               fixture.detectChanges();
             }));
 
-            it("should display the repos", () => {
+            it('should display the repos', () => {
               expect(
-                getCss("repos").componentInstance.appGithubRepoListRepos
+                getCss('repos').componentInstance.appGithubRepoListRepos
               ).toEqual(allRepos);
             });
 
-            describe("when selecting a repo", () => {
+            describe('when selecting a repo', () => {
               beforeEach(() => {
                 getCss(
-                  "repos"
+                  'repos'
                 ).componentInstance.appGithubRepoListOnSelect.emit({
-                  repo: { name: "repo1" },
+                  repo: { name: 'repo1' },
                   index: 0
                 });
 
                 fixture.detectChanges();
               });
 
-              it("should add the selected repo to the selected repos list", () => {
+              it('should add the selected repo to the selected repos list', () => {
                 expect(
-                  getCss("selectedRepos").componentInstance
+                  getCss('selectedRepos').componentInstance
                     .appGithubRepoListRepos
-                ).toEqual([{ name: "repo1" }]);
+                ).toEqual([{ name: 'repo1' }]);
               });
 
-              it("should remove the selected repo from the list of all repos", () => {
+              it('should remove the selected repo from the list of all repos', () => {
                 expect(
-                  getCss("repos").componentInstance.appGithubRepoListRepos
-                ).toEqual([{ name: "repo2", url: "repo2/url" }]);
+                  getCss('repos').componentInstance.appGithubRepoListRepos
+                ).toEqual([{ name: 'repo2', url: 'repo2/url' }]);
               });
 
-              describe("when removing a repo from the selected list", () => {
+              describe('when removing a repo from the selected list', () => {
                 beforeEach(() => {
                   getCss(
-                    "selectedRepos"
+                    'selectedRepos'
                   ).componentInstance.appGithubRepoListOnSelect.emit({
                     repo: {},
                     index: 0
@@ -176,35 +176,35 @@ describe("GithubConfigModalComponent", () => {
                   fixture.detectChanges();
                 });
 
-                it("should remove the repo from the selected list", () => {
-                  expect(getCss("selectedRepos") === null).toBe(true);
+                it('should remove the repo from the selected list', () => {
+                  expect(getCss('selectedRepos') === null).toBe(true);
                 });
               });
             });
 
-            describe("when searching the repos", () => {
+            describe('when searching the repos', () => {
               beforeEach(() => {
                 component.filterRepos({
-                  target: { value: "1" }
+                  target: { value: '1' }
                 } as any);
 
                 fixture.detectChanges();
               });
 
-              it("should filter the repos", () => {
+              it('should filter the repos', () => {
                 expect(
-                  getCss("repos").componentInstance.appGithubRepoListRepos
+                  getCss('repos').componentInstance.appGithubRepoListRepos
                     .length
                 ).toBe(1);
               });
             });
 
-            describe("when the user saves the configuration", () => {
+            describe('when the user saves the configuration', () => {
               beforeEach(() => {
-                getCss("save").nativeElement.click();
+                getCss('save').nativeElement.click();
               });
 
-              it("should close the instance", () => {
+              it('should close the instance', () => {
                 expect(dependencies.matDialogRef.close).toHaveBeenCalledWith({
                   selectedRepos: []
                 });
@@ -213,6 +213,17 @@ describe("GithubConfigModalComponent", () => {
           });
         });
       });
+    });
+  });
+
+  describe('when no repos are passed in', () => {
+    beforeEach(() => {
+      dependencies.dialogData.data.repos = null;
+      fixture.detectChanges();
+    });
+
+    it('should set the repos to an empty array', () => {
+      expect(component.selectedRepos).toEqual([]);
     });
   });
 });
