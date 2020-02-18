@@ -56,6 +56,18 @@ describe('HttpModel', () => {
     });
   });
 
+  describe('when getting a link', () => {
+    let link: string;
+
+    beforeEach(() => {
+      link = model.getLink('self');
+    });
+
+    it('should return the self link', () => {
+      expect(link).toBe('link/self');
+    });
+  });
+
   describe('when updating the model', () => {
     let putPromise: TestPromise<IHttpResponse>;
     beforeEach(() => {
@@ -109,6 +121,16 @@ describe('HttpModel', () => {
 
       it('should return the updated model', async () => {
         expect(await result).toBe(model);
+      });
+    });
+
+    describe('when something goes wrong', () => {
+      beforeEach(async(() => {
+        putPromise.reject('err');
+      }));
+
+      it('should set the model status to error', () => {
+        expect(modelStatus).toBe(ModelStatus.ERROR);
       });
     });
   });
@@ -166,6 +188,16 @@ describe('HttpModel', () => {
         expect(await result).toBe(model);
       });
     });
+
+    describe('when something goes wrong', () => {
+      beforeEach(async(() => {
+        getPromise.reject('err');
+      }));
+
+      it('should set the model status to error', () => {
+        expect(modelStatus).toBe(ModelStatus.ERROR);
+      });
+    });
   });
 
   describe('when deleting the model', () => {
@@ -200,6 +232,16 @@ describe('HttpModel', () => {
 
       it('should return undefined', async () => {
         expect(await result).toBeUndefined();
+      });
+    });
+
+    describe('when something goes wrong', () => {
+      beforeEach(async(() => {
+        deletePromise.reject('err');
+      }));
+
+      it('should set the model status to error', () => {
+        expect(modelStatus).toBe(ModelStatus.ERROR);
       });
     });
   });
