@@ -5,6 +5,7 @@
 <p align="center">
   <a align="center" alt="Build status" href="https://travis-ci.com/danielcornock/kanbo-ui">
     <img src="https://travis-ci.com/danielcornock/kanbo-ui.svg?branch=master">
+    <img src="https://heroku-badge.herokuapp.com/?app=ng-kanban">
   </a>
 </p>
 
@@ -26,8 +27,6 @@ Features include organised columns with drag & drop functionality, linking githu
 
 <img src="./static/github-screenshot.png">
 
-### Technologies used
+#### Technologies used:
 
-- Angular
-- TypeScript
-- Jasmine
+`Angular` `TypeScript` `Jasmine` `SCSS` `TravisCI`
