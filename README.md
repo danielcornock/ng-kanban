@@ -6,7 +6,7 @@
   <a align="center" alt="Build status" href="https://travis-ci.com/danielcornock/kanbo-ui">
     <img src="https://travis-ci.com/danielcornock/kanbo-ui.svg?branch=master">
   </a>
-  <img src="https://heroku-badge.herokuapp.com/?app=ng-kanban">
+  <img src="http://heroku-badge.herokuapp.com/?app=ng-kanban&style=flat&svg=1">
 </p>
 
 > This project is a WIP.
