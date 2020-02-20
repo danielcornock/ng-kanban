@@ -9,6 +9,15 @@
   <img src="http://heroku-badge.herokuapp.com/?app=ng-kanban&style=flat&svg=1">
 </p>
 
+<p align="center">
+<code>Angular</code>
+<code>TypeScript</code>
+<code>Jasmine</code>
+<code>SCSS</code>
+<code>TravisCI</code>
+<code>Heroku</code>
+</p>
+
 > This project is a WIP.
 
 Front end for a kanban board application inspired by Trello. View the code for the back-end [here](https://github.com/danielcornock/kanbo-api).
@@ -26,7 +35,3 @@ Features include organised columns with drag & drop functionality, linking githu
 #### Github config modal
 
 <img src="./static/github-screenshot.png">
-
-#### Technologies used:
-
-`Angular` `TypeScript` `Jasmine` `SCSS` `TravisCI`
