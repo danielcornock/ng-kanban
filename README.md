@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./static/kanban-ui.png">
+  <img src="./static/kanban-ui.png" width="50%">
 </p>
 
 <p align="center">
